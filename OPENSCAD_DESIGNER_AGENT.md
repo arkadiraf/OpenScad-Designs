@@ -5,7 +5,8 @@ glass-insert vase holders in particular, from a brief to a verified, packaged de
 `.scad` source + multi-part `.3mf` + isometric `.png`.
 
 The process was built and debugged while designing **Braided Tree Vase Holder** (2026-09-18/19; §12)
-and refined while finishing **Embracing Tree** (2026-09-19; §13).
+refined while finishing **Embracing Tree** (2026-09-19; §13), and extended with procedural bark on
+**Cradle Tree** (2026-09-19; §14).
 The print rules (§4) come from the house guides `POT_DESIGNER_AGENT.md` and `WOVEN_DESIGNER_AGENT.md`,
 restated here so this guide can be followed on its own. Those two guides drive the browser apps
 (`EquationDrivenPotDesigner.html`, `EquationDrivenWovenPots.html`). This one drives OpenSCAD.
@@ -125,7 +126,7 @@ There is no API into the OpenSCAD GUI. **Share a file instead:**
 | Bottom 1 cm | some overhang is allowed there; the slicer can add "on build plate only" supports | Woven §8 |
 | Topology | 0 boundary / 0 non-manifold edges on **every** part | Both guides |
 | Sits on z = 0 | yes | Both guides |
-| Colours | **Bambu Lab PLA Basic only**, hexes from the table below; pick a combination not already in the palette tables of the other two guides, or used by an OpenSCAD design so far (Braided: Cocoa Brown + Mistletoe Green; Embracing: Cocoa Brown + Mistletoe Green + Bright Green) | Pot §12, user |
+| Colours | **Bambu Lab PLA Basic only**, hexes from the table below; pick a combination not already in the palette tables of the other two guides, or used by an OpenSCAD design so far (Braided: Cocoa Brown + Mistletoe Green; Embracing: Cocoa Brown + Mistletoe Green + Bright Green; Cradle: Cocoa Brown alone) | Pot §12, user |
 | Printer and infill | **Bambu Lab H2C** (0.4 mm nozzle, 0.20mm Standard process), **35 % sparse infill**, unless the user names another | user |
 
 **Bambu Lab PLA Basic colours** (the same list is built into `tools/bambu_3mf.py`; keep the two in
@@ -352,6 +353,13 @@ reach the bore or the bed. In the assembly view the leaves are not trimmed.
 
 - A plate that lies entirely between the bed and the glass floor never needs trimming: union it
   outside `trim()`.
+- **Never nest a `difference()` inside a `difference()` for small cutters** such as growth-ring
+  grooves built as cylinder minus cylinder. The preview normalises the CSG tree into products: six
+  such rings cut from the Cradle Tree trunk gave 448 terms and 12 s per preview. Build each groove
+  as one solid (`rotate_extrude() translate([r - w/2, 0]) square([w, h]);`) and the whole preview
+  dropped from 24 s to 9 s.
+- Preview-only helpers (ground disc, height limit ring) sit behind a `show_guides` toggle that
+  defaults to **false**. The gallery PNG is a preview render too, and would include them.
 - A collar around the glass foot should have an **inner lip** (inner radius `bore_r − 0.5`) that the
   bore cuts away. An inner wall at exactly `bore_r` coincides with the bore cylinder and flickers.
 
@@ -449,6 +457,8 @@ the percentage is meaningless. Judge overhang on the merged file only.
 | Embracing Tree wood: plate with ring grooves, collar, stem, 9 roots, 2 limbs, 6 twigs; 36 k triangles | **2 min 06 s** |
 | Embracing Tree leaf parts, 9 or 18 leaves minus hosts (and minus the shoots) | 39 s / 53 s |
 | Component tests (one tube to the whole crown) | 1–40 s |
+| Cradle Tree, one body: textured trunk, 5 branches with forks and stubs, 7 roots; 315 k triangles | **14 min 19 s** (one branch assembly alone 54 s) |
+| Cradle Tree preview (Normal / Draft quality) | 16 s / 6 s |
 
 - CGAL uses one core. **Export colour parts as separate processes in parallel** (`build_design.py`
   does this), instead of rendering one big union.
@@ -748,3 +758,83 @@ Design history:
    4.5 mm-deep clusters could not fit inside the tips anyway. The fix: tips at the derived
    `leaf_hold_r` (2.7 mm) and leaves starting 3 mm back inside the tube along its axis (§5.4). The
    slice then came out clean.
+
+---
+
+## 14. Third design: Cradle Tree
+
+Folder `art/Math Driven Pots and Vases/Cradle Tree/`. The glass sits 6 cm up in the branches of a
+rooted tree. A trunk with a narrow waist and root buttresses opens into a bowl whose floor, with
+growth rings, carries the glass. Five branches grow out of the bowl as ridges. They spiral around
+the glass (continuing the trunk's grain), lean out above the rim and fork. Every member wears
+procedural bark, and the branches carry knots and pruned twig stubs. It was designed live: the user
+watched each save in OpenSCAD with automatic reload.
+
+| Parameter | Value |
+|---|---|
+| Glass | 80 × 130 mm, clearance 1 mm, so an **82 mm bore**; glass floor at `lift` = 60 mm; rim at 190 mm; `total_h` 250 mm |
+| Trunk | a radial surface (§14.1): waist r 19 mm at z 21, root collar +12 mm, 7 buttresses, grain turning 40° up to the floor |
+| Roots | 7, radius 8 → 2.4 mm, 46 mm reach, 35 % bed cut |
+| Branches | 5, radius 8.5 mm at the floor → 5.5 at the rim → 2 at the tips; bark 1.5 mm outside the bore; turning 87° around the glass (climbing 59°), climbing ≥ 38° out of the trunk; each with a fork above the rim, 2 knots and 2 twig stubs (climbing about 50°) |
+| Bark | plates 7 × 14 mm, fissures up to 1.2 mm deep (0.96 on branches), scaled down on thinner members |
+| Filament | wood `#6F5034` Cocoa Brown (PLA Basic), one part |
+
+**Measured on the packaged 3MF** (`build_design.py`, 2026-09-19; an H2C project):
+
+| Check | Result |
+|---|---|
+| Size | 156.4 × 136.5 × 249.2 mm, standing on z = 0 |
+| Wood | 314 988 triangles, 1 shell, **0 / 0** edges, 373.2 cm³ |
+| Past 60° | **0.04 %** above the bottom 1 cm (top 3 cm 0.00 %). Bottom 1 cm 0.13 %, all below 5 mm: root and trunk-foot edges at the bed cut |
+| Past 45° | 3.33 % (body 3.01 %: the bowl flare and the branches leaving it), report only |
+| Glass | closest material 40.99 mm from the axis above the floor (bore 41.00 mm): **it lifts straight out of the top**. Glass-to-bark gap 2.5 mm along the glass, 3.4 mm at the rim; about 49 mm of open arc between branches at the rim for fingers |
+| Bed contact | 58 cm² |
+| Bambu Studio slice (H2C, 0.20mm Standard, 35 % infill) | **no warnings**; 7 h 52 min; **227 g** (463 g if solid) |
+| Render | 14 min 19 s as one body; components 7–128 s each |
+
+### 14.1 Techniques this design added
+
+- **Trunk as a radial surface.** Loft horizontal rings, and give each vertex its radius from a
+  function of angle and height: `rho(a, z) = core(z) · (1 + buttresses) − bark depth · (1 − bark) +
+  knots`. It can't self-intersect. Buttresses are Gaussian lobes at each root's angle that fade out
+  by the waist, and everything turns with the spiral grain (`twist_at(z)`). The bottom ring at z = 0
+  is the bed contact, so no bed cut is needed.
+- **Trunk wrapped round the branches.** Lay the branch paths out first. Then make the trunk core a
+  smooth maximum (`smax`, k = 3 mm) of its own waist profile and each branch's centreline radius
+  minus half the branch radius. The branches stand out as ridges with no pockets between. Letting
+  branches loop out of a narrow trunk left visible gaps.
+- **Procedural bark** (`bark(U, V)`, in plate units):
+  - Fissures run on whole numbers of `U`, warped by a smooth three-sine noise at plate scale, so
+    neighbouring furrows converge and part.
+  - Each plate column gets its own random length and tilt for the cross-cracks, so the cracks never
+    line up.
+  - Random columns get a shallower split down the middle.
+  - Profiles use `smoothstep` ramps at least a sample wide. Narrower cracks alias into a pixelated
+    look, which showed on the flared bowl.
+  - Sampling: 8 surface samples per plate (Normal) and rings about 0.9 mm apart.
+  - Fissure depth scales with member radius, and plate count is fixed per tube, so thin members get
+    fine, shallow bark.
+- **Knots:** `knot_h(d, kr)` is a swollen rim, a sunken eye and cosine end-grain rings. The fissures
+  fade within 1.5 `kr` (`knot_calm`). They are placed by a world direction (outward from the glass)
+  rather than a frame angle, so they never eat into the glass gap.
+- **Twigs:** long thin twigs read as thorns. Short blunt stubs (11–15 mm, r 3.4 → 2.5) read as
+  pruned wood.
+- **Height limits:** a tube's flat end cap is tilted with the path, so it reaches past the path's
+  end point. End paths 1 mm below a hard limit (the first build measured 250.14 mm).
+- **Design live with the user:** save after each step (glass, trunk and roots, branches, bark).
+  Keep previews under about 15 s, and offer the Draft quality for live tweaking.
+
+Design history:
+
+1. Glass first, then trunk and roots, then branches, then bark. Each step was saved to the user's
+   window.
+2. The first branches looped out of a narrow trunk, leaving pockets, and the floor rim read as a
+   table top. Fixed by wrapping the trunk round the branches and adding a bevelled lip that the bore
+   cuts away.
+3. The preview took 27 s. The nested-difference growth rings were to blame (§5.6), and fixing them
+   brought it to 9 s. Knots and stubs took it to 16 s.
+4. The bark first read as bricks, then as planed lumber. It became natural with plate-scale
+   meander, per-column plate lengths, split plates and wider crack ramps.
+5. Production: component tests were all 0/0 on the first try. The single-body build passed the
+   mesh checks and the Bambu Studio slice. Only the tip height needed the 1 mm spare.
+

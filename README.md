@@ -13,22 +13,28 @@ ships ready to print:
 
 ### Math Driven Pots and Vases
 
-Tree-shaped holders for a plain glass vase. The glass drops into a straight bore and stands on a
+Tree-shaped holders for a plain glass vase. The glass drops straight in from the top and stands on a
 stump floor, and you can see the tree's growth rings through the glass bottom.
 
 <table>
   <tr>
-    <td align="center" width="50%">
+    <td align="center" width="33%">
       <a href="art/Math%20Driven%20Pots%20and%20Vases/Braided%20Tree%20Vase%20Holder/">
-        <img src="art/Math%20Driven%20Pots%20and%20Vases/Braided%20Tree%20Vase%20Holder/Braided_Tree_Vase_Holder.png" alt="Braided Tree Vase Holder" width="360">
+        <img src="art/Math%20Driven%20Pots%20and%20Vases/Braided%20Tree%20Vase%20Holder/Braided_Tree_Vase_Holder.png" alt="Braided Tree Vase Holder" width="260">
       </a>
       <br><b>Braided Tree Vase Holder</b>
     </td>
-    <td align="center" width="50%">
+    <td align="center" width="33%">
       <a href="art/Math%20Driven%20Pots%20and%20Vases/Embracing%20Tree/">
-        <img src="art/Math%20Driven%20Pots%20and%20Vases/Embracing%20Tree/Embracing_Tree.png" alt="Embracing Tree" width="340">
+        <img src="art/Math%20Driven%20Pots%20and%20Vases/Embracing%20Tree/Embracing_Tree.png" alt="Embracing Tree" width="245">
       </a>
       <br><b>Embracing Tree</b>
+    </td>
+    <td align="center" width="33%">
+      <a href="art/Math%20Driven%20Pots%20and%20Vases/Cradle%20Tree/">
+        <img src="art/Math%20Driven%20Pots%20and%20Vases/Cradle%20Tree/Cradle_Tree.png" alt="Cradle Tree" width="200">
+      </a>
+      <br><b>Cradle Tree</b>
     </td>
   </tr>
   <tr>
@@ -41,16 +47,21 @@ stump floor, and you can see the tree's growth rings through the glass bottom.
       wrap around it, with a tall central leader. Each twig ends in a bright new shoot flanked by
       two mature leaves.
     </td>
+    <td valign="top">
+      The glass sits 6 cm up in the branches of a rooted tree. Five branches grow out of the trunk
+      and spiral 87° around the glass, then fork above the rim. Every surface is furrowed bark with
+      knots and pruned twig stubs.
+    </td>
   </tr>
 </table>
 
-| | Braided Tree Vase Holder | Embracing Tree |
-|---|---|---|
-| Glass | 80 × 130 mm (82 mm bore, floor 9 mm) | 80 × 130 mm (82 mm bore, floor 8 mm) |
-| Size | 153.5 × 150.6 × 177.6 mm | 153.8 × 150.6 × 179.4 mm |
-| Colours (Bambu PLA Basic) | Cocoa Brown `#6F5034`, Mistletoe Green `#3F8E43` | Cocoa Brown `#6F5034`, Mistletoe Green `#3F8E43`, Bright Green `#BECF00` |
-| Print on the H2C, 35 % infill | 7 h 56 min, 188 g | 6 h 08 min, 91 g |
-| Files | [scad](art/Math%20Driven%20Pots%20and%20Vases/Braided%20Tree%20Vase%20Holder/Braided_Tree_Vase_Holder.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Braided%20Tree%20Vase%20Holder/Braided_Tree_Vase_Holder.3mf) | [scad](art/Math%20Driven%20Pots%20and%20Vases/Embracing%20Tree/Embracing_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Embracing%20Tree/Embracing_Tree.3mf) |
+| | Braided Tree Vase Holder | Embracing Tree | Cradle Tree |
+|---|---|---|---|
+| Glass | 80 × 130 mm (82 mm bore, floor 9 mm) | 80 × 130 mm (82 mm bore, floor 8 mm) | 80 × 130 mm (82 mm bore, floor 60 mm) |
+| Size | 153.5 × 150.6 × 177.6 mm | 153.8 × 150.6 × 179.4 mm | 156.4 × 136.5 × 249.2 mm |
+| Colours (Bambu PLA Basic) | Cocoa Brown `#6F5034`, Mistletoe Green `#3F8E43` | Cocoa Brown `#6F5034`, Mistletoe Green `#3F8E43`, Bright Green `#BECF00` | Cocoa Brown `#6F5034` |
+| Print on the H2C, 35 % infill | 7 h 56 min, 188 g | 6 h 08 min, 91 g | 7 h 52 min, 227 g |
+| Files | [scad](art/Math%20Driven%20Pots%20and%20Vases/Braided%20Tree%20Vase%20Holder/Braided_Tree_Vase_Holder.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Braided%20Tree%20Vase%20Holder/Braided_Tree_Vase_Holder.3mf) | [scad](art/Math%20Driven%20Pots%20and%20Vases/Embracing%20Tree/Embracing_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Embracing%20Tree/Embracing_Tree.3mf) | [scad](art/Math%20Driven%20Pots%20and%20Vases/Cradle%20Tree/Cradle_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Cradle%20Tree/Cradle_Tree.3mf) |
 
 The images are renders, not photos.
 
@@ -59,7 +70,7 @@ The images are renders, not photos.
 - Each `.3mf` is a **Bambu Studio project** for the Bambu Lab H2C: 0.4 mm nozzle, 0.20mm Standard
   process, 35 % sparse infill. Every colour part is already assigned its own PLA Basic filament,
   with purge volumes. Open it and slice.
-- Print upright without supports. Both holders pass the house rules: no more than 0.5 % of the
+- Print upright without supports. All three holders pass the house rules: no more than 0.5 % of the
   surface past 60° above the first centimetre, and nothing that starts in mid-air.
 - For another Bambu printer: `python tools/bambu_3mf.py <file>.3mf --printer X1C`
   (`--list-printers` shows all ten).
