@@ -53,24 +53,50 @@ stump floor, and you can see the tree's growth rings through the glass bottom.
       knots and pruned twig stubs.
     </td>
   </tr>
+  <tr>
+    <td align="center" width="33%">
+      <a href="art/Math%20Driven%20Pots%20and%20Vases/Tangled%20Cradle%20Tree/">
+        <img src="art/Math%20Driven%20Pots%20and%20Vases/Tangled%20Cradle%20Tree/Tangled_Cradle_Tree.png" alt="Tangled Cradle Tree" width="200">
+      </a>
+      <br><b>Tangled Cradle Tree</b>
+    </td>
+    <td align="center" width="33%">
+      <a href="art/Math%20Driven%20Pots%20and%20Vases/Chaotic%20Cradle%20Tree/">
+        <img src="art/Math%20Driven%20Pots%20and%20Vases/Chaotic%20Cradle%20Tree/Chaotic_Cradle_Tree.png" alt="Chaotic Cradle Tree" width="215">
+      </a>
+      <br><b>Chaotic Cradle Tree</b>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      The Cradle Tree with sub-branches. Five main branches wind one way and never cross each other.
+      Sub-branches fork off and wind back, and where one meets a main branch it arches out over it
+      and grows into it.
+    </td>
+    <td valign="top">
+      Every branch takes its own way: some turn against the grain, three reverse partway up, and
+      sub-branches fork off in the other direction. Wherever two branches meet they grow together,
+      which ties the whole cage into one strong print.
+    </td>
+  </tr>
 </table>
 
-| | Braided Tree Vase Holder | Embracing Tree | Cradle Tree |
-|---|---|---|---|
-| Glass | 80 × 130 mm (82 mm bore, floor 9 mm) | 80 × 130 mm (82 mm bore, floor 8 mm) | 80 × 130 mm (82 mm bore, floor 60 mm) |
-| Size | 153.5 × 150.6 × 177.6 mm | 153.8 × 150.6 × 179.4 mm | 156.4 × 136.5 × 249.2 mm |
-| Colours (Bambu PLA Basic) | Cocoa Brown `#6F5034`, Mistletoe Green `#3F8E43` | Cocoa Brown `#6F5034`, Mistletoe Green `#3F8E43`, Bright Green `#BECF00` | Cocoa Brown `#6F5034` |
-| Print on the H2C, 35 % infill | 7 h 56 min, 188 g | 6 h 08 min, 91 g | 7 h 52 min, 227 g |
-| Files | [scad](art/Math%20Driven%20Pots%20and%20Vases/Braided%20Tree%20Vase%20Holder/Braided_Tree_Vase_Holder.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Braided%20Tree%20Vase%20Holder/Braided_Tree_Vase_Holder.3mf) | [scad](art/Math%20Driven%20Pots%20and%20Vases/Embracing%20Tree/Embracing_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Embracing%20Tree/Embracing_Tree.3mf) | [scad](art/Math%20Driven%20Pots%20and%20Vases/Cradle%20Tree/Cradle_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Cradle%20Tree/Cradle_Tree.3mf) |
+| Design | Glass floor | Size (mm) | Colours (Bambu PLA Basic) | Print on the H2C, 35 % infill | Files |
+|---|---|---|---|---|---|
+| Braided Tree Vase Holder | 9 mm | 153.5 × 150.6 × 177.6 | Cocoa Brown `#6F5034`, Mistletoe Green `#3F8E43` | 7 h 56 min, 188 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Braided%20Tree%20Vase%20Holder/Braided_Tree_Vase_Holder.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Braided%20Tree%20Vase%20Holder/Braided_Tree_Vase_Holder.3mf) |
+| Embracing Tree | 8 mm | 153.8 × 150.6 × 179.4 | Cocoa Brown, Mistletoe Green, Bright Green `#BECF00` | 6 h 08 min, 91 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Embracing%20Tree/Embracing_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Embracing%20Tree/Embracing_Tree.3mf) |
+| Cradle Tree | 60 mm | 156.4 × 136.5 × 249.2 | Cocoa Brown | 7 h 52 min, 227 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Cradle%20Tree/Cradle_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Cradle%20Tree/Cradle_Tree.3mf) |
+| Tangled Cradle Tree | 60 mm | 156.4 × 136.8 × 248.8 | Cocoa Brown | 8 h 32 min, 236 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Tangled%20Cradle%20Tree/Tangled_Cradle_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Tangled%20Cradle%20Tree/Tangled_Cradle_Tree.3mf) |
+| Chaotic Cradle Tree | 60 mm | 156.4 × 142.6 × 249.1 | Cocoa Brown | 8 h 21 min, 232 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Chaotic%20Cradle%20Tree/Chaotic_Cradle_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Chaotic%20Cradle%20Tree/Chaotic_Cradle_Tree.3mf) |
 
-The images are renders, not photos.
+All five hold an 80 × 130 mm glass in an 82 mm bore. The images are renders, not photos.
 
 ## Printing
 
 - Each `.3mf` is a **Bambu Studio project** for the Bambu Lab H2C: 0.4 mm nozzle, 0.20mm Standard
   process, 35 % sparse infill. Every colour part is already assigned its own PLA Basic filament,
   with purge volumes. Open it and slice.
-- Print upright without supports. All three holders pass the house rules: no more than 0.5 % of the
+- Print upright without supports. All five holders pass the house rules: no more than 0.5 % of the
   surface past 60° above the first centimetre, and nothing that starts in mid-air.
 - For another Bambu printer: `python tools/bambu_3mf.py <file>.3mf --printer X1C`
   (`--list-printers` shows all ten).

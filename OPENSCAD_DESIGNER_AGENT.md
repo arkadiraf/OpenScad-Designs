@@ -5,8 +5,9 @@ glass-insert vase holders in particular, from a brief to a verified, packaged de
 `.scad` source + multi-part `.3mf` + isometric `.png`.
 
 The process was built and debugged while designing **Braided Tree Vase Holder** (2026-09-18/19; §12)
-refined while finishing **Embracing Tree** (2026-09-19; §13), and extended with procedural bark on
-**Cradle Tree** (2026-09-19; §14).
+refined while finishing **Embracing Tree** (2026-09-19; §13), extended with procedural bark on
+**Cradle Tree** (2026-09-19; §14), and with branches that meet and grow together on **Tangled** and
+**Chaotic Cradle Tree** (2026-09-19; §15).
 The print rules (§4) come from the house guides `POT_DESIGNER_AGENT.md` and `WOVEN_DESIGNER_AGENT.md`,
 restated here so this guide can be followed on its own. Those two guides drive the browser apps
 (`EquationDrivenPotDesigner.html`, `EquationDrivenWovenPots.html`). This one drives OpenSCAD.
@@ -20,6 +21,7 @@ Everything scripted lives in `tools/` next to this file:
 | `tools/merge_3mf.py` | Merges single-mesh OpenSCAD 3MF exports into one object with named, coloured parts |
 | `tools/bambu_3mf.py` | Rewrites a 3MF as a Bambu Studio project: printer, plate, one PLA Basic filament per part, purge volumes and infill (§9.1). Converts in place; re-targets its own output to another printer. `--slice` slices it with the installed Bambu Studio and reports its warnings, print time and filament |
 | `tools/render_png.py` | Preview render to PNG from a preset view (iso, front, back, top, persp), background trimmed |
+| `tools/member_clearance.py` | Gap or overlap between every pair of branches, from the centrelines a design echoes with `part="paths"`; fails above a merge limit (§15.1) |
 
 ---
 
@@ -126,7 +128,7 @@ There is no API into the OpenSCAD GUI. **Share a file instead:**
 | Bottom 1 cm | some overhang is allowed there; the slicer can add "on build plate only" supports | Woven §8 |
 | Topology | 0 boundary / 0 non-manifold edges on **every** part | Both guides |
 | Sits on z = 0 | yes | Both guides |
-| Colours | **Bambu Lab PLA Basic only**, hexes from the table below; pick a combination not already in the palette tables of the other two guides, or used by an OpenSCAD design so far (Braided: Cocoa Brown + Mistletoe Green; Embracing: Cocoa Brown + Mistletoe Green + Bright Green; Cradle: Cocoa Brown alone) | Pot §12, user |
+| Colours | **Bambu Lab PLA Basic only**, hexes from the table below; pick a combination not already in the palette tables of the other two guides, or used by an OpenSCAD design so far (Braided: Cocoa Brown + Mistletoe Green; Embracing: Cocoa Brown + Mistletoe Green + Bright Green; Cradle, Tangled and Chaotic: Cocoa Brown alone) | Pot §12, user |
 | Printer and infill | **Bambu Lab H2C** (0.4 mm nozzle, 0.20mm Standard process), **35 % sparse infill**, unless the user names another | user |
 
 **Bambu Lab PLA Basic colours** (the same list is built into `tools/bambu_3mf.py`; keep the two in
@@ -459,6 +461,8 @@ the percentage is meaningless. Judge overhang on the merged file only.
 | Component tests (one tube to the whole crown) | 1–40 s |
 | Cradle Tree, one body: textured trunk, 5 branches with forks and stubs, 7 roots; 315 k triangles | **14 min 19 s** (one branch assembly alone 54 s) |
 | Cradle Tree preview (Normal / Draft quality) | 16 s / 6 s |
+| Tangled / Chaotic Cradle Tree, one body, 8–9 branches with merges; 337 k / 328 k triangles | **21 min 37 s / 21 min 20 s**, run side by side |
+| A pair of merging branches alone (component test) | 1.5–3 min |
 
 - CGAL uses one core. **Export colour parts as separate processes in parallel** (`build_design.py`
   does this), instead of rendering one big union.
@@ -837,4 +841,79 @@ Design history:
    meander, per-column plate lengths, split plates and wider crack ramps.
 5. Production: component tests were all 0/0 on the first try. The single-body build passed the
    mesh checks and the Bambu Studio slice. Only the tip height needed the 1 mm spare.
+
+---
+
+## 15. Branches that meet: Tangled and Chaotic Cradle Tree
+
+Folders `art/Math Driven Pots and Vases/Tangled Cradle Tree/` and `.../Chaotic Cradle Tree/`. Both
+are the Cradle Tree (§14) with its five symmetric branches replaced by a table of unique paths.
+Trunk, roots, bark, knots, stubs and the growth-ring floor are unchanged.
+
+- **Tangled:** 5 main branches wind the same way and never cross. 3 sub-branches fork off and wind
+  back. Where a sub-branch meets a main branch, it arches out over it and returns to the glass.
+- **Chaotic:** 5 main branches in mixed directions, 3 of which reverse partway up, plus 4
+  sub-branches, 2 of them forks near the rim. Any two branches may meet. The later one arches over
+  and they grow together.
+
+The user's rules: branches may merge where they meet, planned at **10 %** of the thinner one's
+thickness and never more than 30 % (25 % for Tangled). The merges tie the cage into a stronger print.
+
+| | Tangled Cradle Tree | Chaotic Cradle Tree |
+|---|---|---|
+| Branches | 5 main + 3 sub; 1 main fork above the rim | 5 main (3 reverse) + 4 sub, 2 of them forks at the rim |
+| Meetings | 6 arches, merge 6–21 % | 4 arches, merge 7–14 % (largest empty sector around the glass 69–99° at every height) |
+| Size | 156.4 × 136.8 × 248.8 mm | 156.4 × 142.6 × 249.1 mm |
+| Wood | 337 464 triangles, **0 / 0** edges, 1 shell, 380.9 cm³ | 327 802 triangles, **0 / 0** edges, 2 shells (the second a 4-triangle, zero-volume pocket inside a merge), 374.6 cm³ |
+| Past 60° | **0.04 %** above the bottom 1 cm; bottom 1 cm 0.12 % | **0.04 %**; bottom 1 cm 0.12 % |
+| Past 45° | 3.50 % (report only) | 3.65 % (report only) |
+| Glass | lifts straight out: closest material 40.99 mm from the axis (bore 41.00) | same |
+| Climb | ≥ 37° | ≥ 38° |
+| Bambu Studio slice (H2C, 35 % infill) | no warnings; 8 h 32 min; 236 g | no warnings; 8 h 21 min; 232 g |
+| Render | 21 min 37 s | 21 min 20 s |
+
+### 15.1 Techniques
+
+- **One table row per branch.** Rows hold the angle at the floor, turn rate(s), reversal height,
+  radius scale, tip drop, lean, and meander amplitude, wavelength and phase. Sub-branches also name
+  their parent and fork height. Build one `members` list, mains first, and write every function
+  over the member index.
+- **Reversing a turn smoothly.** Integrate a smoothstep between the two rates:
+  `ismooth(u) = u<=0 ? 0 : u<1 ? u³ − u⁴/2 : u − 0.5`, and the angle offset is
+  `(r2 − r1) · W · ismooth((z − (zc − W/2)) / W)` with W = 40 mm. The direction eases through
+  vertical with a bend radius around 40 mm. Subtract the term's value at the reference height so a
+  sub-branch starts exactly on its parent.
+- **Meetings, not just crossings.** A meeting is any local minimum, along the height, of the
+  distance apart along the glass (`|Δφ| · r`) that falls below the two radii. Checking only for
+  sign changes in Δφ missed a fork running alongside a branch (24 %).
+- **Arch height** at a meeting: the later branch moves out radially until the two centrelines are
+  `r1 + r2 − 2 · merge · min(r1, r2)` apart, allowing for the distance apart along the glass at
+  each height. Take the largest need within ±12 mm of the meeting, divided by the Gaussian falloff
+  (half-width 20 mm). Sized only at the meeting point, one arch still merged 31 % a few mm before
+  it, where the two were converging.
+- **Resolve in order.** Build the meeting lists recursively (`build(i, acc)`). Branch i sees the
+  final, arched radius of every earlier branch, so an arch over an arched branch lands correctly.
+  Avoid stacking: a sub-branch forking 5 mm before an arch over its own parent needed an 18 mm
+  hump. Move the fork away from existing meetings.
+- **Forks are members too.** A separate "fork above the rim" routine sat outside the meeting
+  system and ran into a neighbour (67 % overlap). Model forks as sub-branches that start near the
+  rim.
+- **Check with the real tube sizes:** render `part="paths"` (every member's centreline and radii
+  as echo lines) and run `tools/member_clearance.py --limit 0.30`. It takes seconds, while the
+  meshes take minutes. Then full-render each merging pair on its own (component tests, §6.1).
+- **Coverage search.** Random directions bunched the branches into two bundles, leaving a 156°
+  empty sector. A Python copy of the angle functions (checked to match OpenSCAD at every height)
+  scored 24 000 random tables. The score was the largest empty sector at every height, penalised
+  for contact below the arch zone, fewer than 6 or more than 12 meetings, and stacked meetings. The
+  best table cut the sector to 100°. Keep the search per design; the angle model is its only
+  dependency.
+
+### 15.2 Traps found
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| A preview that never ends and 38 MB of `cross()` / `undefined` warnings | a knot and twig placement helper with an **inverted range**: forks near the rim start above `glass_top − 10`, so the candidate heights fell before the branch's start. The negative `t` indexed outside the path, which gave NaN geometry | `pick()` returns `[]` when `z1 <= z0` and keeps only heights inside `[z0, z1)` |
+| Heights 250.24 and 250.49 mm against a 250 mm limit | a leaning tip's end cap reaches up to r · sin(lean) past its path end; a 1 mm spare was too little | `tip_spare = 2.5` |
+| An extra shell of 4–14 triangles and zero volume | two bark textures meeting trap a sealed pocket inside the merge | harmless; the Bambu slice has no warnings |
+| A pair test shows 2 shells but the members were meant to merge | the same pocket, not a gap: list the shells with their volumes before worrying | — |
 
