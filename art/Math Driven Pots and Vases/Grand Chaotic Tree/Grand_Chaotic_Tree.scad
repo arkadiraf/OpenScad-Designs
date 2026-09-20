@@ -1,59 +1,62 @@
 // GRAND CHAOTIC TREE - a large glass held up in the branches of a big rooted tree.
-// A thick trunk splits into 3 limbs, the limbs into 7 branches and those into
-// 13, each fork turning its own way around the glass; some reverse partway up.
-// There is no floor and nothing is cut away for the glass: the wood grows
-// against it like a tree round an obstacle, pressed flat where it touches, bark
-// and all. The three limbs pass under the foot of the glass and it stands on
-// their flattened tops, 10 cm above the ground. Wherever two branches meet, the later
-// one arches out over the other and the two grow together: it sinks in by
-// arch_merge of the thinner one's thickness (10 % planned, 30 % at most), which
-// also ties the cage together for printing. Every path is unique and nothing is
-// symmetrical. The trunk comes down in buttresses that spread over the ground
-// and run out into long roots, some with side roots, to a 25 cm spread. The whole piece stays within 32 cm. Bark, knots and pruned twig
-// stubs are modelled on every member.
+// A trunk that comes down in buttresses splits into 3 limbs at three different
+// heights, the limbs into 7 branches and those into 13, each fork turning its own
+// way around the glass; some reverse partway up. There is no floor and nothing is
+// cut away for the glass: the wood grows against it like a tree round an obstacle,
+// pressed flat where it touches, bark and all, and the glass stands on the
+// flattened tops of the three limbs. Wherever two branches meet, the later one
+// arches out over the other and the two grow together: it sinks in by arch_merge
+// of the thinner one's thickness (10 % planned, 30 % at most), which also ties the
+// cage together for printing. The trunk, its buttresses and the bases of the roots
+// are one skin; the limbs and roots take over from it along defined contours where
+// the surfaces cross almost parallel, wearing the same bark pattern on both sides,
+// so the joins do not show. Every path is unique and nothing is symmetrical. The
+// roots sprawl over the ground to a 30 cm spread, and the whole piece stays within
+// 32 cm. Bark, knots and pruned twig stubs are modelled on every member.
 // Step 1 is the glass; every holder dimension is derived from it.
 // All dimensions in mm. OpenSCAD trigonometry uses DEGREES.
 
 /* [1 - Real glass vase] */
-glass_d = 96;           // outer diameter of the glass
-glass_h = 170;          // height of the glass
+glass_d = 100;          // outer diameter of the glass
+glass_h = 200;          // height of the glass
 glass_wall = 3;         // preview only
 glass_bottom = 6;       // preview only
 glass_foot = 2;         // radius of the rounded edge at the foot of the glass
 show_glass = true;
 
 /* [2 - Fit and height] */
-clearance = 1;          // radial gap around the glass: 96 mm glass -> 98 mm bore
-lift = 100;             // glass floor above the ground
+clearance = 1;          // radial gap around the glass: 100 mm glass -> 102 mm bore
+lift = 80;              // glass bottom above the ground
 total_h = 320;          // overall height, branch tips included (the H2C prints 325)
 
 /* [3 - Trunk and roots] */
-trunk_waist = 28;       // trunk radius at its narrowest
-root_collar = 4;        // slight flare of the trunk between the buttresses
-buttress = 36;          // how far the buttresses reach out over the ground beyond the trunk
-buttress_h = 50;        // how high up the trunk the buttresses start
+trunk_waist = 29;       // trunk radius at its narrowest
+root_collar = 4.2;      // slight flare of the trunk between the buttresses
+buttress = 32;          // how far the buttresses reach out over the ground beyond the trunk
+buttress_h = 33;        // how high up the trunk the buttresses start (below the fork, so the
+                        // two flares do not add up into a shelf)
 grain_twist = 55;       // spiral grain: degrees the trunk turns from the ground to the floor
 root_count = 9;
-root_spread = 250;      // diameter the roots reach over the ground
-root_r0 = 10;           // root radius where it starts, inside the trunk
-root_r1 = 2.8;          // root radius at the tip
-root_meander = 8;       // how far the roots snake from side to side (mm)
-root_sweep = 22;        // how far a root tip swings off its straight line (mm)
+root_spread = 310;      // diameter the roots reach over the ground (the widest reaches about 300)
+root_r0 = 10.4;         // root radius where it starts, inside the trunk
+root_r1 = 3;            // root radius at the tip
+root_meander = 8.3;     // how far the roots snake from side to side (mm)
+root_sweep = 23;        // how far a root tip swings off its straight line (mm)
 side_roots = 0.6;       // share of the roots that fork a side root
 
 /* [4 - Branches] */
 press = 0.2;            // share of a branch's thickness pressed flat against the glass
-branch_r = 12;          // radius of a scale-1 branch at the glass bottom (limbs are thicker)
-tip_r = 2.6;            // at the tips
+branch_r = 12.5;        // radius of a scale-1 branch at the glass bottom (limbs are thicker)
+tip_r = 2.75;           // at the tips
 wander = 1;             // irregular wander of every branch along the glass (0 = smooth spirals)
 sprawl = 1;             // branches lifting off the glass and tips flung out sideways (0 = none)
-wander_seed = 17;       // another number gives every branch a different wander
+wander_seed = 0;        // another number gives every branch a different wander
 arch_merge = 0.10;      // where two branches meet, the one on top sinks into the other by this
                         // share of the thinner one's thickness (planned 0.10, 0.30 at most)
-arch_w = 24;            // half-width of an arch, measured along the height (mm)
-reverse_w = 50;         // height over which a branch reverses its turn (mm)
+arch_w = 25;            // half-width of an arch, measured along the height (mm)
+reverse_w = 52;         // height over which a branch reverses its turn (mm)
 // The layout came from a search over random 3 -> 7 -> 13 trees for the smallest
-// empty sector around the glass at every height (largest gap 82 deg above the
+// empty sector around the glass at every height (largest gap 106 deg above the
 // lower glass), a steady three-point seat (limbs at most 126 deg apart) and no
 // stacked arches.
 // Limbs, out of the trunk: [angle at the glass bottom (deg), turn rate as degrees
@@ -62,15 +65,16 @@ reverse_w = 50;         // height over which a branch reverses its turn (mm)
 //  top (mm), lean out above the rim (mm), meander amplitude (deg), meander
 //  wavelength (mm), meander phase (deg), twig stubs (0..2)]
 limb_table = [
-    [225,  -77, 121,   73, 1.32,  0, 25, 7, 128,  98, 2],
-    [341,  -72,   0,    0, 1.26, 12, 29, 5, 178, 173, 2],
-    [108,  -70,   0,    0, 1.36,  6, 24, 5, 168, 340, 2]];
+    [ 227,  116,    0,    0, 1.32,    0,   16,    5,  198,   60,    2],
+    [ 345,  -89,    0,    0, 1.26,    7,   17,    5,  158,  197,    2],
+    [ 104,  118,  125, -114, 1.36,    4,   14,    7,  155,  303,    2]];
 // How each limb rises out of the trunk, so they part at different heights:
 // [parting height (share of lift), where it reaches the side of the glass (mm
 //  above the glass bottom), share of the rise spent speeding up, share spent
-//  slowing down]. Limb 2 parts first; limbs 0 and 1 go on together as one
-// forked stem and part higher up.
-limb_rise = [[0.38, 14, 0.5, 0.4], [0.46, 12, 0.4, 0.4], [0.28, 16, 0.5, 0.4]];
+//  slowing down]. Limb 2 parts first, then limb 0, then limb 1; with a 20 cm
+// glass on an 8 cm trunk the limbs have little height to reach out in, so the
+// three partings sit closer together than on the smaller tree.
+limb_rise = [[0.225, 16, 0.4, 0.4], [0.275, 14, 0.4, 0.4], [0.175, 18, 0.4, 0.4]];
 // Forks, each off an earlier member (limbs are 0-2, then the forks in this
 // order from 3); the first four make the 7 branches, the last six the 13. A fork
 // takes `share` of its parent's thickness and the parent thins so that their two
@@ -80,21 +84,21 @@ limb_rise = [[0.38, 14, 0.5, 0.4], [0.46, 12, 0.4, 0.4], [0.28, 16, 0.5, 0.4]];
 //  it, share, tip below the top (mm), lean out above the rim (mm), meander
 //  amplitude (deg), meander wavelength (mm), meander phase (deg), twig stubs]
 fork_table = [
-    [0,  49,  89,   0,   0, 0.65, 12, 27, 4, 152, 219, 1],
-    [1,  17,  86,   0,   0, 0.69,  6, 26, 7, 113, 309, 1],
-    [0,  15,  81,   0,   0, 0.72,  7, 30, 7, 154, 125, 1],
-    [2,  26,  64,   0,   0, 0.64, 10, 26, 8, 121,  49, 1],
-    [2,  93,  81,   0,   0, 0.66, 21, 25, 4, 141, 245, 0],
-    [1,  94,  56,   0,   0, 0.66, 15, 26, 7, 128, 136, 0],
-    [6, 143, -48,   0,   0, 0.59, 19, 23, 4,  97, 118, 0],
-    [5, 108, -46,   0,   0, 0.61, 25, 25, 3, 118,   2, 1],
-    [0,  97, -48,   0,   0, 0.63,  4, 23, 6,  96,   7, 0],
-    [4,  67, -77,   0,   0, 0.65, 21, 23, 5, 130, 197, 0]];
+    [   2,   65, -113,    0,    0, 0.71,    5,   14,    5,  162,   11,    1],
+    [   2,   25,  -85,    0,    0, 0.71,    5,   14,    7,  199,  132,    1],
+    [   0,   26, -116,    0,    0, 0.69,    4,   14,    5,  189,  219,    1],
+    [   1,   21,   85,    0,    0, 0.68,    6,   13,    8,  163,   36,    1],
+    [   0,   97, -114,    0,    0, 0.62,   14,   15,    5,  112,   59,    1],
+    [   4,  161,   79,    0,    0, 0.67,    2,   13,    6,  116,   26,    0],
+    [   6,  167, -105,    0,    0, 0.64,    5,   14,    6,  142,  321,    0],
+    [   5,  111,   91,    0,    0, 0.66,    8,   17,    3,  173,   84,    1],
+    [   2,  149,   83,    0,    0, 0.70,    8,   16,    6,  149,  210,    0],
+    [   3,  168,  109,    0,    0, 0.62,    5,   13,    5,  152,   48,    0]];
 
 /* [5 - Bark] */
-bark_depth = 1.5;       // fissure depth on the trunk (mm); thinner members get less
-plate_w = 8.5;          // bark plate width (mm)
-plate_len = 17;         // bark plate length (mm)
+bark_depth = 1.56;      // fissure depth on the trunk (mm); thinner members get less
+plate_w = 8.9;          // bark plate width (mm)
+plate_len = 17.7;       // bark plate length (mm)
 
 /* [6 - View] */
 part = "assembly";      // [assembly, wood, glass, paths, none]
@@ -108,6 +112,7 @@ step = quality == 0 ? 2 : quality == 1 ? 1 : 0.7;        // ring spacing along m
 glass_r = glass_d/2;
 bore_r = glass_r+clearance;
 glass_top = lift+glass_h;
+sc = glass_d/96;        // the fixed lengths below were set for a 96 mm glass; scaled to this one
 trunk_plates = 26;      // bark plates around the trunk
 tip_spare = 2.5;        // tips end this far below total_h: a leaning tip's end cap reaches past its path end
 
@@ -155,8 +160,9 @@ function n2(x,y) = (sin(263*x+131*y+11)+sin(-97*x+211*y+47)+sin(59*x-173*y+83))/
 // The fissures meander at plate scale and drift over several plates, so
 // neighbouring furrows converge and part like real furrowed bark. Each column is broken into plates of its own
 // length by shallower, tilted cross cracks, so the cracks never line up, and
-// some plates are split lengthwise by a shallow secondary groove.
-function bark(U,V) = let(
+// some plates are split lengthwise by a shallow secondary groove. cw (0..1)
+// scales the cross cracks.
+function bark(U,V,cw=1) = let(
     u = U+0.5*n2(0.9*U,0.2*V)+0.45*n2(0.35*U+5,0.07*V),
     d = abs(u-round(u)),                                   // 0 on a fissure
     col = floor(u),
@@ -165,9 +171,16 @@ function bark(U,V) = let(
     dv = abs(v-round(v)),                                  // 0 on a cross crack
     sp = abs(frac(u)-0.5),                                 // 0 along the plate middle
     ridge = smooth(0.04,0.24,d),
-    crack = 0.5+0.5*smooth(0.05,0.2,dv),
+    crack = 1-cw*0.5*(1-smooth(0.05,0.2,dv)),
     split = h>0.6 ? 0.62+0.38*smooth(0.02,0.1,sp) : 1)
     min(ridge*(0.85+0.15*sin(180*frac(u))),crack,split);
+
+// The bark of the trunk, fixed in space around the trunk axis: fissures run up
+// the trunk (round it by angle, with the spiral grain), and down the flare and out
+// along the roots (V falls with the distance beyond the trunk). Every surface near
+// a join wears this, so where two surfaces meet their fissures line up.
+function wbark(p) = let(r=norm([p[0],p[1]]), a=atan2(p[1],p[0]))
+    bark(trunk_plates*(a-twist_at(min(p[2],crotch_z)))/360,(p[2]-max(0,r-trunk_waist))/plate_len);
 
 // A knot at surface distance d (mm) from its centre, size kr: a swollen rim
 // around a sunken eye, ringed like end grain. Returns a radius change in mm.
@@ -183,8 +196,11 @@ function knot_calm(d,kr) = smooth(0.7*kr,1.5*kr,d);
 // world vector the knot faces (it is placed where the ring points that way).
 // glass = true: the smooth tube is pressed flat onto the glass where it would
 // grow into it (press_glass), and the bark there, squashed to 40 % of its depth,
-// is cut into the flat face, away from the glass.
-module bark_tube(P,R,depth,seed=0,knots=[],glass=false) {
+// is cut into the flat face, away from the glass. wmix: a function of the smooth
+// surface point, 0 where the tube wears the trunk's bark (wbark, at the trunk's
+// depth) and 1 where it wears its own; tubes that leave the trunk blend from one to
+// the other past their handover contour.
+module bark_tube(P,R,depth,seed=0,knots=[],glass=false,wmix=undef) {
     T=tangents(P); N=transport(T,0,normal0(T[0])); L=arclen(P);
     Rmax=max(R); n=max(5,round(2*PI*Rmax/plate_w)); S=n*spp;
     K=[for(k=knots) let(i=round(k[0]*(len(P)-1)), B=cross(T[i],N[i]))
@@ -195,8 +211,10 @@ module bark_tube(P,R,depth,seed=0,knots=[],glass=false) {
             calm=len(K)==0 ? 1 : min([for(m=[0:len(K)-1]) knot_calm(ds[m],K[m][2])]),
             bump=len(K)==0 ? 0 : sum([for(m=[0:len(K)-1]) knot_h(ds[m],K[m][2])]),
             u=cos(a)*N[i]+sin(a)*B,
-            f=depth*R[i]/Rmax*calm*(1-bark(n*j/S+seed,L[i]/plate_len+0.37*seed))-bump,
-            q=glass ? press_glass(P[i]+R[i]*u) : [P[i]+R[i]*u,99,u],
+            q0=P[i]+R[i]*u, m=is_undef(wmix) ? 1 : wmix(q0),
+            own=bark(n*j/S+seed,L[i]/plate_len+0.37*seed),
+            f=lerp(bark_depth,depth*R[i]/Rmax,m)*calm*(1-(m>=1 ? own : lerp(wbark(q0),own,m)))-bump,
+            q=glass ? press_glass(q0) : [q0,99,u],
             w=1-smooth(press_k,2*press_k,q[1]))
             q[0]+lerp(f,0.4*max(f,0),w)*unit(lerp(-u,q[2],w))]]);
 }
@@ -219,8 +237,8 @@ module glass_vase() {
 // with a much rounder foot, so the push never flips where a limb wraps round
 // the foot); within press_k of it the push fades out smoothly.
 env_e = glass_foot+clearance;   // foot rounding of the obstacle
-env_eg = 12;                    // foot rounding of the direction field
-press_k = 2.5;                  // width of the smooth transition (mm)
+env_eg = 12*sc;                 // foot rounding of the direction field
+press_k = 2.5*sc;               // width of the smooth transition (mm)
 function env_sdf(r,z) = let(x=r-(bore_r-env_e), y=lift+env_e-z)
     x>0 && y>0 ? norm([x,y])-env_e : max(x,y)-env_e;
 function env_dir(r,z) = let(x=r-(bore_r-env_eg), y=lift+env_eg-z)       // [outward, up]
@@ -245,10 +263,11 @@ function press_glass(p) = let(r=norm([p[0],p[1]]), g=env_dir(r,p[2]),
 // trunk, rise, part one after another, pass under the foot of the glass and
 // climb onto its side. The trunk is then one surface (radius as a function of
 // angle and height): a thick column that turns three-lobed as the first limb
-// parts and ends inside the limbs at the crotch. Below, it comes down in
-// buttresses that spread over the ground and run out as roots.
+// parts and narrows smoothly into the limbs, ending inside them at the crotch.
+// Below, it comes down in buttresses that spread over the ground and run out as
+// roots.
 waist_z = 0.3*lift;     // height of the trunk's narrowest point
-branch_z0 = 0.25*lift;  // where the limbs start inside the trunk
+branch_z0 = 0.08*lift;  // where the limbs start, deep inside the trunk
 turn_rate = grain_twist/lift;   // spiral grain, degrees per mm of height
 function twist_at(z) = turn_rate*z;
 function smax(a,b,k=3) = let(h=max(0,min(1,0.5+0.5*(a-b)/k))) lerp(b,a,h)+k*h*(1-h);
@@ -257,8 +276,8 @@ nm = len(limb_table); ns = len(fork_table); nmem = nm+ns;
 function branch_radius(z) = branch_r*lookup(z,[[branch_z0,1.1],[lift,1],[glass_top,0.85],[total_h,0.65]]);
 // Centreline radius of a member of radius r pressed against the glass.
 function hug_r(r) = bore_r+(1-press)*r;
-function lean(z,top,amount) = amount*min(1,(top-glass_top+10)/55)*pow(max(0,z-(glass_top-10))/(top-glass_top+10),1.5);
-branch_rho0 = 11;
+function lean(z,top,amount) = amount*min(1,(top-glass_top+10)/(70*sc))*pow(max(0,z-(glass_top-10))/(top-glass_top+10),1.5);
+branch_rho0 = 7*sc;
 // Parting and out under the glass: a limb leaves the trunk upright, leans out at
 // a steady rate and reaches the side of the glass upright again. The speed rises
 // and falls linearly (limb_rise), which keeps every bend at least 1.25 times the
@@ -290,103 +309,140 @@ function m_z0(i) = Mb(i)[1];
 function m_end(i) = Mb(i)[7];
 kids = [for(i=[0:nmem-1]) [for(k=[0:nmem-1]) if(Mb(k)[0]==i) k]];
 function prod(v,i=0) = i>=len(v) ? 1 : v[i]*prod(v,i+1);
-// A member thins at each of its forks, from 10 mm below to 30 mm above it (a
+// A member thins at each of its forks, from 8 mm below to 25 mm above it (a
 // quicker change would kink the centreline, which follows the radius).
-function thin(i,z) = prod([for(k=kids[i]) 1+(sqrt(1-Mb(k)[6]*Mb(k)[6])-1)*smooth(m_z0(k)-10,m_z0(k)+30,z)]);
+function thin(i,z) = prod([for(k=kids[i]) 1+(sqrt(1-Mb(k)[6]*Mb(k)[6])-1)*smooth(m_z0(k)-10*sc,m_z0(k)+30*sc,z)]);
 function scale_at(i,z) = (is_main(i) ? Mb(i)[6] : Mb(i)[6]*scale_at(Mb(i)[0],m_z0(i)))*thin(i,z);
 bscale = [for(i=[0:nmem-1]) is_main(i) ? Mb(i)[6] : Mb(i)[6]*scale_at(Mb(i)[0],m_z0(i))];
-// Member radius: its share of the tree's thickness, tapering to tip_r over its last 35 mm.
-function m_r(i,z) = lerp(bscale[i]*thin(i,z)*branch_radius(z),tip_r,smooth(m_end(i)-35,m_end(i),z));
+// Member radius: its share of the tree's thickness, tapering to tip_r over its last 29 mm.
+function m_r(i,z) = lerp(bscale[i]*thin(i,z)*branch_radius(z),tip_r,smooth(m_end(i)-35*sc,m_end(i),z));
 // Natural irregularity, different for every member (from rnd), on top of the
-// table's turn and meander. It fades in over 60 mm from where the member leaves
+// table's turn and meander. It fades in over 50 mm from where the member leaves
 // the trunk's seat or its parent, so forks still start on their parent.
 //  - wander_t: sideways along the glass (mm), three waves of unrelated lengths;
-//    the shortest is gentle, so a bend never gets tighter than about 10 mm.
-//  - wander_r: lifting off the glass by up to 4-9 mm in places, then back.
-//  - flick: the last part above the rim swings 5-12 mm to one side (less on
-//    short tips, so they keep climbing steeply enough to print).
+//    the shortest is gentle, so a bend never gets tighter than about 8 mm.
+//  - wander_r: lifting off the glass by up to 3-7.5 mm in places, then back.
+//  - flick: the last part above the rim swings 3-8 mm to one side (less on
+//    tips with under 58 mm of room, so they keep climbing steeply enough to
+//    print; the lean shrinks the same way).
 function wr(i,k,c=0) = rnd(i+17*wander_seed,k,c);
 function wave(i,k,z,l0,l1) = sin(360*z/lerp(l0,l1,wr(i,k,1))+360*wr(i,k,2));
-function w_fade(i,z) = let(z0=is_main(i) ? hug_z(i) : m_z0(i)) smooth(z0,z0+60,z);
-function wander_t(i,z) = wander*w_fade(i,z)*(7*wave(i,31,z,110,160)+3*wave(i,32,z,55,80)+1.1*wave(i,33,z,34,45));
-function wander_r(i,z) = sprawl*w_fade(i,z)*lerp(4,9,wr(i,34))
-    *pow(max(0,0.6*wave(i,35,z,140,200)+0.4*wave(i,36,z,70,100)),2);
-function tip_room(i) = min(1,(m_end(i)-glass_top+10)/55);
-function flick(i,z) = sprawl*tip_room(i)*(5+7*wr(i,37))*(wr(i,38)<0.5 ? -1 : 1)
+function w_fade(i,z) = let(z0=is_main(i) ? hug_z(i) : m_z0(i)) smooth(z0,z0+60*sc,z);
+function wander_t(i,z) = wander*sc*w_fade(i,z)*(7*wave(i,31,z,110*sc,160*sc)+3*wave(i,32,z,55*sc,80*sc)
+    +1.1*wave(i,33,z,34*sc,45*sc));
+function wander_r(i,z) = sprawl*sc*w_fade(i,z)*lerp(4,9,wr(i,34))
+    *pow(max(0,0.6*wave(i,35,z,140*sc,200*sc)+0.4*wave(i,36,z,70*sc,100*sc)),2);
+function tip_room(i) = min(1,(m_end(i)-glass_top+10)/(70*sc));
+function flick(i,z) = sprawl*sc*tip_room(i)*(4+6*wr(i,37))*(wr(i,38)<0.5 ? -1 : 1)
     *pow(max(0,z-(glass_top-10))/(m_end(i)-glass_top+10),2);
-function side_mm(i,z) = (wander_t(i,z)+flick(i,z))*180/PI/(bore_r+8);   // as degrees
+function side_mm(i,z) = (wander_t(i,z)+flick(i,z))*180/PI/(bore_r+8*sc);   // as degrees
 function m_phi(i,z) = is_main(i)
     ? Mb(i)[2]+turn(z,lift,Mb(i)[3],Mb(i)[4],Mb(i)[5])+Mb(i)[9]*sin(360*(z-lift)/Mb(i)[10]+Mb(i)[11])+side_mm(i,z)
     : let(z0=m_z0(i)) m_phi(Mb(i)[0],z0)+turn(z,z0,Mb(i)[3],Mb(i)[4],Mb(i)[5])
         +Mb(i)[9]*(sin(360*(z-z0)/Mb(i)[10]+Mb(i)[11])-sin(Mb(i)[11]))+side_mm(i,z);
 
-// Trunk radius. The core is the column: waist and root collar below, fading out
-// from lobe_z0 to the crotch. Around it the three limbs: the trunk's radius is a
-// smooth maximum of the core and each limb's cross-section (the far side of the
-// limb's circle seen from the axis). The core fades out slowly, the fillet
-// between the lobes grows in above the limbs' start and narrows to nothing at the
-// crotch, and the limb circles sink gradually 3 mm inside the limbs (deeper than
-// their bark), so the column turns three-lobed without a ledge, the valleys
-// between the lobes deepen into the crotch, the limbs grow out of the trunk
-// surface and the loft ends inside them.
+// Trunk radius, one skin for the trunk, its buttresses and the bases of the roots
+// and limbs. Near the ground it is a smooth maximum (fillet 10 mm) of the core
+// column swollen by the buttresses and a copy of each root's base (root_band), so
+// the roots meet the trunk in a fillet. Above, a
+// smooth maximum of that and each limb's cross-section (the far side of the
+// limb's circle seen from the axis), so the column turns three-lobed and the
+// valleys deepen into the crotch.
+//  - The core narrows by at most fade_rate mm per mm of height from where the
+//    limbs start, so no exposed part of the trunk narrows fast enough to print as
+//    a shelf; it is gone inside the lobes long before the crotch.
+//  - Handover contour to the limbs, hand_z(a): below it the limb circles are
+//    0.4 mm fuller than the limbs, so the trunk skin covers them; over the 8 mm
+//    above it they sink 2.3 mm inside, so the limbs take over along a contour where
+//    the two surfaces cross almost parallel. The contour wanders 7 mm round the
+//    trunk, 10 to 18 mm below the crotch, so the handover is complete before the
+//    loft ends inside the limbs. The fillet between the lobes narrows to nothing
+//    at the crotch.
+fade_rate = 0.7;
 function trunk_core(z) = z<=waist_z ? trunk_waist+root_collar*pow((waist_z-z)/waist_z,2) : trunk_waist;
-function core_r(z) = trunk_core(z)*(1-smooth(branch_z0+4,crotch_z-2,z));
+function soft_ramp(u,w) = u<=0 ? 0 : u<w ? u*u/(2*w) : u-w/2;
+function core_r(z) = max(0,trunk_core(z)-fade_rate*soft_ramp(z-fade_z0,6*sc));
 function limb_circles(z) = z<branch_z0 ? [] : [for(j=[0:nm-1]) [rho(j,z),m_phi(j,z),m_r(j,z)]];
-// The handover from trunk to limbs happens up to 16 mm earlier at some angles
-// than at others, so the join wanders round the trunk instead of a level ring.
-function hand_z(a,z) = z+16*pow(0.5+0.3*sin(3*a+40)+0.2*sin(7*a+110),2);
+function hand_z(a) = crotch_z-sc*(10+8*(0.5+0.3*sin(3*a+40)+0.2*sin(7*a+110)));
+function limb_off(a,z) = let(h=hand_z(a)) sc*lerp(0.4,-2.2,smooth(h,h+8*sc,z));
 function circ_far(a,c) = let(d=wrap(a-c[1]), h=c[2]*c[2]-pow(c[0]*sin(d),2)) h<=0 ? 0 : c[0]*cos(d)+sqrt(h);
 function smax_all(v,k,i=0) = i>=len(v)-1 ? v[len(v)-1] : smax(v[i],smax_all(v,k,i+1),k);
-function trunk_r(a,z,C,b=0) = let(zs=min(hand_z(a,z),max(z,crotch_z)),
-    k=0.05+9*smooth(branch_z0,lobe_z0,zs)*(1-smooth(lobe_z0,crotch_z,zs)),
-    inset=1.2*smooth(branch_z0,lobe_z0,zs)+1.8*smooth(lobe_z0,crotch_z,zs))
-    smax_all(concat([core_r(zs)+b],[for(c=C) circ_far(a,[c[0],c[1],c[2]-inset])]),k);
+function trunk_r(a,z,C,b=0) = let(o=limb_off(a,z),
+    k=0.05+9*sc*smooth(branch_z0,lobe_z0,z)*(1-smooth(lobe_z0,crotch_z,z)),
+    base=smax_all(concat([core_r(z)+b],[for(i=[0:root_count-1]) root_band(i,a,z)]),12*sc))
+    len(C)==0 ? base : smax_all(concat([base],[for(c=C) circ_far(a,[c[0],c[1],c[2]+o])]),k);
 function root_angle(i) = 360*i/root_count+20*(rnd(i,1)-0.5);
 function lobe(da,w) = exp(-pow(da/w,2));
 // Buttresses: a ridge for every root, growing out of the trunk from buttress_h
 // down and flaring ever faster towards the ground, like a real root flare. Each
-// narrows as it goes, so it meets the ground as a root, with the trunk standing
-// between them.
+// narrows as it goes and ends on the base of its root (root_band), with the trunk
+// standing between them.
 function butt_reach(i) = buttress*(0.75+0.35*rnd(i,2));
 function butt(a,z) = z>=buttress_h ? 0 : let(f=(buttress_h-z)/buttress_h, w=lerp(26,9,f))
-    sum([for(i=[0:root_count-1]) butt_reach(i)*pow(f,2.3)*lobe(wrap(a-root_angle(i)-twist_at(z)),w)]);
+    sum([for(i=[0:root_count-1]) butt_reach(i)*pow(f,2.3)*lobe(wrap(a-root_angle(i)-0.3*twist_at(z)),w)]);
 // The buttresses swell the core, so they fade out where the limbs take over.
 function trunk_rho(a,z,C) = trunk_r(a,z,C,butt(a,z));
 
 // Knots on the trunk column: [height, angle, size].
-trunk_knots = [[27,70,6],[36,205,5],[19,300,4.5],[32,128,4.5]];
+trunk_knots = [[22,70,5],[29,205,4.2],[16,300,3.7],[26,128,3.7]];
+// Rings every 0.4 mm up to 12 mm (the round tops of the root bases) and twice the
+// usual samples around (the sides of the root bases), then the usual spacing.
 module trunk() {
-    top=crotch_z; nz=ceil(top/step); S=trunk_plates*spp;
-    loft([for(k=[0:nz]) let(z=top*k/nz, th=twist_at(z), C=limb_circles(z))
+    zl=12*sc; n1=ceil(zl/0.4); n2=ceil((crotch_z-zl)/step); S=2*trunk_plates*spp;
+    loft([for(z=concat([for(k=[0:n1]) zl*k/n1],[for(k=[1:n2]) zl+(crotch_z-zl)*k/n2]))
+        let(C=limb_circles(z))
         [for(j=[0:S-1]) let(a=360*j/S, rc=trunk_rho(a,z,C),
             ds=[for(q=trunk_knots) norm([wrap(a-q[1])*PI/180*rc,z-q[0]])],
             calm=min([for(m=[0:len(trunk_knots)-1]) knot_calm(ds[m],trunk_knots[m][2])]),
             bump=sum([for(m=[0:len(trunk_knots)-1]) knot_h(ds[m],trunk_knots[m][2])]),
-            rho=rc-bark_depth*calm*(1-bark(trunk_plates*(a-th)/360,z/plate_len))+bump)
+            rho=rc-bark_depth*calm*(1-wbark([rc*cos(a),rc*sin(a),z]))+bump)
             [rho*cos(a),rho*sin(a),z]]]);
 }
 
-// Each root starts high inside the trunk, runs down under the crest of its
-// buttress, comes out of it near the ground and snakes on over the ground to the
-// root spread, lying on it: the centreline ends 0.3 r up, so the bed cut takes
-// 35 % of the root height. Each root has its own length, a one-sided sweep and a
-// side-to-side meander gentle enough that its bend stays wider than the root.
-root_tip = root_spread/2-root_r1-1;                // centreline radius of the longest tip
-function root_radius(t) = root_r1+(root_r0-root_r1)*pow(1-t,1.25);
-function root_rho(i,t) = lerp(trunk_core(0)-12,root_tip*(0.8+0.2*rnd(i,2)),t);
-function root_foot(i) = trunk_core(0)+0.9*butt_reach(i);     // where it has come out of the buttress
-function root_zc(i,rho,r) = let(s=max(0,min(1,(rho-trunk_core(0)+12)/(root_foot(i)-trunk_core(0)+12))))
-    0.3*r+(0.38*buttress_h-0.3*root_r0)*pow(1-s,2.2);
-function root_off(i,t) = root_sweep*(2*rnd(i,3)-1)*t*t
-    + root_meander*smooth(0.25,0.5,t)*sin(360*root_rho(i,t)/(72+24*rnd(i,4))+360*rnd(i,5));
-function root_point(i,t) = let(rho=root_rho(i,t), z=root_zc(i,rho,root_radius(t)))
-    polar(rho,root_angle(i)+twist_at(z)+root_off(i,t)/rho*180/PI,z);
+// Each root starts inside the trunk foot and lies on the ground (the centreline
+// is 0.3 r up, so the bed cut takes 35 % of the root height), tapering all the
+// way to its tip. Out to its foot contour, root_foot(i), it runs straight out
+// under its buttress and the trunk skin carries a copy of it (root_band) just
+// inside it, which the skin's smooth maximum turns into a fillet between the
+// root and the trunk and buttress; the root comes out of that fillet at a
+// shallow angle. Beyond the foot it snakes on over the ground to the root
+// spread, with a one-sided sweep and a side-to-side meander gentle enough that
+// its bend stays wider than the root.
+root_tip = root_spread/2-root_r1-1-0.15*root_sweep;   // centreline radius of the longest tip (its sweep adds a little)
+function root_s(i) = trunk_core(0)-10*sc;           // where it starts, inside the trunk
+function root_end(i) = root_tip*(0.8+0.2*rnd(i,2));
+function root_foot(i) = trunk_core(0)+butt_reach(i)+4*sc;   // just past the foot of its buttress
+function root_tG(i) = (root_foot(i)-root_s(i))/(root_end(i)-root_s(i));
+function root_u(i,t) = max(0,(t-root_tG(i))/(1-root_tG(i)));       // 0 up to the foot, 1 at the tip
+function root_radius(i,t) = root_r1+(root_r0-root_r1)*pow(1-t,1.25);
+function root_rho(i,t) = lerp(root_s(i),root_end(i),t);
+function root_off(i,t) = let(u=root_u(i,t)) root_sweep*(2*rnd(i,3)-1)*u*u
+    + root_meander*smooth(0,0.6,u)*sin(360*(root_rho(i,t)-root_foot(i))/((72+24*rnd(i,4))*sc)+360*rnd(i,5));
+function root_point(i,t) = let(rho=root_rho(i,t))
+    polar(rho,root_angle(i)+root_off(i,t)/rho*180/PI,0.3*root_radius(i,t));
+// The copy of a root's base in the trunk skin: the lying, tapering cylinder
+// seen from the axis (its far side along each ray, from its half-width at height
+// z), inside the root by more than its bark is deep; over the last 8 mm before
+// the foot contour it sinks a further 3.3 mm, so the fillet fades out before the
+// copy ends.
+band_in = bark_depth+0.3*sc;    // how far the copy sits inside the root: deeper than its bark
+function band_r(i,rho) = root_radius(i,max(0,min(1,(rho-root_s(i))/(root_end(i)-root_s(i)))))-band_in
+    -4*sc*smooth(root_foot(i)-10*sc,root_foot(i),rho);
+function band_w(r,z) = let(q=r*r-pow(z-0.3*(r+band_in),2)) q>0 ? sqrt(q) : -1;
+// The far side along a ray at angle a: the largest distance f at which the ray,
+// f sin(d) off the root's axis, is still within the copy's half-width there
+// (bisection: the copy tapers, so the half-width shrinks outward).
+function band_ok(i,c,s,z,f) = let(w=band_w(band_r(i,f*c),z)) w>=0 && f*s<=w;
+function band_bis(i,c,s,z,lo,hi,n) = n==0 ? lo : let(m=(lo+hi)/2)
+    band_ok(i,c,s,z,m) ? band_bis(i,c,s,z,m,hi,n-1) : band_bis(i,c,s,z,lo,m,n-1);
+function root_band(i,a,z) = let(d=wrap(a-root_angle(i)), c=cos(d), s=abs(sin(d)), f0=0.5*trunk_core(0))
+    c<=0.7 || !band_ok(i,c,s,z,f0) ? 0 : band_bis(i,c,s,z,f0,root_foot(i)/c,9);
 // Side roots fork off partway, head out to one side and turn outward again.
 function has_side(i) = rnd(i,6)<side_roots;
-function side_t(i) = 0.42+0.14*rnd(i,7);
-function side_radius(i,t) = lerp(0.62*root_radius(side_t(i)),0.9*root_r1,pow(t,0.8));
+function side_t(i) = lerp(root_tG(i),1,0.2+0.2*rnd(i,7));
+function side_radius(i,t) = lerp(0.62*root_radius(i,side_t(i)),0.9*root_r1,pow(t,0.8));
 function side_root_point(i,t) = let(t0=side_t(i), p=root_point(i,t0), q=root_point(i,t0+0.02),
-    dir=atan2(q[1]-p[1],q[0]-p[0]), side=rnd(i,8)<0.5 ? -1 : 1, Ls=30+12*rnd(i,9),
+    dir=atan2(q[1]-p[1],q[0]-p[0]), side=rnd(i,8)<0.5 ? -1 : 1, Ls=(30+12*rnd(i,9))*sc,
     P1=[p[0],p[1]]+0.5*Ls*[cos(dir+side*42),sin(dir+side*42)],
     P2=[p[0],p[1]]+Ls*[cos(dir+side*26),sin(dir+side*26)],
     xy=(1-t)*(1-t)*[p[0],p[1]]+2*t*(1-t)*P1+t*t*P2,
@@ -395,10 +451,10 @@ function side_root_point(i,t) = let(t0=side_t(i), p=root_point(i,t0), q=root_poi
 root_len = root_tip+root_r0;
 module roots() {
     for(i=[0:root_count-1]) {
-        bark_tube(curve(function(t) root_point(i,t),root_len),curve(function(t) root_radius(t),root_len),
-            0.7*bark_depth,seed=3.1*i+1);
+        bark_tube(curve(function(t) root_point(i,t),root_len),curve(function(t) root_radius(i,t),root_len),
+            0.7*bark_depth,seed=3.1*i+1,wmix=function(p) smooth(trunk_core(0)+5*sc,root_foot(i)+10*sc,norm([p[0],p[1]])));
         if(has_side(i))
-            bark_tube(curve(function(t) side_root_point(i,t),45),curve(function(t) side_radius(i,t),45),
+            bark_tube(curve(function(t) side_root_point(i,t),45*sc),curve(function(t) side_radius(i,t),45*sc),
                 0.55*bark_depth,seed=4.3*i+2);
     }
 }
@@ -407,17 +463,23 @@ module roots() {
 // Centreline radius without arches: a limb parts from the others, passes under
 // the foot of the glass (which presses its top flat: the glass stands on the
 // three limbs) and onto its side, hugs it and leans out above the rim; a fork
-// leaves its parent's centreline and settles on the glass within 18 mm.
+// leaves its parent's centreline and settles on the glass within 15 mm.
 function m_rho0(i,z,acc) = is_main(i)
     ? (z<hug_z(i) ? lerp(branch_rho0,hug_r(m_r(i,hug_z(i))),ease_out(i,z)) : m_rho_g(i,z))
-    : let(z0=m_z0(i)) lerp(m_rho(Mb(i)[0],z0,acc),m_rho_g(i,z),smooth(z0,z0+18,z));
+    : let(z0=m_z0(i)) lerp(m_rho(Mb(i)[0],z0,acc),m_rho_g(i,z),smooth(z0,z0+18*sc,z));
 function bumps(C,z) = sum([for(c=C) c[2]*exp(-pow((z-c[1])/arch_w,2))]);
-function m_rho(i,z,acc) = m_rho0(i,z,acc)+(i<len(acc) ? bumps(acc[i],z) : 0);
+// A fork's own arches fade in over its first 21 mm, so it starts exactly on its
+// parent's centreline and its end cap stays buried in it. Without this an arch
+// just above a fork lifts the fork off its parent and its cap hangs in mid-air,
+// which the slicer reports as a floating region. arch_h divides by the same ramp,
+// so the arch still clears what it crosses.
+function bump_ramp(i,z) = is_main(i) ? 1 : smooth(m_z0(i),m_z0(i)+25*sc,z);
+function m_rho(i,z,acc) = m_rho0(i,z,acc)+(i<len(acc) ? bumps(acc[i],z)*bump_ramp(i,z) : 0);
 // Where branch i meets an earlier branch m it arches out over it, just enough to
 // sink in by arch_merge of the thinner one's thickness, then returns to the
 // glass: [m, height, arch height]. A meeting is any closest approach (along the
 // glass) nearer than the two radii, whether the paths cross or only touch. The
-// arch height covers the need anywhere within 14 mm of the meeting. Branches
+// arch height covers the need anywhere within 12 mm of the meeting. Branches
 // are resolved in order, so an arch over a branch that itself arches lands on
 // its arched position.
 // Centreline radius on the glass, lifting off it in places and leaning out
@@ -430,10 +492,10 @@ function lean_slope(i,z) = (m_rho_g(i,z+1)-m_rho_g(i,z-1))/2;
 function need(i,m,z,acc) = let(rm=m_r(m,z), ri=m_r(i,z), reach=rm+ri-2*arch_merge*min(rm,ri), d=sep(i,m,z),
     s=(lean_slope(i,z)+lean_slope(m,z))/2)
     d>=reach ? 0 : max(0,m_rho(m,z,acc)+sqrt(reach*reach-d*d)*sqrt(1+s*s)-m_rho0(i,z,acc));
-function arch_h(i,m,zc,zs,ze,acc) = max([for(dz=[-14:2:14]) let(z=zc+dz)
-    if(z>=zs && z<=ze) need(i,m,z,acc)/exp(-pow(dz/arch_w,2))]);
+function arch_h(i,m,zc,zs,ze,acc) = max([for(k=[-7:7]) let(dz=2*sc*k, z=zc+dz)
+    if(z>=zs && z<=ze) need(i,m,z,acc)/(exp(-pow(dz/arch_w,2))*max(0.25,bump_ramp(i,z)))]);
 function crossings(i,acc) = [for(m=[0:1:i-1])
-    let(zs=max(m_z0(i)+5,lift+24,m_z0(m)+5,m==Mb(i)[0] ? m_z0(i)+48 : 0), ze=min(m_end(i),m_end(m)))
+    let(zs=max(m_z0(i)+5,lift+24*sc,m_z0(m)+5,m==Mb(i)[0] ? m_z0(i)+48*sc : 0), ze=min(m_end(i),m_end(m)))
     for(z=[zs:1:ze])
         let(s0=z>zs ? sep(i,m,z-1) : 1e9, s1=sep(i,m,z), s2=z<ze ? sep(i,m,z+1) : 1e9)
         if(s1<=s0 && s1<s2 && s1<m_r(i,z)+m_r(m,z)) [m,z,arch_h(i,m,z,zs,ze,acc)]];
@@ -441,9 +503,10 @@ function build(i,acc=[]) = i>=nmem ? acc : build(i+1,concat(acc,[crossings(i,acc
 cross = build(0);
 function rho(i,z) = m_rho(i,z,cross);
 // The trunk ends where the first limb to part no longer contains the axis (with
-// 3.5 mm to spare), and turns three-lobed over the 12 mm below.
-crotch_z = [for(z=[branch_z0:0.5:lift]) if(min([for(j=[0:nm-1]) m_r(j,z)-3.5-rho(j,z)])<0) z][0]-0.5;
-lobe_z0 = crotch_z-12;
+// 2.9 mm to spare), and turns three-lobed over the 10 mm below.
+crotch_z = [for(z=[branch_z0:0.5:lift]) if(min([for(j=[0:nm-1]) m_r(j,z)-3.5*sc-rho(j,z)])<0) z][0]-0.5;
+lobe_z0 = crotch_z-12*sc;
+fade_z0 = branch_z0;            // where the core starts to narrow
 function m_t(i,z) = (z-m_z0(i))/(m_end(i)-m_z0(i));
 function m_point(i,t) = let(z=lerp(m_z0(i),m_end(i),t)) polar(rho(i,z),m_phi(i,z),z);
 function m_path(i) = curve(function(t) m_point(i,t),m_end(i)-m_z0(i)+80);
@@ -453,17 +516,17 @@ function m_path(i) = curve(function(t) m_point(i,t),m_end(i)-m_z0(i)+80);
 function busy(i) = concat([for(c=cross[i]) c[1]],
     [for(k=[0:nmem-1]) for(c=cross[k]) if(c[0]==i) c[1]],
     [for(k=[0:nmem-1]) if(Mb(k)[0]==i) m_z0(k)]);
-function is_free(z,busy,d=26) = min(concat([999],[for(b=busy) abs(z-b)]))>=d;
-// Up to n free heights, at least 30 mm apart, from a jittered ladder.
-function spaced(f,n,d=30,i=0,acc=[]) = len(acc)>=n || i>=len(f) ? acc :
+function is_free(z,busy,d=26*sc) = min(concat([999],[for(b=busy) abs(z-b)]))>=d;
+// Up to n free heights, at least 25 mm apart, from a jittered ladder.
+function spaced(f,n,d=30*sc,i=0,acc=[]) = len(acc)>=n || i>=len(f) ? acc :
     spaced(f,n,d,i+1,len(acc)==0 || f[i]-acc[len(acc)-1]>=d ? concat(acc,[f[i]]) : acc);
 function pick(z0,z1,busy,n,seed,ok=function(z) true) = z1<=z0 ? [] : spaced([for(k=[0:10]) let(z=z0+(z1-z0)*(k+0.5*rnd(seed,k,12))/10)
     if(z>=z0 && z<z1 && is_free(z,busy) && ok(z)) z],n);
 // Room for a twig stub on member i at height z: every other member at least
-// 14 mm clear of both around its first 20 mm, no arch or fork within 40 mm, and
+// 12 mm clear of both around its first 17 mm, no arch or fork within 33 mm, and
 // member i not swinging out into it.
-function twig_ok(i,z) = rho(i,z+22)-rho(i,z)<=3 && is_free(z,busy(i),40) && min(concat([99],[for(m=[0:nmem-1])
-    if(m!=i && m_z0(m)<z+16 && m_end(m)>z+16) sep(i,m,z+12)-m_r(i,z)-m_r(m,z+12)]))>=14;
+function twig_ok(i,z) = rho(i,z+22*sc)-rho(i,z)<=3*sc && is_free(z,busy(i),40*sc) && min(concat([99],[for(m=[0:nmem-1])
+    if(m!=i && m_z0(m)<z+16*sc && m_end(m)>z+16*sc) sep(i,m,z+12*sc)-m_r(i,z)-m_r(m,z+12*sc)]))>=14*sc;
 function outward(p,turn=0) = let(a=atan2(p[1],p[0])+turn) [cos(a),sin(a),0];
 
 // Short pruned twig stubs from a centreline point p of a branch heading T:
@@ -471,22 +534,23 @@ function outward(p,turn=0) = let(a=atan2(p[1],p[0])+turn) [cos(a),sin(a),0];
 // not moving to, and climb at least 45 degrees, so they part from it clearly.
 function twig_dir(p,T,seed) = let(o=outward(p), t=[-o[1],o[0],0], u=unit(T),
     sd=t*(u*t>0 ? -0.35 : 0.35), d=u+0.9*o+sd, h=norm([d[0],d[1]])) unit([d[0],d[1],max(d[2],h)]);
-function twig_point(p,T,seed,t) = let(len=15+5*rnd(seed,14))
-    p+0.95*len*t*twig_dir(p,T,seed)+[0,0,1.5*t*t];
-function twig_radius(t) = lerp(4.2,3.1,t);
+function twig_point(p,T,seed,t) = let(len=(15+5*rnd(seed,14))*sc)
+    p+0.95*len*t*twig_dir(p,T,seed)+[0,0,1.5*sc*t*t];
+function twig_radius(t) = sc*lerp(4.2,3.1,t);
 function m_heading(i,z) = m_point(i,m_t(i,z+1))-m_point(i,m_t(i,z-1));
 module twig(p,T,seed) {
-    bark_tube(curve(function(t) twig_point(p,T,seed,t),20),curve(function(t) twig_radius(t),20),
+    bark_tube(curve(function(t) twig_point(p,T,seed,t),20*sc),curve(function(t) twig_radius(t),20*sc),
         0.35*bark_depth,seed=seed);
 }
-function knot_zs(i) = pick(is_main(i) ? lift+25 : m_z0(i)+18,glass_top-15,busy(i),is_main(i) ? 3 : 1,i+20);
-function twig_zs(i) = pick(is_main(i) ? lift+32 : m_z0(i)+22,glass_top-15,busy(i),Mb(i)[12],i+40,
+function knot_zs(i) = pick(is_main(i) ? lift+25*sc : m_z0(i)+18*sc,glass_top-15*sc,busy(i),is_main(i) ? 3 : 1,i+20);
+function twig_zs(i) = pick(is_main(i) ? lift+32*sc : m_z0(i)+22*sc,glass_top-15*sc,busy(i),Mb(i)[12],i+40,
     function(z) twig_ok(i,z));
 
 // Branch i with its knots and twig stubs, all clear of arches.
 module member(i) {
     P=m_path(i);
     bark_tube(P,[for(p=P) m_r(i,p[2])],(is_main(i) ? 0.8 : 0.7)*bark_depth,seed=7.3*i+2,glass=true,
+        wmix=is_main(i) ? function(p) smooth(crotch_z,crotch_z+20*sc,p[2]) : undef,
         knots=[for(z=knot_zs(i)) [m_t(i,z),outward(m_point(i,m_t(i,z)),40*(rnd(i,z,21)-0.5)),
             m_r(i,z)*(0.3+0.12*rnd(i,z,22))]]);
     for(z=twig_zs(i)) twig(m_point(i,m_t(i,z)),m_heading(i,z),i*7+z);
@@ -511,7 +575,7 @@ module guides() {
         cylinder(r=root_spread/2,h=0.6); translate([0,0,-1]) cylinder(r=root_spread/2-1,h=3);
     }
     %color([1,0.3,0.2,0.4]) translate([0,0,total_h]) difference() {
-        cylinder(r=100,h=0.4); translate([0,0,-1]) cylinder(r=99,h=2);
+        cylinder(r=100*sc,h=0.4); translate([0,0,-1]) cylinder(r=100*sc-1,h=2);
     }
 }
 
@@ -519,7 +583,8 @@ module guides() {
 function rise(P) = min([for(i=[0:len(P)-2]) let(d=P[i+1]-P[i]) atan2(d[2],norm([d[0],d[1]]))]);
 function above(P,z0) = [for(p=P) if(p[2]>=z0) p];
 echo(str("Grand Chaotic Tree | glass ",glass_d," x ",glass_h," mm | bore d ",2*bore_r,
-    " mm | glass floor at ",lift," mm, rim at ",glass_top," mm | total height ",total_h,
+    " mm | glass bottom at ",lift," mm, rim at ",glass_top," mm | total height ",total_h,
+    " mm | crotch at ",crotch_z,
     " mm | roots ",root_count," over ",root_spread," mm | branches ",nm," -> ",nm+4," -> ",nmem,
     " (",len([for(i=[0:nmem-1]) if(Mb(i)[4]>0) i])," reverse) | radius at the rim ",
     [for(i=[0:nmem-1]) round(m_r(i,glass_top)*10)/10]," | ",
@@ -532,13 +597,13 @@ if(part=="paths") {
     for(i=[0:nmem-1]) let(P=m_path(i))
         echo(str("PATH;b",i,";",is_main(i) ? "" : str("b",Mb(i)[0]),";",P,";",[for(p=P) m_r(i,p[2])]));
     for(i=[0:nmem-1]) for(z=twig_zs(i))
-        let(p=m_point(i,m_t(i,z)), T=m_heading(i,z), P=curve(function(t) twig_point(p,T,i*7+z,t),20))
-        echo(str("PATH;twig",i,"_",round(z),";b",i,";",P,";",curve(function(t) twig_radius(t),20)));
+        let(p=m_point(i,m_t(i,z)), T=m_heading(i,z), P=curve(function(t) twig_point(p,T,i*7+z,t),20*sc))
+        echo(str("PATH;twig",i,"_",round(z),";b",i,";",P,";",curve(function(t) twig_radius(t),20*sc)));
     for(i=[0:root_count-1]) {
         echo(str("PATH;root",i,";;",curve(function(t) root_point(i,t),root_len),";",
-            curve(function(t) root_radius(t),root_len)));
-        if(has_side(i)) echo(str("PATH;twigroot",i,";root",i,";",curve(function(t) side_root_point(i,t),45),";",
-            curve(function(t) side_radius(i,t),45)));
+            curve(function(t) root_radius(i,t),root_len)));
+        if(has_side(i)) echo(str("PATH;twigroot",i,";root",i,";",curve(function(t) side_root_point(i,t),45*sc),";",
+            curve(function(t) side_radius(i,t),45*sc)));
     }
 }
 

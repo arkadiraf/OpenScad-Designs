@@ -462,7 +462,7 @@ the percentage is meaningless. Judge overhang on the merged file only.
 | Cradle Tree, one body: textured trunk, 5 branches with forks and stubs, 7 roots; 315 k triangles | **14 min 19 s** (one branch assembly alone 54 s) |
 | Cradle Tree preview (Normal / Draft quality) | 16 s / 6 s |
 | Tangled / Chaotic Cradle Tree, one body, 8–9 branches with merges; 337 k / 328 k triangles | **21 min 37 s / 21 min 20 s**, run side by side |
-| Grand Chaotic Tree, one body: buttressed trunk, 13 branches pressed against the glass, 9 roots; 500 k triangles, 5 GB RAM | **23 min 28 s** |
+| Grand Chaotic Tree, one body: buttressed trunk, 13 branches pressed against the glass, 9 roots; 550 k triangles, 5-6 GB RAM | **25 min 45 s** (its first build, 500 k triangles, 23 min 28 s) |
 | One pressed limb alone / all roots alone (component tests) | 20–30 s / 6 min 13 s |
 | Wild Chaotic Tree, one body: the trunk skin carrying the root bases, 13 branches, 9 roots; 454 k triangles | **21 min 07 s**; its trunk alone 41 s, its roots 5 min 24 s |
 | A pair of merging branches alone (component test) | 1.5–3 min |
@@ -934,9 +934,10 @@ thickness and never more than 30 % (25 % for Tangled). The merges tie the cage i
 
 ## 16. Grand Chaotic Tree: a tree that grows around the glass
 
-Folder `art/Math Driven Pots and Vases/Grand Chaotic Tree/`. A bigger glass (96 × 170 mm) held 10 cm
-up in a big rooted tree, 32 cm tall. It keeps the Chaotic approach (unique paths, branches that
-arch over each other and merge about 10 %), but the tree is built like a real one:
+Folder `art/Math Driven Pots and Vases/Grand Chaotic Tree/`. A big glass (100 × 200 mm) held 8 cm up
+in a 32 cm tree whose roots sprawl over 30 cm of ground. It keeps the Chaotic approach (unique
+paths, branches that arch over each other and merge about 10 %), but the tree is built like a real
+one:
 
 - **3 → 7 → 13.** The trunk splits into 3 limbs, the limbs into 7 branches and those into 13.
 - **No floor and no cuts.** The wood grows against the glass like a tree around an obstacle.
@@ -945,31 +946,35 @@ arch over each other and merge about 10 %), but the tree is built like a real on
 
 The user steered it through drafts: a first split that looks like a real fork, and splits at
 different heights; less straight, more random and sprawling branches; a buttressed base like a
-reference photo instead of a flat foot.
+reference photo instead of a flat foot. It was then rebuilt for the bigger glass with the seamless
+joins of §17 (its first build, for a 96 × 170 mm glass, had the seams described in §16.2).
 
 | Parameter | Value |
 |---|---|
-| Glass | 96 × 170 mm, foot rounded 2 mm, clearance 1 mm (98 mm bore); it stands at `lift` = 100 mm; rim at 270 mm; `total_h` 320 mm (the H2C prints 325) |
-| Trunk | waist r 28 mm, slight flare (+4 mm) between 9 buttresses that reach 27–40 mm out over the ground from 50 mm up; turns three-lobed as the first limb parts and ends inside the limbs at the crotch (43.5 mm) |
-| Roots | 9 plus 6 side roots, r 10 → 2.8 mm, 25 cm spread; each starts inside the trunk and runs down under its buttress |
-| Limbs | scale 1.26–1.36 (r ≈ 16 mm at the glass bottom); they part at 28, 38 and 46 mm; the glass presses about 45 % of a limb's thickness flat at its foot |
-| Branches | radius 12 mm × scale; each fork takes 59–72 % of its parent's thickness and the parent thins so the two cross-sections add up; pressed 20 % flat against the glass side; tips taper to 2.6 mm |
-| Wander | three waves of unrelated length sideways (7, 3, 1.1 mm), lifting 4–9 mm off the glass in places, tips flicking 5–12 mm sideways; `wander_seed` 17 of 24 tried |
-| Bark | plates 8.5 × 17 mm, fissures up to 1.5 mm (1.2 on limbs), drifting over several plates; squashed to 40 % where pressed against the glass |
+| Glass | 100 × 200 mm, foot rounded 2 mm, clearance 1 mm (102 mm bore); it stands at `lift` = 80 mm; rim at 280 mm; `total_h` 320 mm (the H2C prints 325), so the tips have 40 mm above the rim |
+| Trunk | waist r 29 mm, slight flare (+4.2 mm) between 9 buttresses that reach 24–35 mm out over the ground from 33 mm up; turns three-lobed as the first limb parts and ends inside the limbs at the crotch (34 mm) |
+| Roots | 9 plus side roots, r 10.4 → 3 mm, out to 298 mm; each starts inside the trunk foot and lies on the ground |
+| Limbs | scale 1.26–1.36 (r ≈ 16 mm at the glass bottom); they part at 14, 18 and 22 mm (a 20 cm glass on an 8 cm trunk leaves little height to reach out in, so the partings sit closer together than on the Wild tree); the glass presses 53–56 % of a limb's thickness flat at its foot |
+| Branches | radius 12.5 mm × scale; each fork takes 58–69 % of its parent's thickness and the parent thins so the two cross-sections add up; pressed 20 % flat against the glass side; tips taper to 2.75 mm |
+| Layout | 3 → 7 → 13 search with the turn rates raised by half (§16.2); largest gap 106°, seat 126°; `wander_seed` 0 of 16 tried |
+| Wander | three waves of unrelated length sideways (7.3, 3.1, 1.1 mm), lifting 4–9 mm off the glass in places, tips flicking 4–10 mm sideways |
+| Joins | the seamless method of §17: one skin for trunk, buttresses and root bases, handover contours for roots and limbs, and the same bark on both sides of every join |
+| Bark | plates 8.9 × 17.7 mm, fissures up to 1.56 mm (1.25 on limbs), drifting over several plates; squashed to 40 % where pressed against the glass |
 
 **Measured on the packaged 3MF** (`build_design.py`, 2026-09-19; an H2C project):
 
 | Check | Result |
 |---|---|
-| Size | 220.5 × 226.7 × 319.5 mm, standing on z = 0 (limit 320 mm) |
-| Wood | 499 976 triangles, **0 / 0** edges, 724.8 cm³; 4 shells: the body and 3 sealed pockets inside it (60 mm³ where a root starts inside the trunk foot, and two of ~0 mm³ in merges) |
-| Past 60° | **0.25 %** above the bottom 1 cm (top 3 cm 0.00 %); bottom 1 cm 0.04 % |
-| Past 45° | 1.85 % (report only) |
-| Glass | nothing inside the glass or its 1 mm clearance (closest −0.00 mm, at the side 116 mm up); **seat 1.9 cm²** of pads within one layer of 100 mm, 38.5–46.7 mm from the axis, largest gap between them 100° |
-| Branches | 6 meetings, merge 10–13 %; climb ≥ 35°; tightest bend 1.3 × the tube radius |
-| Bed contact | 113.5 cm² |
-| Bambu Studio slice (H2C, 0.20mm Standard, 35 % infill) | **no warnings**; 13 h 57 min; **430 g** |
-| Render | 23 min 28 s as one body; components 20 s – 6 min |
+| Size | 270.9 × 271.2 × 319.0 mm, standing on z = 0 (limit 320 mm) |
+| Wood | 549 968 triangles, **0 / 0** edges, **1 shell**, 806.2 cm³ (the seamless joins leave none of the sealed pockets the first build had) |
+| Past 60° | **0.04 %** above the bottom 1 cm (top 3 cm 0.00 %); bottom 1 cm 0.03 % |
+| Past 45° | 2.38 % (report only) |
+| Glass | nothing inside the glass or its 1 mm clearance; **seat 2.9 cm²** of pads within one layer of 80 mm, 38.5–49.2 mm from the axis, largest gap between them 100° |
+| Branches | 12 meetings, merge ≤ 10 %; climb ≥ 33°; tightest bend 1.39 × the tube radius |
+| Mid-air | `floating_check.py`: **0** regions |
+| Bed contact | 140.4 cm² |
+| Bambu Studio slice (H2C, 0.20mm Standard, 35 % infill) | **no warnings**; 15 h 39 min; **483 g** |
+| Render | 25 min 45 s as one body; its trunk alone 37 s, its roots 6 min 19 s |
 
 ### 16.1 Techniques
 
@@ -1029,7 +1034,9 @@ reference photo instead of a flat foot.
 | A ring of trunk bark round the limbs where the trunk ends | the trunk sat 0.6–1.4 mm inside the limbs, less than their 1.2 mm fissures; the buttresses, added to the whole trunk, fade slowly and pushed it further out | sink the trunk 3 mm inside, add the buttresses to the core only, vary the handover height with angle |
 | A flat-topped "sleeve" at a root's start | the root started too high and too far out, its end cap outside the trunk | start 12 mm inside the trunk foot, lower |
 | Only 0.1 cm² of pad at the glass height | full-depth bark on the pressed face left only the plate tops there | bark squashed to 40 % where pressed; count pad faces within one 0.25 mm layer |
-| **Open:** the slice preview shows top-surface fill on the side of the trunk at the fork | near-level shelves (13 cm² flatter than 37°, 20–35 mm up) where the trunk core fades out faster than the height rises, plus a root start near the surface | not fixed in this design yet ([TODO.md](TODO.md)); the Wild Chaotic Tree fixes it (§17.1) |
+| Rebuilt for a 200 mm glass: 17 meetings, arches of 20–160 mm, merges over 80 %, climbs of 26° | **turn rates are degrees per glass height**, so the same number turns far more slowly per mm on a taller glass. Branches drifted alongside each other for 50–60 mm, and an arch (25 mm wide) cannot lift one clear of a contact that long; each arch then pushed its branch into the next | scale the search's turn rates with the glass height (here × 1.5, to 68–143 deg per glass height). The branches cross instead of drifting: 12 meetings, merges ≤ 10 %. Reducing the wander first did not help, which is what pointed at the rates |
+| The trunk's top ring only 0.07 mm inside the limbs | the handover contour sat 4–12 mm below the crotch and its 8 mm ramp finished above the loft's top | put the contour 10–18 mm below the crotch, so the handover completes before the loft ends |
+| **Open:** the slice preview shows top-surface fill on the side of the trunk at the fork | near-level shelves (13 cm² flatter than 37°, 20–35 mm up) where the trunk core fades out faster than the height rises, plus a root start near the surface | fixed in the rebuild with the seamless joins of §17.1 |
 
 ---
 

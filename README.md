@@ -17,9 +17,10 @@ Tree-shaped holders for a plain glass vase. The glass drops straight in from the
 five it stands on a stump floor, and you can see the tree's growth rings through the glass bottom; in
 the two Chaotic trees there is no floor at all and it stands on the branches themselves.
 
-[<img src="art/Math%20Driven%20Pots%20and%20Vases/Design_Evolution.png" alt="How the tree vase holders evolved: seven designs at the same scale">](art/Math%20Driven%20Pots%20and%20Vases/Design_Evolution.png)
+[<img src="art/Math%20Driven%20Pots%20and%20Vases/Design_Evolution.png" alt="How the tree vase holders evolved: six designs at the same scale">](art/Math%20Driven%20Pots%20and%20Vases/Design_Evolution.png)
 
-Each design and what it added, at the same scale.
+The six holders for the 80 × 130 mm glass, at the same scale, and what each one added. The Grand
+Chaotic Tree is not in it: it holds a bigger glass.
 
 <table>
   <tr>
@@ -105,10 +106,10 @@ Each design and what it added, at the same scale.
   </tr>
   <tr>
     <td valign="top">
-      A bigger glass, 10 cm up in a 32 cm tree. The trunk comes down in buttresses that run out
-      into roots, and splits into 3 limbs, then 7 branches, then 13. Nothing is cut for the glass:
-      the wood grows around it and is pressed flat where it touches, and the glass stands on the
-      three limbs.
+A bigger glass, 100 × 200 mm, standing 8 cm up in a 32 cm tree whose roots sprawl
+      over 30 cm of ground. The trunk comes down in buttresses and splits into 3 limbs, then 7
+      branches, then 13. Nothing is cut for the glass: the wood grows around it, pressed flat where
+      it touches, and the glass stands on the three limbs. Joins without seams, like the Wild tree.
     </td>
   </tr>
 </table>
@@ -121,10 +122,10 @@ Each design and what it added, at the same scale.
 | Tangled Cradle Tree | 60 mm | 156.4 × 136.8 × 248.8 | Cocoa Brown | 8 h 32 min, 236 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Tangled%20Cradle%20Tree/Tangled_Cradle_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Tangled%20Cradle%20Tree/Tangled_Cradle_Tree.3mf) |
 | Chaotic Cradle Tree | 60 mm | 156.4 × 142.6 × 249.1 | Cocoa Brown | 8 h 21 min, 232 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Chaotic%20Cradle%20Tree/Chaotic_Cradle_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Chaotic%20Cradle%20Tree/Chaotic_Cradle_Tree.3mf) |
 | Wild Chaotic Tree | none: stands on 3 limbs at 83 mm | 179.2 × 197.2 × 266.0 | Cocoa Brown | 9 h 32 min, 249 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Wild%20Chaotic%20Tree/Wild_Chaotic_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Wild%20Chaotic%20Tree/Wild_Chaotic_Tree.3mf) |
-| Grand Chaotic Tree | none: stands on 3 limbs at 100 mm | 220.5 × 226.7 × 319.5 | Cocoa Brown | 13 h 57 min, 430 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Grand%20Chaotic%20Tree/Grand_Chaotic_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Grand%20Chaotic%20Tree/Grand_Chaotic_Tree.3mf) |
+| Grand Chaotic Tree | none: stands on 3 limbs at 80 mm | 270.9 × 271.2 × 319.0 | Cocoa Brown | 15 h 39 min, 483 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Grand%20Chaotic%20Tree/Grand_Chaotic_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Grand%20Chaotic%20Tree/Grand_Chaotic_Tree.3mf) |
 
 Five of them hold an 80 × 130 mm glass in an 82 mm bore, and the Wild Chaotic Tree holds the same
-glass on its branches; the Grand Chaotic Tree holds a 96 × 170 mm glass. All leave 1 mm of clearance
+glass on its branches; the Grand Chaotic Tree holds a 100 × 200 mm glass. All leave 1 mm of clearance
 all round. The images are renders, not photos.
 
 ## Printing
@@ -134,7 +135,7 @@ all round. The images are renders, not photos.
   with purge volumes. Open it and slice.
 - Print upright without supports. All seven holders pass the house rules: no more than 0.5 % of the
   surface past 60° above the first centimetre, and nothing that starts in mid-air.
-- The Grand Chaotic Tree is 319.5 mm tall. Of the listed printers only the H2C, H2D, H2D Pro and H2S
+- The Grand Chaotic Tree is 319 mm tall and 27 cm across its roots. Of the listed printers only the H2C, H2D, H2D Pro and H2S
   have room for it.
 - For another Bambu printer: `python tools/bambu_3mf.py <file>.3mf --printer X1C`
   (`--list-printers` shows all ten).
