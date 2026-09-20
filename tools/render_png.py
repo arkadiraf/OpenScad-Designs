@@ -7,9 +7,10 @@ The flat background is trimmed to the model plus a margin.
 usage:
   python render_png.py design.scad out.png [--view iso] [--size 2000] [-D show_glass=false ...]
 
-OpenSCAD is taken from $OPENSCAD, else C:/Program Files/OpenSCAD/openscad.com, else `openscad`.
+OpenSCAD is taken from $OPENSCAD, else the newest install, else `openscad`; builds that have the
+Manifold backend are asked for it, which is far faster than CGAL ($OPENSCAD_BACKEND overrides).
 """
-import argparse, os, shutil, subprocess, sys, tempfile
+import argparse, functools, os, shutil, subprocess, sys, tempfile
 from PIL import Image, ImageChops
 
 VIEWS = {   # rot x, rot y, rot z, projection
@@ -22,16 +23,39 @@ VIEWS = {   # rot x, rot y, rot z, projection
 
 
 def openscad_exe():
-    for p in (os.environ.get('OPENSCAD'), r'C:\Program Files\OpenSCAD\openscad.com', shutil.which('openscad')):
+    """Newest install first: the nightly renders with Manifold, minutes faster per part."""
+    for p in (os.environ.get('OPENSCAD'),
+              r'C:\Program Files\OpenSCAD (Nightly)\openscad.com',
+              r'C:\Program Files\OpenSCAD\openscad.com',
+              shutil.which('openscad')):
         if p and os.path.exists(p):
             return p
     raise SystemExit('OpenSCAD not found: set $OPENSCAD')
 
 
+@functools.lru_cache(maxsize=None)
+def _backend(exe):
+    """The backend flag this binary accepts, if any. 2021.01 errors out on an unknown option."""
+    want = os.environ.get('OPENSCAD_BACKEND', 'Manifold')
+    if want.lower() == 'none':
+        return ()
+    try:
+        h = subprocess.run([exe, '--help'], capture_output=True, text=True, timeout=60)
+    except (OSError, subprocess.SubprocessError):
+        return ()
+    return ('--backend', want) if '--backend' in h.stdout + h.stderr else ()
+
+
+def openscad_cmd():
+    """The command to run OpenSCAD with: the binary, plus a backend flag where it is supported."""
+    exe = openscad_exe()
+    return [exe, *_backend(exe)]
+
+
 def render(scad, out_png, view='iso', size=2000, defines=(), margin=60, scheme='Tomorrow'):
     rx, ry, rz, proj = VIEWS[view]
     raw = tempfile.mktemp(suffix='.png')
-    cmd = [openscad_exe(), '-o', raw, f'--imgsize={size},{size}', f'--projection={proj}',
+    cmd = [*openscad_cmd(), '-o', raw, f'--imgsize={size},{size}', f'--projection={proj}',
            f'--camera=0,0,0,{rx},{ry},{rz},500', '--viewall', '--autocenter', f'--colorscheme={scheme}']
     for d in defines:
         cmd += ['-D', d]

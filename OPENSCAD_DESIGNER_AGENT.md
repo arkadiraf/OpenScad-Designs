@@ -22,6 +22,8 @@ Everything scripted lives in `tools/` next to this file:
 | `tools/bambu_3mf.py` | Rewrites a 3MF as a Bambu Studio project: printer, plate, one PLA Basic filament per part, purge volumes and infill (§9.1). Converts in place; re-targets its own output to another printer. `--slice` slices it with the installed Bambu Studio and reports its warnings, print time and filament |
 | `tools/render_png.py` | Preview render to PNG from a preset view (iso, front, back, top, persp), background trimmed |
 | `tools/member_clearance.py` | Gap or overlap between every pair of branches, from the centrelines a design echoes with `part="paths"`; fails above a merge limit (§15.1) |
+| `tools/cap_height.py` | How high each member reaches once its end cap is counted (`r·cos(climb)` above the path end), from the same echo; fails above a height limit (§16.2) |
+| `tools/floating_check.py` | Finds the regions that would start in mid-air, and where they are; Bambu Studio only says that they exist (§8) |
 
 ---
 
@@ -31,7 +33,8 @@ Everything scripted lives in `tools/` next to this file:
 # 1. design: edit the .scad; the user's OpenSCAD window auto-reloads it (§2)
 # 2. look at it: quick preview render (seconds), read the PNG
 python tools/render_png.py design.scad preview.png --view persp --size 900
-# 3. test risky components alone with a full CGAL render (§6.1)
+# 3. test risky components alone with a full render (§6.1)
+# 3b. a searched layout: keep the search beside the design, with the seed that reproduces it (§3.1)
 # 4. package + verify in one go (minutes, parts render in parallel)
 python tools/build_design.py design.scad --name "Design Name" \
     --part bark=#6F5034 --part leaves=#3F8E43 --check-args "--bore-r 41 --floor-h 9"
@@ -48,12 +51,14 @@ slice) **and** you have looked at the PNG.
 
 | Item | Value on this machine |
 |---|---|
-| OpenSCAD | **2021.01** at `C:\Program Files\OpenSCAD\`. Use `openscad.com` from scripts (a console binary that prints the log); `openscad.exe` is the GUI |
-| Geometry kernel | CGAL only: exact, single-threaded and slow (minutes per part). There is no Manifold backend in 2021.01 (§7) |
+| OpenSCAD | **2026.09.18** at `C:\Program Files\OpenSCAD (Nightly)\`, with 2021.01 still at `C:\Program Files\OpenSCAD\`. Use `openscad.com` from scripts (a console binary that prints the log); `openscad.exe` is the GUI |
+| Geometry kernel | **Manifold** (`--backend Manifold`), which renders these designs in seconds where CGAL took 20-30 minutes (§7). CGAL is still there, exact and single-threaded, and is all 2021.01 has |
 | Python | 3.13 with `numpy` and `Pillow`. The tools need nothing else (no trimesh) |
 | Shell | PowerShell 5.1 by default; Git Bash is also available |
 
-The tools find OpenSCAD through `$OPENSCAD`, then the default install path, then `PATH`.
+The tools find OpenSCAD through `$OPENSCAD`, then the newest install path, then `PATH`, and add
+`--backend Manifold` when that binary lists the option, so they stay correct on 2021.01
+(`OPENSCAD_BACKEND=none` leaves the backend alone).
 
 **Shell pitfalls that each cost a failed run:**
 
@@ -100,7 +105,7 @@ There is no API into the OpenSCAD GUI. **Share a file instead:**
 3. **Step 2: derive every holder dimension from those variables.** Bore radius, floor height,
    stem radius, fork heights and crown height are all expressions in `glass_*`, never literals. Then
    changing the glass in the Customizer rebuilds a correct holder.
-4. **Iterate in preview.** A preview takes about 2 s, a full render minutes. Render 2–3 angles
+4. **Iterate in preview.** A preview takes about 2 s, a full render about a minute. Render 2–3 angles
    (a front 3/4 view, a high view that looks into the opening, a view without the glass) after each
    change, and judge the look there. Also render:
    - **the `iso` view that `build_design.py` will use for the gallery PNG.** Turn the design about z so
@@ -113,6 +118,25 @@ There is no API into the OpenSCAD GUI. **Share a file instead:**
    a 15-minute render.
 6. **Build and verify** (§9, §10), fix, rebuild. Only re-render parts whose geometry changed.
 7. **Package and report** (§10, §11).
+
+### 3.1 A searched layout is part of the design
+
+Where numbers in the `.scad` came out of a search rather than out of a judgement — the branch
+tables of the Chaotic trees are 13 members' worth of angles, heights and shares — **the search
+script goes in the design folder**, named `<Design_Name>_layout.py`, not in the scratchpad where
+it dies with the session.
+
+- **Record the seed and the count that reproduce the built tables**, in the docstring, as a
+  command line. Without them the file is a description; with them the layout can be re-derived,
+  a different seed gives a tree that deliberately looks unlike the last one, and the next design
+  starts from a working search instead of a rewritten one.
+- **Check that it still reproduces them** before calling it kept: run it and compare its JSON with
+  the `.scad`'s tables. A search that has drifted from the design is worse than no search at all.
+- **Say where it has drifted on purpose.** The Grand tree's copy keeps `spare = 2.5` because that
+  is what the search ran with, while the design moved to 3.5 afterwards (§16.2); the comment says
+  so, rather than quietly matching the design and no longer reproducing it.
+- The script mirrors the `.scad`'s own geometry (angles, shares, taper), so **the two change
+  together**. That is the cost of keeping it, and it is the reason to keep it next to the design.
 
 ---
 
@@ -367,7 +391,8 @@ reach the bore or the bed. In the assembly view the leaves are not trimmed.
 
 ### 5.7 Colour parts
 
-OpenSCAD 2021.01 writes **one mesh per 3MF, without colour**. So:
+OpenSCAD 2021.01 writes **one mesh per 3MF, without colour** (not re-checked on the 2026 build;
+either way the pipeline exports one part per file and merges them itself). So:
 
 1. Give each colour its own `part` value.
 2. Export each one separately (in parallel, §7).
@@ -447,7 +472,28 @@ the percentage is meaningless. Judge overhang on the merged file only.
 
 ---
 
-## 7. Render time and parallelism (2021.01, this machine)
+## 7. Render time and parallelism (this machine)
+
+**With the Manifold backend a whole tree renders in about a minute.** Measured 2026-09-20 by
+exporting the same `part="wood"` from the same sources with both binaries:
+
+| Design | CGAL (2021.01) | Manifold (2026.09.18) | |
+|---|---|---|---|
+| Grand Chaotic Tree, 550 k triangles | 25 min 45 s | **57 s** | 27× |
+| Wild Chaotic Tree, 454 k triangles | 21 min 07 s | **47 s** | 27× |
+
+- **The meshes come out the same.** Manifold's Grand tree is 274 907 / 549 862 against CGAL's
+  274 960 / 549 968 (a slightly different triangulation), and `mesh_check.py` reports the same
+  0 / 0 edges, 1 shell, 806.2 cm³ and the same bounding box for both.
+- **The bottleneck moved.** OpenSCAD reports `Total rendering time: 0:00:03` for these: the other
+  ~53 s is evaluating the design's own functions to build the tube polyhedra, and writing the 3MF.
+  So geometry is nearly free now, and the cost is in how many points the design computes. Cutting
+  booleans matters much less than it did; `step`, `spp` and the trunk's ring spacing matter more.
+- **It changes how to work.** A layout can be rendered and checked in a minute, so search by
+  building rather than by modelling: the wander-seed scan, the component tests and a full
+  `build_design.py` run are all cheap enough to repeat.
+
+The times below are CGAL on 2021.01, kept because the relative cost of the parts still holds:
 
 | Render | Time |
 |---|---|
@@ -473,8 +519,8 @@ the percentage is meaningless. Judge overhang on the merged file only.
   check `Get-Process openscad` (CPU seconds climbing means it's working).
 - Fewer booleans matter more than fewer triangles. A single polyhedron is nearly free; each union or
   difference is not.
-- Newer OpenSCAD development builds have the **Manifold** backend, which is 10–100× faster. Installing
-  one is a download: ask the user first, and never do it silently.
+- Manifold is single-threaded here too, but a minute per part makes the parallel export a
+  convenience rather than a necessity.
 
 ---
 
@@ -649,6 +695,8 @@ It writes the layout Bambu Studio saves itself:
       the user asked for another printer
 - [ ] Looked at the PNG yourself
 - [ ] The `.scad` in the package is the one the 3MF was exported from (`build_design.py` guarantees this)
+- [ ] If the layout was searched: `<Design_Name>_layout.py` is in the design folder, and re-running
+      it with the seed in its docstring still prints the tables that are in the `.scad` (§3.1)
 - [ ] Told the user which Customizer variables matter, and that changing them needs a rebuild
 
 ---
@@ -947,34 +995,36 @@ one:
 The user steered it through drafts: a first split that looks like a real fork, and splits at
 different heights; less straight, more random and sprawling branches; a buttressed base like a
 reference photo instead of a flat foot. It was then rebuilt for the bigger glass with the seamless
-joins of §17 (its first build, for a 96 × 170 mm glass, had the seams described in §16.2).
+joins of §17 (its first build, for a 96 × 170 mm glass, had the seams described in §16.2), and
+rebuilt again for the blunt branch tips below, with a fresh layout draw so the new tree does not
+repeat the branches of the old one.
 
 | Parameter | Value |
 |---|---|
 | Glass | 100 × 200 mm, foot rounded 2 mm, clearance 1 mm (102 mm bore); it stands at `lift` = 80 mm; rim at 280 mm; `total_h` 320 mm (the H2C prints 325), so the tips have 40 mm above the rim |
 | Trunk | waist r 29 mm, slight flare (+4.2 mm) between 9 buttresses that reach 24–35 mm out over the ground from 33 mm up; turns three-lobed as the first limb parts and ends inside the limbs at the crotch (34 mm) |
 | Roots | 9 plus side roots, r 10.4 → 3 mm, out to 298 mm; each starts inside the trunk foot and lies on the ground |
-| Limbs | scale 1.26–1.36 (r ≈ 16 mm at the glass bottom); they part at 14, 18 and 22 mm (a 20 cm glass on an 8 cm trunk leaves little height to reach out in, so the partings sit closer together than on the Wild tree); the glass presses 53–56 % of a limb's thickness flat at its foot |
-| Branches | radius 12.5 mm × scale; each fork takes 58–69 % of its parent's thickness and the parent thins so the two cross-sections add up; pressed 20 % flat against the glass side; tips taper to 2.75 mm |
-| Layout | 3 → 7 → 13 search with the turn rates raised by half (§16.2); largest gap 106°, seat 126°; `wander_seed` 0 of 16 tried |
+| Limbs | scale 1.26–1.36 (r ≈ 16 mm at the glass bottom); they part at 14, 18 and 22 mm (a 20 cm glass on an 8 cm trunk leaves little height to reach out in, so the partings sit closer together than on the Wild tree); the glass presses their tops flat into the pads measured below |
+| Branches | radius 12.5 mm × scale; each fork takes 60–73 % of its parent's thickness and the parent thins so the two cross-sections add up; pressed 20 % flat against the glass side; **blunt tips** (§16.1): 2.7–4.8 mm, against a flat 2.75 mm before |
+| Layout | a fresh 3 → 7 → 13 search (`Grand_Chaotic_Tree_layout.py`, seed 43 of 8 tried × 4000 trees), turn rates raised by half (§16.2); largest gap 98°, seat 125°; `wander_seed` 44 of 48 tried. All three limbs set off the same way round and the first turns back halfway up, which is what makes this tree read differently from the last |
 | Wander | three waves of unrelated length sideways (7.3, 3.1, 1.1 mm), lifting 4–9 mm off the glass in places, tips flicking 4–10 mm sideways |
 | Joins | the seamless method of §17: one skin for trunk, buttresses and root bases, handover contours for roots and limbs, and the same bark on both sides of every join |
 | Bark | plates 8.9 × 17.7 mm, fissures up to 1.56 mm (1.25 on limbs), drifting over several plates; squashed to 40 % where pressed against the glass |
 
-**Measured on the packaged 3MF** (`build_design.py`, 2026-09-19; an H2C project):
+**Measured on the packaged 3MF** (`build_design.py`, 2026-09-20; an H2C project):
 
 | Check | Result |
 |---|---|
-| Size | 270.9 × 271.2 × 319.0 mm, standing on z = 0 (limit 320 mm) |
-| Wood | 549 968 triangles, **0 / 0** edges, **1 shell**, 806.2 cm³ (the seamless joins leave none of the sealed pockets the first build had) |
-| Past 60° | **0.04 %** above the bottom 1 cm (top 3 cm 0.00 %); bottom 1 cm 0.03 % |
-| Past 45° | 2.38 % (report only) |
-| Glass | nothing inside the glass or its 1 mm clearance; **seat 2.9 cm²** of pads within one layer of 80 mm, 38.5–49.2 mm from the axis, largest gap between them 100° |
-| Branches | 12 meetings, merge ≤ 10 %; climb ≥ 33°; tightest bend 1.39 × the tube radius |
+| Size | 270.9 × 271.2 × 318.5 mm, standing on z = 0 (limit 320 mm) |
+| Wood | 558 498 triangles, **0 / 0** edges, **1 shell**, 800.8 cm³ (the seamless joins leave none of the sealed pockets the first build had) |
+| Past 60° | **0.05 %** above the bottom 1 cm (top 3 cm 0.00 %); bottom 1 cm 0.03 % |
+| Past 45° | 2.08 % (report only) |
+| Glass | nothing inside the glass or its 1 mm clearance; **seat 2.9 cm²** of pads within one layer of 80 mm, 38.2–48.9 mm from the axis, largest gap between them 96° |
+| Branches | 11 meetings, merge ≤ 18 %; climb ≥ 31°; tightest bend 1.4 × the tube radius; tips 2.7–4.8 mm |
 | Mid-air | `floating_check.py`: **0** regions |
 | Bed contact | 140.4 cm² |
-| Bambu Studio slice (H2C, 0.20mm Standard, 35 % infill) | **no warnings**; 15 h 39 min; **483 g** |
-| Render | 25 min 45 s as one body; its trunk alone 37 s, its roots 6 min 19 s |
+| Bambu Studio slice (H2C, 0.20mm Standard, 35 % infill) | **no warnings**; 15 h 42 min; **481 g** |
+| Render | **57 s** as one body with Manifold (25 min 45 s with CGAL, §7) |
 
 ### 16.1 Techniques
 
@@ -998,6 +1048,25 @@ joins of §17 (its first build, for a 96 × 170 mm glass, had the seams describe
   curvature is `2/a · Δρ/Δz²`, not `6 · Δρ/Δz²`. A grid search over start height, end height,
   acceleration and deceleration found profiles that keep bend ≥ 1.25× the radius, climb ≥ 37° and
   a 7–9 mm pad.
+- **Branch tips that end as wood, not needles.** A branch's radius is its share of the tree's
+  thickness times the height profile, which already falls to 0.65 near the top; letting it *also*
+  fall to a fixed `tip_r` over its last 35 mm stacked two narrowings in the same place, and a
+  branch lost 59 % of its thickness over its last 30 mm. Three changes together fix it:
+  - **Over a longer run.** `tip_taper` 70 mm instead of 35, so a branch thins along most of its
+    last stretch rather than at its point.
+  - **To a tip of its own size.** `tip_share` 0.55 of *that branch's* own thickness at the rim
+    (untapered), floored at `tip_min` 2.6 mm, instead of one radius for the whole tree. A thick
+    branch then ends as thick wood (4.8 mm) and a thin one stays in proportion (2.7 mm) instead of
+    ending as a club.
+  - **Along a curve.** `pow(t, tip_curve)`, `tip_curve` 2.5, so the branch holds its thickness most
+    of the way and only rounds off near the end. The exponent is what protects the rest of the
+    branch: over a 70 mm run, squaring (2.0) thins it 11 % at the rim, 2.5 thins it 8 %, and at
+    2.5 the branch is actually fatter 20 mm from its end than it was before. Compare the whole profile,
+    not just the tip, before choosing it.
+  - **Result:** the steepest narrowing anywhere along a branch falls from 0.28 to 0.11 mm of radius
+    per mm of height, and the tips go from a flat 2.75 mm to 2.7–4.8 mm.
+  - **Then re-check.** A blunt tip carries a wider end cap, which reaches higher and meets its
+    neighbours sooner: both bit here (§16.2).
 - **A fork that looks like a fork.** The trunk is a radial surface: a smooth maximum of a fading
   core and each limb's cross-section, i.e. the far side of the limb's circle seen from the axis.
   The fillet narrows to nothing at the crotch, where the loft ends 3 mm inside the limbs. This
@@ -1036,6 +1105,8 @@ joins of §17 (its first build, for a 96 × 170 mm glass, had the seams describe
 | Only 0.1 cm² of pad at the glass height | full-depth bark on the pressed face left only the plate tops there | bark squashed to 40 % where pressed; count pad faces within one 0.25 mm layer |
 | Rebuilt for a 200 mm glass: 17 meetings, arches of 20–160 mm, merges over 80 %, climbs of 26° | **turn rates are degrees per glass height**, so the same number turns far more slowly per mm on a taller glass. Branches drifted alongside each other for 50–60 mm, and an arch (25 mm wide) cannot lift one clear of a contact that long; each arch then pushed its branch into the next | scale the search's turn rates with the glass height (here × 1.5, to 68–143 deg per glass height). The branches cross instead of drifting: 12 meetings, merges ≤ 10 %. Reducing the wander first did not help, which is what pointed at the rates |
 | The trunk's top ring only 0.07 mm inside the limbs | the handover contour sat 4–12 mm below the crotch and its 8 mm ramp finished above the loft's top | put the contour 10–18 mm below the crotch, so the handover completes before the loft ends |
+| The piece grew to 319.85 mm, 0.15 mm under the limit | a tube's end cap is a disc square to the path, so its top edge sits `r·cos(climb)` **above** the end of the path — 2.3 mm for a blunt tip where `tip_spare` only held back 2.5 | raise `tip_spare` with the tip radius (3.5 mm here, giving 318.5 mm). `tools/cap_height.py` computes the cap tops straight from a `part="paths"` echo, before a render |
+| Shortening every branch by 1 mm buried one tip 2.6 mm inside another: 96 % overlap, `member_clearance.py` FAIL | the two met 0.5 mm above the shorter one's **new** end, so the meeting fell outside the search range, no arch was built for it, and the branch that should have arched over drove its tip into the other | re-run the wander scan after anything that moves the branch ends; and see §18, because a meeting that close to an end is fragile by construction |
 | **Open:** the slice preview shows top-surface fill on the side of the trunk at the fork | near-level shelves (13 cm² flatter than 37°, 20–35 mm up) where the trunk core fades out faster than the height rises, plus a root start near the surface | fixed in the rebuild with the seamless joins of §17.1 |
 
 ---
@@ -1051,25 +1122,27 @@ Chaotic Tree was then rebuilt the same way.
 |---|---|
 | Scale | every size × 80/96 = 0.833: Customizer values set directly, fixed lengths in the code multiplied by `sc = glass_d/96` |
 | Glass | 80 × 130 mm, foot 2 mm, clearance 1 mm (82 mm bore); stands at `lift` = 83 mm; rim 213 mm; `total_h` 267 mm |
-| Layout | new 3 → 7 → 13 search (`wild_search.py`, fork heights scaled by the glass height, 130/170): largest empty sector 97°, seat 126°; `wander_seed` 29 of 32 tried |
+| Layout | new 3 → 7 → 13 search (`Wild_Chaotic_Tree_layout.py`, seed 71 × 2500, fork heights scaled by the glass height, 130/170): largest empty sector 97°, seat 126°; `wander_seed` 29 of 32 tried |
 | Limbs | start at 7 mm, 5.8 mm off the axis, deep inside the trunk; part at 16, 24 and 32 mm; crotch 34 mm |
 | Base | 9 buttresses (reach 22–33 mm, from 30 mm up, below the fork), 9 roots plus side roots over 208 mm |
 | Calmer than the Grand tree | the shorter glass turns the same angle per glass height 9 % faster sideways, which pushed tips and arches below 30°; wander 0.85, and tip lean and flick at full size only with 58 mm of room above the rim |
+| Blunt tips, added later | the same code as the Grand tree (§16.1), which on this glass tapers over 58 mm (70 × `sc`) and ends at 2.2–3.8 mm against a flat 2.2 mm before. Nothing else was touched: same layout, same `wander_seed` 29, same 9 meetings at the same heights, merge still 12–26 %. `tip_spare` went 2.5 → 3.5, because the wider end caps put the top 0.11 mm over the limit (§16.2) |
 
-**Measured on the packaged 3MF** (`build_design.py`, 2026-09-20; an H2C project):
+**Measured on the packaged 3MF** (`build_design.py`, rebuilt with the blunt tips 2026-09-20; an
+H2C project). The figures in brackets are the build before them, where they differ:
 
 | Check | Result |
 |---|---|
-| Size | 179.2 × 197.2 × 266.0 mm, standing on z = 0 |
-| Wood | 453 576 triangles, **0 / 0** edges, 394.7 cm³; 6 shells: the body and 5 sealed pockets of ~0 mm³ in merges |
+| Size | 179.2 × 197.2 × 266.1 mm, standing on z = 0 (266.0) |
+| Wood | 452 044 triangles, **0 / 0** edges, 394.4 cm³; 5 shells: the body and 4 sealed pockets of ≤ 0.03 mm³ in merges (was 6, one more pocket) |
 | Past 60° | **0.03 %** above the bottom 1 cm; bottom 1 cm 0.05 % |
-| Past 45° | 1.33 % (report only) |
-| Glass | nothing inside the glass or its 1 mm clearance; **seat 1.6 cm²** of pads within one layer of 83 mm, 32.1–38.4 mm from the axis, largest gap 98° |
-| Branches | 9 meetings, merge 12–26 %; climb ≥ 38°; tightest bend 1.4 × the tube radius |
+| Past 45° | 1.31 % (report only) |
+| Glass | nothing inside the glass or its 1 mm clearance; **seat 1.5 cm²** of pads within one layer of 83 mm, 32.1–38.3 mm from the axis, largest gap 98° |
+| Branches | 9 meetings, merge 12–26 %; climb ≥ 39°; tightest bend 1.4 × the tube radius; tips 2.2–3.8 mm (a flat 2.2) |
 | Mid-air | `floating_check.py`: **0** regions (the first build had 1, §17.2) |
 | Bed contact | 75.0 cm² |
-| Bambu Studio slice (H2C, 0.20mm Standard, 35 % infill) | **no warnings**; 9 h 32 min; **249 g** |
-| Render | 21 min 07 s as one body |
+| Bambu Studio slice (H2C, 0.20mm Standard, 35 % infill) | **no warnings**; 9 h 32 min; **249 g** — unchanged, because the branches lose as much along their length as the tips gain |
+| Render | **47 s** as one body with Manifold (21 min 07 s with CGAL, §7) |
 
 ### 17.1 Techniques: defining the contours of interference
 
@@ -1131,18 +1204,30 @@ two surfaces to match there.
 
 ## 18. To try in the next design
 
-**Branch tips narrow too fast.** Most of a branch reads well, but the last stretch thins into a
-point quicker than a real branch does. `m_r` tapers to `tip_r` over the last 35 mm (`smooth(end −
-35·sc, end, z)`), on top of the profile's own fall to 0.65 of the base radius, so the two stack up
-at the end. Three ways, which combine:
+**Branch tips that narrow too fast** was the last entry here; it is done. The technique is in
+§16.1 and what it costs to re-check is in §16.2. Both Chaotic trees that hold the glass in their
+branches now carry it: the Grand tree was rebuilt around it, and the Wild tree took it on its own
+(§17) with nothing else changed, which is the cheaper way to fit it to an existing design.
 
-1. **Taper over a longer run**: 70 mm instead of 35 (`smooth(end − 70·sc, end, z)`), so it thins
-   over most of the last branch rather than at its tip.
-2. **Keep the tips fatter**: `tip_r` about half the radius at the rim (roughly 3.5–4 mm on the
-   Grand tree, against 2.75 now), so a tip ends as blunt wood, not a needle.
-3. **Blunt profile**: taper along a curve rather than a smoothstep, e.g. `lerp(r, tip_r, pow(t, 2))`
-   over the last stretch, so the branch stays wide and only rounds off in the last few mm.
+**A meeting too close to a branch's end is fragile.** An arch is only built where both branches
+exist, so a meeting a millimetre or two below the shorter one's end vanishes as soon as anything
+moves that end — a different `tip_spare`, a different `drop`, a changed profile. The branch that
+should have arched over then drives its tip straight into the other one. In this build that showed
+up as a 96 % overlap where 30 % is the limit, and nothing said so until `member_clearance.py`
+failed; on the seed finally chosen, the same pair is a clean merge.
 
-Whichever is used, re-check: the overhang budget (a blunt end cap is an up-facing face, so it costs
-nothing), the merges (fatter tips meet sooner, so `member_clearance.py` again), and the print time
-and weight, which both rise a little.
+It belongs in the two search steps, where every other layout rule already lives:
+
+1. **Score it in the layout search** (`Grand_Chaotic_Tree_layout.py`): penalise a meeting closer than about
+   10 mm to either member's `end`, alongside the existing penalty for stacked meetings.
+2. **Report it in the wander scan**: print the smallest distance from any meeting to the ends of
+   the two members involved, so a seed that only just holds together is visible before the build
+   rather than after it.
+
+Then the seed choice survives a later change to the tips, and the scan stops having to be re-run
+from scratch every time one moves.
+
+Worth weighing at the same time: the alternative is to let an arch build against a member that
+ends just below it, which would keep the merge instead of dropping it. That is a change to
+`arch_h`'s range rather than to the search, and it would make the layout less sensitive in the
+first place.

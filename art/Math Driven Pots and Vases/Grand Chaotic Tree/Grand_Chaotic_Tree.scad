@@ -12,7 +12,8 @@
 // the surfaces cross almost parallel, wearing the same bark pattern on both sides,
 // so the joins do not show. Every path is unique and nothing is symmetrical. The
 // roots sprawl over the ground to a 30 cm spread, and the whole piece stays within
-// 32 cm. Bark, knots and pruned twig stubs are modelled on every member.
+// 32 cm. A branch holds its thickness nearly to the end and finishes as blunt cut
+// wood, not as a point. Bark, knots and pruned twig stubs are modelled on every member.
 // Step 1 is the glass; every holder dimension is derived from it.
 // All dimensions in mm. OpenSCAD trigonometry uses DEGREES.
 
@@ -47,27 +48,33 @@ side_roots = 0.6;       // share of the roots that fork a side root
 /* [4 - Branches] */
 press = 0.2;            // share of a branch's thickness pressed flat against the glass
 branch_r = 12.5;        // radius of a scale-1 branch at the glass bottom (limbs are thicker)
-tip_r = 2.75;           // at the tips
+tip_share = 0.55;       // how thick a branch ends: this share of its own thickness at the rim, so
+                        // a tip is blunt wood and not a needle (about 3.4 mm on a typical branch)
+tip_min = 2.6;          // but never thinner than this (mm), for the thinnest branches
+tip_taper = 70;         // over how many mm a branch narrows to its tip
+tip_curve = 2.5;        // how the narrowing is spread: 1 straight, higher stays wide and rounds off late
 wander = 1;             // irregular wander of every branch along the glass (0 = smooth spirals)
 sprawl = 1;             // branches lifting off the glass and tips flung out sideways (0 = none)
-wander_seed = 0;        // another number gives every branch a different wander
+wander_seed = 44;       // another number gives every branch a different wander
 arch_merge = 0.10;      // where two branches meet, the one on top sinks into the other by this
                         // share of the thinner one's thickness (planned 0.10, 0.30 at most)
 arch_w = 25;            // half-width of an arch, measured along the height (mm)
 reverse_w = 52;         // height over which a branch reverses its turn (mm)
 // The layout came from a search over random 3 -> 7 -> 13 trees for the smallest
-// empty sector around the glass at every height (largest gap 106 deg above the
-// lower glass), a steady three-point seat (limbs at most 126 deg apart) and no
-// stacked arches.
+// empty sector around the glass at every height (largest gap 98 deg above the
+// lower glass), a tripod seat (the three limbs 125 deg apart at most) and no
+// stacked arches. A different draw from the last build, so this tree branches
+// its own way: all three limbs set off the same way round and the first one
+// turns back halfway up.
 // Limbs, out of the trunk: [angle at the glass bottom (deg), turn rate as degrees
 //  per glass height (+ counter-clockwise seen from above), reversal height above
 //  the glass bottom (mm; 0 none), turn rate after it, radius scale, tip below the
 //  top (mm), lean out above the rim (mm), meander amplitude (deg), meander
 //  wavelength (mm), meander phase (deg), twig stubs (0..2)]
 limb_table = [
-    [ 227,  116,    0,    0, 1.32,    0,   16,    5,  198,   60,    2],
-    [ 345,  -89,    0,    0, 1.26,    7,   17,    5,  158,  197,    2],
-    [ 104,  118,  125, -114, 1.36,    4,   14,    7,  155,  303,    2]];
+    [    1,  -79,  149,   94, 1.32,    0,   15,    8,  147,  148,    2],
+    [  117,  -76,    0,    0, 1.26,    7,   16,    6,  164,  111,    2],
+    [  251,  -88,    0,    0, 1.36,    4,   18,    8,  203,  202,    2]];
 // How each limb rises out of the trunk, so they part at different heights:
 // [parting height (share of lift), where it reaches the side of the glass (mm
 //  above the glass bottom), share of the rise spent speeding up, share spent
@@ -84,16 +91,16 @@ limb_rise = [[0.225, 16, 0.4, 0.4], [0.275, 14, 0.4, 0.4], [0.175, 18, 0.4, 0.4]
 //  it, share, tip below the top (mm), lean out above the rim (mm), meander
 //  amplitude (deg), meander wavelength (mm), meander phase (deg), twig stubs]
 fork_table = [
-    [   2,   65, -113,    0,    0, 0.71,    5,   14,    5,  162,   11,    1],
-    [   2,   25,  -85,    0,    0, 0.71,    5,   14,    7,  199,  132,    1],
-    [   0,   26, -116,    0,    0, 0.69,    4,   14,    5,  189,  219,    1],
-    [   1,   21,   85,    0,    0, 0.68,    6,   13,    8,  163,   36,    1],
-    [   0,   97, -114,    0,    0, 0.62,   14,   15,    5,  112,   59,    1],
-    [   4,  161,   79,    0,    0, 0.67,    2,   13,    6,  116,   26,    0],
-    [   6,  167, -105,    0,    0, 0.64,    5,   14,    6,  142,  321,    0],
-    [   5,  111,   91,    0,    0, 0.66,    8,   17,    3,  173,   84,    1],
-    [   2,  149,   83,    0,    0, 0.70,    8,   16,    6,  149,  210,    0],
-    [   3,  168,  109,    0,    0, 0.62,    5,   13,    5,  152,   48,    0]];
+    [    1,   44,  103,    0,    0, 0.67,    4,   16,    6,  143,  336,    1],
+    [    0,   68,  137,    0,    0, 0.73,    7,   18,    6,  163,   27,    1],
+    [    2,   30,  130,    0,    0, 0.72,    4,   15,    4,  131,  157,    1],
+    [    0,   18,   86,    0,    0, 0.65,    2,   14,    7,  184,  271,    1],
+    [    4,  145, -100,    0,    0, 0.65,    5,   14,    3,  141,  264,    0],
+    [    1,   88,   84,    0,    0,  0.6,    3,   17,    3,  137,    5,    1],
+    [    2,  158,   88,    0,    0, 0.68,    9,   15,    6,  128,  131,    1],
+    [    0,  118,  101,    0,    0, 0.64,    5,   14,    7,  113,  296,    0],
+    [    5,  119, -132,  175,   77, 0.62,   12,   13,    6,  140,  320,    0],
+    [    3,   89,  -79,  167,   96, 0.64,   14,   14,    4,  159,  331,    1]];
 
 /* [5 - Bark] */
 bark_depth = 1.56;      // fissure depth on the trunk (mm); thinner members get less
@@ -114,7 +121,8 @@ bore_r = glass_r+clearance;
 glass_top = lift+glass_h;
 sc = glass_d/96;        // the fixed lengths below were set for a 96 mm glass; scaled to this one
 trunk_plates = 26;      // bark plates around the trunk
-tip_spare = 2.5;        // tips end this far below total_h: a leaning tip's end cap reaches past its path end
+tip_spare = 3.5;        // tips end this far below total_h: a leaning tip's end cap reaches past its
+                        // path end by its own radius, and a blunt tip carries a wider cap
 
 assert(glass_d > 2*glass_wall && glass_h > glass_bottom, "Invalid glass dimensions");
 assert(lift >= 7.5, "The glass floor must be at least 7.5 mm above the plate");
@@ -314,8 +322,15 @@ function prod(v,i=0) = i>=len(v) ? 1 : v[i]*prod(v,i+1);
 function thin(i,z) = prod([for(k=kids[i]) 1+(sqrt(1-Mb(k)[6]*Mb(k)[6])-1)*smooth(m_z0(k)-10*sc,m_z0(k)+30*sc,z)]);
 function scale_at(i,z) = (is_main(i) ? Mb(i)[6] : Mb(i)[6]*scale_at(Mb(i)[0],m_z0(i)))*thin(i,z);
 bscale = [for(i=[0:nmem-1]) is_main(i) ? Mb(i)[6] : Mb(i)[6]*scale_at(Mb(i)[0],m_z0(i))];
-// Member radius: its share of the tree's thickness, tapering to tip_r over its last 29 mm.
-function m_r(i,z) = lerp(bscale[i]*thin(i,z)*branch_radius(z),tip_r,smooth(m_end(i)-35*sc,m_end(i),z));
+// Member radius: its share of the tree's thickness, narrowing to a blunt tip over its
+// last tip_taper mm. The tip is a share of this member's own thickness at the rim, so
+// thick branches end as thick wood and thin ones stay in proportion; the narrowing runs
+// along a curve (tip_curve), so a branch keeps its thickness most of the way and only
+// rounds off near the end instead of running out into a point.
+function rim_r(i) = bscale[i]*thin(i,glass_top)*branch_radius(glass_top);
+function tip_rad(i) = max(tip_min*sc,tip_share*rim_r(i));
+function m_r(i,z) = lerp(bscale[i]*thin(i,z)*branch_radius(z),tip_rad(i),
+    pow(max(0,min(1,(z-(m_end(i)-tip_taper*sc))/(tip_taper*sc))),tip_curve));
 // Natural irregularity, different for every member (from rnd), on top of the
 // table's turn and meander. It fades in over 50 mm from where the member leaves
 // the trunk's seat or its parent, so forks still start on their parent.

@@ -21,7 +21,9 @@ stands on the branches themselves.
 [<img src="art/Math%20Driven%20Pots%20and%20Vases/Design_Evolution.png" alt="How the tree vase holders evolved: six designs at the same scale">](art/Math%20Driven%20Pots%20and%20Vases/Design_Evolution.png)
 
 The six holders for the 80 × 130 mm glass, at the same scale, and what each one added. The Grand
-Chaotic Tree is not in it: it holds a bigger glass.
+Chaotic Tree is not in it: it holds a bigger glass. The picture is drawn from the designs' own
+renders by [Design_Evolution.py](art/Math%20Driven%20Pots%20and%20Vases/Design_Evolution.py), which
+is re-run whenever one of the six is rebuilt.
 
 <table>
   <tr>
@@ -95,7 +97,8 @@ Chaotic Tree is not in it: it holds a bigger glass.
       A 27 cm tree for the 80 × 130 mm glass, with a wild layout of its own: the trunk splits into
       3 limbs, then 7 branches, then 13, and the glass stands on the three limbs with no floor under
       it. The first design where the trunk, its buttresses and the roots are one skin, so the roots
-      and limbs grow out of it wearing the same bark and the joins do not show.
+      and limbs grow out of it wearing the same bark and the joins do not show. Its branches now
+      end as blunt cut wood, like the Grand tree's.
     </td>
   </tr>
   <tr>
@@ -112,6 +115,8 @@ Chaotic Tree is not in it: it holds a bigger glass.
       into a 27 cm footprint. The trunk comes down in buttresses and splits into 3 limbs, then 7
       branches, then 13. Nothing is cut for the glass: the wood grows around it, pressed flat where
       it touches, and the glass stands on the three limbs. Joins without seams, like the Wild tree.
+      The branches keep their thickness to the end and finish as blunt cut wood rather than
+      running out into points.
     </td>
   </tr>
 </table>
@@ -123,11 +128,13 @@ Chaotic Tree is not in it: it holds a bigger glass.
 | Cradle Tree | 80 × 130 | 60 mm, on a floor | 156.4 × 136.5 × 249.2 | Cocoa Brown | 7 h 52 min, 227 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Cradle%20Tree/Cradle_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Cradle%20Tree/Cradle_Tree.3mf) |
 | Tangled Cradle Tree | 80 × 130 | 60 mm, on a floor | 156.4 × 136.8 × 248.8 | Cocoa Brown | 8 h 32 min, 236 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Tangled%20Cradle%20Tree/Tangled_Cradle_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Tangled%20Cradle%20Tree/Tangled_Cradle_Tree.3mf) |
 | Chaotic Cradle Tree | 80 × 130 | 60 mm, on a floor | 156.4 × 142.6 × 249.1 | Cocoa Brown | 8 h 21 min, 232 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Chaotic%20Cradle%20Tree/Chaotic_Cradle_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Chaotic%20Cradle%20Tree/Chaotic_Cradle_Tree.3mf) |
-| Wild Chaotic Tree | 80 × 130 | 83 mm, on 3 limbs | 179.2 × 197.2 × 266.0 | Cocoa Brown | 9 h 32 min, 249 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Wild%20Chaotic%20Tree/Wild_Chaotic_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Wild%20Chaotic%20Tree/Wild_Chaotic_Tree.3mf) |
-| Grand Chaotic Tree | 100 × 200 | 80 mm, on 3 limbs | 270.9 × 271.2 × 319.0 | Cocoa Brown | 15 h 39 min, 483 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Grand%20Chaotic%20Tree/Grand_Chaotic_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Grand%20Chaotic%20Tree/Grand_Chaotic_Tree.3mf) |
+| Wild Chaotic Tree | 80 × 130 | 83 mm, on 3 limbs | 179.2 × 197.2 × 266.1 | Cocoa Brown | 9 h 32 min, 249 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Wild%20Chaotic%20Tree/Wild_Chaotic_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Wild%20Chaotic%20Tree/Wild_Chaotic_Tree.3mf) · [layout](art/Math%20Driven%20Pots%20and%20Vases/Wild%20Chaotic%20Tree/Wild_Chaotic_Tree_layout.py) |
+| Grand Chaotic Tree | 100 × 200 | 80 mm, on 3 limbs | 270.9 × 271.2 × 318.5 | Cocoa Brown | 15 h 42 min, 481 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Grand%20Chaotic%20Tree/Grand_Chaotic_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Grand%20Chaotic%20Tree/Grand_Chaotic_Tree.3mf) · [layout](art/Math%20Driven%20Pots%20and%20Vases/Grand%20Chaotic%20Tree/Grand_Chaotic_Tree_layout.py) |
 
 Every one leaves 1 mm of clearance around its glass, so the glass lifts straight out of the top. The
-images are renders, not photos.
+images are renders, not photos. The two trees that hold the glass in their branches carry a
+**layout** script as well: the search that drew their 13 branches, with the seed that reproduces
+the tables in the `.scad` (another seed grows a different tree).
 
 ## Printing
 
@@ -136,7 +143,7 @@ images are renders, not photos.
   with purge volumes. Open it and slice.
 - Print upright without supports. All seven holders pass the house rules: no more than 0.5 % of the
   surface past 60° above the first centimetre, and nothing that starts in mid-air.
-- Height: the Wild (266 mm) and Grand (319 mm) Chaotic Trees need an H2-series printer (H2C, H2D,
+- Height: the Wild (266 mm) and Grand (318.5 mm) Chaotic Trees need an H2-series printer (H2C, H2D,
   H2D Pro or H2S). The other five are 250 mm or under and fit every printer in the list.
 - For another Bambu printer: `python tools/bambu_3mf.py <file>.3mf --printer X1C`
   (`--list-printers` shows all ten).
@@ -154,6 +161,7 @@ reference figures for each design. The scripts in [`tools/`](tools/) do the pack
 | `build_design.py` | Exports every colour part, merges them, writes the Bambu project, renders the image, and runs the mesh checks and a Bambu Studio slice |
 | `mesh_check.py` | Printability checks: watertight parts, overhang, bore clearance (or, for a glass standing on branches, clearance to its rounded foot and the pads it stands on), bed contact, volume |
 | `member_clearance.py` | How much branches overlap where they meet, from the centrelines in seconds, before any full render |
+| `cap_height.py` | How high each branch reaches once its end cap is counted, from the same centrelines, against a height limit |
 | `bambu_3mf.py` | Turns a 3MF into a Bambu Studio project, or re-targets it to another printer; `--slice` asks Bambu Studio for its verdict |
 | `floating_check.py` | Finds regions that start in mid-air and says where they are (Bambu Studio only warns that they exist) |
 | `merge_3mf.py`, `render_png.py` | Multi-part 3MF merge; preview renders |
@@ -174,8 +182,13 @@ python tools/build_design.py "art/Math Driven Pots and Vases/Grand Chaotic Tree/
     --part wood=#6F5034 --check-args "--bore-r 51 --floor-h 80 --foot-r 3"
 ```
 
-This needs OpenSCAD 2021.01+ and Python 3 with `numpy` and `Pillow`. Bambu Studio is optional; if
-it's installed, the build also slice-checks the result.
+This needs OpenSCAD and Python 3 with `numpy` and `Pillow`. Bambu Studio is optional; if it's
+installed, the build also slice-checks the result.
+
+The tools use the newest OpenSCAD they find and ask it for the **Manifold** backend, which renders
+these designs in about a minute where the old CGAL kernel took 20-30 of them. 2021.01 still works,
+with CGAL, and is just slow. Set `$OPENSCAD` to choose a binary, or `OPENSCAD_BACKEND=none` to
+leave the backend to OpenSCAD.
 
 ## License
 

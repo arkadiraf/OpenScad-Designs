@@ -48,7 +48,11 @@ side_roots = 0.6;       // share of the roots that fork a side root
 /* [4 - Branches] */
 press = 0.2;            // share of a branch's thickness pressed flat against the glass
 branch_r = 10;          // radius of a scale-1 branch at the glass bottom (limbs are thicker)
-tip_r = 2.2;            // at the tips
+tip_share = 0.55;       // how thick a branch ends: this share of its own thickness at the rim, so
+                        // a tip is blunt wood and not a needle
+tip_min = 2.6;          // but never thinner than this (mm), for the thinnest branches
+tip_taper = 70;         // over how many mm a branch narrows to its tip
+tip_curve = 2.5;        // how the narrowing is spread: 1 straight, higher stays wide and rounds off late
 wander = 0.85;          // irregular wander of every branch along the glass (0 = smooth spirals)
 sprawl = 1;             // branches lifting off the glass and tips flung out sideways (0 = none)
 wander_seed = 29;       // another number gives every branch a different wander
@@ -114,7 +118,8 @@ bore_r = glass_r+clearance;
 glass_top = lift+glass_h;
 sc = glass_d/96;        // the fixed lengths below were set for a 96 mm glass; scaled to this one
 trunk_plates = 26;      // bark plates around the trunk
-tip_spare = 2.5;        // tips end this far below total_h: a leaning tip's end cap reaches past its path end
+tip_spare = 3.5;        // tips end this far below total_h: a leaning tip's end cap reaches past its
+                        // path end by its own radius, and a blunt tip carries a wider cap
 
 assert(glass_d > 2*glass_wall && glass_h > glass_bottom, "Invalid glass dimensions");
 assert(lift >= 7.5, "The glass floor must be at least 7.5 mm above the plate");
@@ -314,8 +319,15 @@ function prod(v,i=0) = i>=len(v) ? 1 : v[i]*prod(v,i+1);
 function thin(i,z) = prod([for(k=kids[i]) 1+(sqrt(1-Mb(k)[6]*Mb(k)[6])-1)*smooth(m_z0(k)-10*sc,m_z0(k)+30*sc,z)]);
 function scale_at(i,z) = (is_main(i) ? Mb(i)[6] : Mb(i)[6]*scale_at(Mb(i)[0],m_z0(i)))*thin(i,z);
 bscale = [for(i=[0:nmem-1]) is_main(i) ? Mb(i)[6] : Mb(i)[6]*scale_at(Mb(i)[0],m_z0(i))];
-// Member radius: its share of the tree's thickness, tapering to tip_r over its last 29 mm.
-function m_r(i,z) = lerp(bscale[i]*thin(i,z)*branch_radius(z),tip_r,smooth(m_end(i)-35*sc,m_end(i),z));
+// Member radius: its share of the tree's thickness, narrowing to a blunt tip over its
+// last tip_taper mm. The tip is a share of this member's own thickness at the rim, so
+// thick branches end as thick wood and thin ones stay in proportion; the narrowing runs
+// along a curve (tip_curve), so a branch keeps its thickness most of the way and only
+// rounds off near the end instead of running out into a point.
+function rim_r(i) = bscale[i]*thin(i,glass_top)*branch_radius(glass_top);
+function tip_rad(i) = max(tip_min*sc,tip_share*rim_r(i));
+function m_r(i,z) = lerp(bscale[i]*thin(i,z)*branch_radius(z),tip_rad(i),
+    pow(max(0,min(1,(z-(m_end(i)-tip_taper*sc))/(tip_taper*sc))),tip_curve));
 // Natural irregularity, different for every member (from rnd), on top of the
 // table's turn and meander. It fades in over 50 mm from where the member leaves
 // the trunk's seat or its parent, so forks still start on their parent.

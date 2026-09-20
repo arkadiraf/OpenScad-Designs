@@ -31,12 +31,12 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from merge_3mf import merge                     # noqa: E402
 from bambu_3mf import convert, slice_check, DEFAULT_PRINTER, DEFAULT_INFILL   # noqa: E402
-from render_png import render, openscad_exe     # noqa: E402
+from render_png import render, openscad_cmd     # noqa: E402
 
 
 def export_part(scad, part, out_3mf):
     t = time.time()
-    r = subprocess.run([openscad_exe(), '-o', out_3mf, '-D', f'part="{part}"', scad],
+    r = subprocess.run([*openscad_cmd(), '-o', out_3mf, '-D', f'part="{part}"', scad],
                        capture_output=True, text=True)
     log = r.stdout + r.stderr
     notes = [l.strip() for l in log.splitlines()
@@ -69,7 +69,8 @@ def main():
 
     parts = [p.split('=', 1) for p in a.part]
     tmp = tempfile.mkdtemp(prefix='scad_parts_')
-    print(f'[2/4] exporting   {", ".join(p for p, _ in parts)} in parallel (CGAL; minutes each)...')
+    kernel = 'Manifold' if '--backend' in openscad_cmd() else 'CGAL; minutes each'
+    print(f'[2/4] exporting   {", ".join(p for p, _ in parts)} in parallel ({kernel})...')
     with ThreadPoolExecutor(len(parts)) as ex:
         jobs = [ex.submit(export_part, scad, p, os.path.join(tmp, p + '.3mf')) for p, _ in parts]
         results = [j.result() for j in jobs]
