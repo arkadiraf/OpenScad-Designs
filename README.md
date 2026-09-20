@@ -14,8 +14,9 @@ ships ready to print:
 ### Math Driven Pots and Vases
 
 Tree-shaped holders for a plain glass vase. The glass drops straight in from the top. In the first
-five it stands on a stump floor, and you can see the tree's growth rings through the glass bottom; in
-the two Chaotic trees there is no floor at all and it stands on the branches themselves.
+five it stands on a stump floor, and you can see the tree's growth rings through the glass bottom. In
+the Wild and Grand Chaotic Trees there is no floor at all: the wood grows around the glass and it
+stands on the branches themselves.
 
 [<img src="art/Math%20Driven%20Pots%20and%20Vases/Design_Evolution.png" alt="How the tree vase holders evolved: six designs at the same scale">](art/Math%20Driven%20Pots%20and%20Vases/Design_Evolution.png)
 
@@ -91,9 +92,10 @@ Chaotic Tree is not in it: it holds a bigger glass.
       which ties the whole cage into one strong print.
     </td>
     <td valign="top">
-      The Grand Chaotic Tree grown for the 80 × 130 mm glass, with its own wild layout. The trunk,
-      its buttresses and the roots are one skin, and the roots and limbs grow out of it with the
-      same bark, so there are no seams at the joins.
+      A 27 cm tree for the 80 × 130 mm glass, with a wild layout of its own: the trunk splits into
+      3 limbs, then 7 branches, then 13, and the glass stands on the three limbs with no floor under
+      it. The first design where the trunk, its buttresses and the roots are one skin, so the roots
+      and limbs grow out of it wearing the same bark and the joins do not show.
     </td>
   </tr>
   <tr>
@@ -106,27 +108,26 @@ Chaotic Tree is not in it: it holds a bigger glass.
   </tr>
   <tr>
     <td valign="top">
-A bigger glass, 100 × 200 mm, standing 8 cm up in a 32 cm tree whose roots sprawl
-      over 30 cm of ground. The trunk comes down in buttresses and splits into 3 limbs, then 7
+      A bigger glass, 100 × 200 mm, standing 8 cm up in a 32 cm tree whose roots sprawl
+      into a 27 cm footprint. The trunk comes down in buttresses and splits into 3 limbs, then 7
       branches, then 13. Nothing is cut for the glass: the wood grows around it, pressed flat where
       it touches, and the glass stands on the three limbs. Joins without seams, like the Wild tree.
     </td>
   </tr>
 </table>
 
-| Design | Glass floor | Size (mm) | Colours (Bambu PLA Basic) | Print on the H2C, 35 % infill | Files |
-|---|---|---|---|---|---|
-| Braided Tree Vase Holder | 9 mm | 153.5 × 150.6 × 177.6 | Cocoa Brown `#6F5034`, Mistletoe Green `#3F8E43` | 7 h 56 min, 188 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Braided%20Tree%20Vase%20Holder/Braided_Tree_Vase_Holder.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Braided%20Tree%20Vase%20Holder/Braided_Tree_Vase_Holder.3mf) |
-| Embracing Tree | 8 mm | 153.8 × 150.6 × 179.4 | Cocoa Brown, Mistletoe Green, Bright Green `#BECF00` | 6 h 08 min, 91 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Embracing%20Tree/Embracing_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Embracing%20Tree/Embracing_Tree.3mf) |
-| Cradle Tree | 60 mm | 156.4 × 136.5 × 249.2 | Cocoa Brown | 7 h 52 min, 227 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Cradle%20Tree/Cradle_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Cradle%20Tree/Cradle_Tree.3mf) |
-| Tangled Cradle Tree | 60 mm | 156.4 × 136.8 × 248.8 | Cocoa Brown | 8 h 32 min, 236 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Tangled%20Cradle%20Tree/Tangled_Cradle_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Tangled%20Cradle%20Tree/Tangled_Cradle_Tree.3mf) |
-| Chaotic Cradle Tree | 60 mm | 156.4 × 142.6 × 249.1 | Cocoa Brown | 8 h 21 min, 232 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Chaotic%20Cradle%20Tree/Chaotic_Cradle_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Chaotic%20Cradle%20Tree/Chaotic_Cradle_Tree.3mf) |
-| Wild Chaotic Tree | none: stands on 3 limbs at 83 mm | 179.2 × 197.2 × 266.0 | Cocoa Brown | 9 h 32 min, 249 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Wild%20Chaotic%20Tree/Wild_Chaotic_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Wild%20Chaotic%20Tree/Wild_Chaotic_Tree.3mf) |
-| Grand Chaotic Tree | none: stands on 3 limbs at 80 mm | 270.9 × 271.2 × 319.0 | Cocoa Brown | 15 h 39 min, 483 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Grand%20Chaotic%20Tree/Grand_Chaotic_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Grand%20Chaotic%20Tree/Grand_Chaotic_Tree.3mf) |
+| Design | Glass (mm) | The glass sits at | Size (mm) | Colours (Bambu PLA Basic) | Print on the H2C, 35 % infill | Files |
+|---|---|---|---|---|---|---|
+| Braided Tree Vase Holder | 80 × 130 | 9 mm, on a floor | 153.5 × 150.6 × 177.6 | Cocoa Brown `#6F5034`, Mistletoe Green `#3F8E43` | 7 h 56 min, 188 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Braided%20Tree%20Vase%20Holder/Braided_Tree_Vase_Holder.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Braided%20Tree%20Vase%20Holder/Braided_Tree_Vase_Holder.3mf) |
+| Embracing Tree | 80 × 130 | 8 mm, on a floor | 153.8 × 150.6 × 179.4 | Cocoa Brown, Mistletoe Green, Bright Green `#BECF00` | 6 h 08 min, 91 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Embracing%20Tree/Embracing_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Embracing%20Tree/Embracing_Tree.3mf) |
+| Cradle Tree | 80 × 130 | 60 mm, on a floor | 156.4 × 136.5 × 249.2 | Cocoa Brown | 7 h 52 min, 227 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Cradle%20Tree/Cradle_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Cradle%20Tree/Cradle_Tree.3mf) |
+| Tangled Cradle Tree | 80 × 130 | 60 mm, on a floor | 156.4 × 136.8 × 248.8 | Cocoa Brown | 8 h 32 min, 236 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Tangled%20Cradle%20Tree/Tangled_Cradle_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Tangled%20Cradle%20Tree/Tangled_Cradle_Tree.3mf) |
+| Chaotic Cradle Tree | 80 × 130 | 60 mm, on a floor | 156.4 × 142.6 × 249.1 | Cocoa Brown | 8 h 21 min, 232 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Chaotic%20Cradle%20Tree/Chaotic_Cradle_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Chaotic%20Cradle%20Tree/Chaotic_Cradle_Tree.3mf) |
+| Wild Chaotic Tree | 80 × 130 | 83 mm, on 3 limbs | 179.2 × 197.2 × 266.0 | Cocoa Brown | 9 h 32 min, 249 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Wild%20Chaotic%20Tree/Wild_Chaotic_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Wild%20Chaotic%20Tree/Wild_Chaotic_Tree.3mf) |
+| Grand Chaotic Tree | 100 × 200 | 80 mm, on 3 limbs | 270.9 × 271.2 × 319.0 | Cocoa Brown | 15 h 39 min, 483 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Grand%20Chaotic%20Tree/Grand_Chaotic_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Grand%20Chaotic%20Tree/Grand_Chaotic_Tree.3mf) |
 
-Five of them hold an 80 × 130 mm glass in an 82 mm bore, and the Wild Chaotic Tree holds the same
-glass on its branches; the Grand Chaotic Tree holds a 100 × 200 mm glass. All leave 1 mm of clearance
-all round. The images are renders, not photos.
+Every one leaves 1 mm of clearance around its glass, so the glass lifts straight out of the top. The
+images are renders, not photos.
 
 ## Printing
 
@@ -135,8 +136,8 @@ all round. The images are renders, not photos.
   with purge volumes. Open it and slice.
 - Print upright without supports. All seven holders pass the house rules: no more than 0.5 % of the
   surface past 60° above the first centimetre, and nothing that starts in mid-air.
-- The Grand Chaotic Tree is 319 mm tall and 27 cm across its roots. Of the listed printers only the H2C, H2D, H2D Pro and H2S
-  have room for it.
+- Height: the Wild (266 mm) and Grand (319 mm) Chaotic Trees need an H2-series printer (H2C, H2D,
+  H2D Pro or H2S). The other five are 250 mm or under and fit every printer in the list.
 - For another Bambu printer: `python tools/bambu_3mf.py <file>.3mf --printer X1C`
   (`--list-printers` shows all ten).
 - For a different glass, change `glass_d` and `glass_h` in the Customizer, then rebuild (below).
@@ -162,6 +163,15 @@ python tools/build_design.py "art/Math Driven Pots and Vases/Embracing Tree/Embr
     --name "Embracing Tree" --out "art/Math Driven Pots and Vases/Embracing Tree" \
     --part wood=#6F5034 --part leaves_dark=#3F8E43 --part leaves_light=#BECF00 \
     --check-args "--bore-r 41 --floor-h 8"
+```
+
+For a design with no floor, the checker is given the glass's rounded foot instead of a plain bore,
+and it reports the pads the glass stands on:
+
+```bash
+python tools/build_design.py "art/Math Driven Pots and Vases/Grand Chaotic Tree/Grand_Chaotic_Tree.scad" \
+    --name "Grand Chaotic Tree" --out "art/Math Driven Pots and Vases/Grand Chaotic Tree" \
+    --part wood=#6F5034 --check-args "--bore-r 51 --floor-h 80 --foot-r 3"
 ```
 
 This needs OpenSCAD 2021.01+ and Python 3 with `numpy` and `Pillow`. Bambu Studio is optional; if
