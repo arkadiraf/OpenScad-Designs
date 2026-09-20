@@ -1044,8 +1044,8 @@ joins of §17 (its first build, for a 96 × 170 mm glass, had the seams describe
 
 Folder `art/Math Driven Pots and Vases/Wild Chaotic Tree/`. The Grand Chaotic Tree (§16) grown for
 the 80 × 130 mm glass, with its own chaotic layout. It is the first design where the trunk,
-buttresses, roots and limbs meet without visible seams, which fixes the open issue in §16.2 and
-[TODO.md](TODO.md).
+buttresses, roots and limbs meet without visible seams, which fixed the seams of §16.2; the Grand
+Chaotic Tree was then rebuilt the same way.
 
 | Parameter | Value |
 |---|---|
@@ -1126,3 +1126,23 @@ two surfaces to match there.
 | Chunky bits along the roots near the trunk | the copy sat 0.5 mm inside the root, less than the bark's 1.25 mm, so it showed through the fissures | the copy sits deeper than the bark (`band_in`) |
 | Roots bending tighter than their own radius | the meander ramped in over 13 mm right after the foot contour | ramp it over 60 % of the free root |
 | Tips climbing 25° on a design scaled down from a bigger one | a shorter glass turns the same angle per glass height faster sideways, so lean, flick, turn and wander add up to more | tip lean and flick scaled by the room above the rim, wander 0.85 |
+
+---
+
+## 18. To try in the next design
+
+**Branch tips narrow too fast.** Most of a branch reads well, but the last stretch thins into a
+point quicker than a real branch does. `m_r` tapers to `tip_r` over the last 35 mm (`smooth(end −
+35·sc, end, z)`), on top of the profile's own fall to 0.65 of the base radius, so the two stack up
+at the end. Three ways, which combine:
+
+1. **Taper over a longer run**: 70 mm instead of 35 (`smooth(end − 70·sc, end, z)`), so it thins
+   over most of the last branch rather than at its tip.
+2. **Keep the tips fatter**: `tip_r` about half the radius at the rim (roughly 3.5–4 mm on the
+   Grand tree, against 2.75 now), so a tip ends as blunt wood, not a needle.
+3. **Blunt profile**: taper along a curve rather than a smoothstep, e.g. `lerp(r, tip_r, pow(t, 2))`
+   over the last stretch, so the branch stays wide and only rounds off in the last few mm.
+
+Whichever is used, re-check: the overhang budget (a blunt end cap is an up-facing face, so it costs
+nothing), the merges (fatter tips meet sooner, so `member_clearance.py` again), and the print time
+and weight, which both rise a little.
