@@ -8,7 +8,9 @@ for meshes exported from OpenSCAD:
   * overhang       area share of printed surface past 60 deg and 45 deg from vertical,
                    split into height bands (bottom 1 cm, body, top 3 cm)
   * bed contact    area lying on z = 0
-  * bore           (vase holders) smallest distance from the Z axis above the glass floor
+  * bore           (vase holders) smallest distance from the Z axis above the glass floor; with
+                   --foot-r (a glass standing on branches, no floor) the distance to the glass's
+                   rounded foot and side, and the pads it stands on
   * volume / mass  PLA at 100 % solid (1.24 g/cm3)
 
 A 3MF may hold several mesh objects (a multi-part file from merge_3mf.py, or a Bambu Studio
@@ -18,7 +20,7 @@ the slicer itself: bambu_3mf.py --slice.
 Topology uses the file's own vertex indices for 3MF (exact); STL is welded at 1e-6 mm.
 
 usage:
-  python mesh_check.py model.3mf [--bore-r 41 --floor-h 9] [--max-overhang 0.5] [--locate]
+  python mesh_check.py model.3mf [--bore-r 41 --floor-h 9 [--foot-r 3]] [--max-overhang 0.5] [--locate]
 
 Exit code 0 when every hard check passes, 1 otherwise.
 """
@@ -137,11 +139,43 @@ def overhang(T, area, nz, top_z, max_over):
     return passed
 
 
+def glass_seat(V, T, area, nz, bore_r, floor_h, foot_r):
+    """A glass that stands on the wood itself (no floor): nothing may enter the glass and its
+    clearance, a cylinder of radius bore_r from floor_h up with its foot rounded by foot_r. Also
+    reports the pads it stands on: up-facing faces at floor_h inside the bore."""
+    r = np.hypot(V[:, 0], V[:, 1])
+    x = r - (bore_r - foot_r); y = floor_h + foot_r - V[:, 2]
+    d = np.where((x > 0) & (y > 0), np.hypot(x, y) - foot_r, np.maximum(x, y) - foot_r)
+    k = np.argmin(d)
+    good = d[k] >= -0.01
+    print(f"  {'PASS' if good else 'FAIL'}: closest material to the glass {d[k]:.2f} mm (negative = inside) at"
+          f" z {V[k, 2]:.1f} r {r[k]:.1f} (bore {bore_r:.2f} mm from {floor_h:.1f} mm, foot rounded {foot_r:.1f} mm)")
+    # seat pads: up-facing faces inside the bore within one 0.25 mm layer of the floor height (the
+    # bark cut into a pad leaves only its plates exactly there; a layer is what the print resolves)
+    c = T.mean(axis=1)
+    pad = ((T[:, :, 2] > floor_h - 0.25).all(axis=1) & (T[:, :, 2] < floor_h + 0.01).all(axis=1) & (nz > 0.95)
+           & (np.hypot(c[:, 0], c[:, 1]) < bore_r))
+    if pad.any():
+        phi = np.sort(np.degrees(np.arctan2(c[pad, 1], c[pad, 0])) % 360)
+        gap = np.max(np.diff(np.concatenate([phi, [phi[0] + 360]])))
+        rp = np.hypot(c[pad, 0], c[pad, 1])
+        print(f"  seat         {area[pad].sum() / 100:.1f} cm2 of pads within 0.25 mm of {floor_h:.1f} mm, {rp.min():.1f}..{rp.max():.1f} mm"
+              f" from the axis; largest gap between them {gap:.0f} deg")
+        steady = gap < 180
+        print(f"  {'PASS' if steady else 'FAIL'}: the glass stands steady (pads all round, no gap of 180 deg or more)")
+        good &= steady
+    else:
+        print("  FAIL: nothing carries the glass at the floor height"); good = False
+    return good
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('mesh')
     ap.add_argument('--bore-r', type=float, help='glass bore radius (mm): nothing may come closer to the Z axis')
     ap.add_argument('--floor-h', type=float, default=0.0, help='glass floor height (mm); bore check starts above it')
+    ap.add_argument('--foot-r', type=float, help='the glass stands on the wood with no floor: check against a bore '
+                    'whose foot is rounded by this radius (mm), and report the pads it stands on')
     ap.add_argument('--max-overhang', type=float, default=0.5, help='%% of surface past 60 deg allowed above 1 cm')
     ap.add_argument('--locate', action='store_true', help='print the position of every bad edge')
     args = ap.parse_args()
@@ -164,13 +198,15 @@ def main():
     if abs(Vall[:, 2].min()) > 0.01:
         print("  FAIL: model does not sit on z = 0"); all_ok = False
     all_ok &= overhang(T, area, nz, Vall[:, 2].max(), args.max_overhang)
-    if args.bore_r is not None:
+    if args.bore_r is not None and args.foot_r is None:
         sel = Vall[:, 2] > args.floor_h + 0.01
         rmin = np.hypot(Vall[sel, 0], Vall[sel, 1]).min()
         good = rmin >= args.bore_r - 0.01
         print(f"  {'PASS' if good else 'FAIL'}: closest material to the axis above the floor {rmin:.2f} mm"
               f" (bore {args.bore_r:.2f} mm)")
         all_ok &= good
+    if args.bore_r is not None and args.foot_r is not None:
+        all_ok &= glass_seat(Vall, T, area, nz, args.bore_r, args.floor_h, args.foot_r)
     print("RESULT:", "PASS" if all_ok else "FAIL")
     sys.exit(0 if all_ok else 1)
 

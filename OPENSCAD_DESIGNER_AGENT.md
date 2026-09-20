@@ -128,7 +128,7 @@ There is no API into the OpenSCAD GUI. **Share a file instead:**
 | Bottom 1 cm | some overhang is allowed there; the slicer can add "on build plate only" supports | Woven §8 |
 | Topology | 0 boundary / 0 non-manifold edges on **every** part | Both guides |
 | Sits on z = 0 | yes | Both guides |
-| Colours | **Bambu Lab PLA Basic only**, hexes from the table below; pick a combination not already in the palette tables of the other two guides, or used by an OpenSCAD design so far (Braided: Cocoa Brown + Mistletoe Green; Embracing: Cocoa Brown + Mistletoe Green + Bright Green; Cradle, Tangled and Chaotic: Cocoa Brown alone) | Pot §12, user |
+| Colours | **Bambu Lab PLA Basic only**, hexes from the table below; pick a combination not already in the palette tables of the other two guides, or used by an OpenSCAD design so far (Braided: Cocoa Brown + Mistletoe Green; Embracing: Cocoa Brown + Mistletoe Green + Bright Green; Cradle, Tangled, Chaotic, Grand Chaotic and Wild Chaotic: Cocoa Brown alone) | Pot §12, user |
 | Printer and infill | **Bambu Lab H2C** (0.4 mm nozzle, 0.20mm Standard process), **35 % sparse infill**, unless the user names another | user |
 
 **Bambu Lab PLA Basic colours** (the same list is built into `tools/bambu_3mf.py`; keep the two in
@@ -462,6 +462,9 @@ the percentage is meaningless. Judge overhang on the merged file only.
 | Cradle Tree, one body: textured trunk, 5 branches with forks and stubs, 7 roots; 315 k triangles | **14 min 19 s** (one branch assembly alone 54 s) |
 | Cradle Tree preview (Normal / Draft quality) | 16 s / 6 s |
 | Tangled / Chaotic Cradle Tree, one body, 8–9 branches with merges; 337 k / 328 k triangles | **21 min 37 s / 21 min 20 s**, run side by side |
+| Grand Chaotic Tree, one body: buttressed trunk, 13 branches pressed against the glass, 9 roots; 500 k triangles, 5 GB RAM | **23 min 28 s** |
+| One pressed limb alone / all roots alone (component tests) | 20–30 s / 6 min 13 s |
+| Wild Chaotic Tree, one body: the trunk skin carrying the root bases, 13 branches, 9 roots; 454 k triangles | **21 min 07 s**; its trunk alone 41 s, its roots 5 min 24 s |
 | A pair of merging branches alone (component test) | 1.5–3 min |
 
 - CGAL uses one core. **Export colour parts as separate processes in parallel** (`build_design.py`
@@ -478,7 +481,7 @@ the percentage is meaningless. Judge overhang on the merged file only.
 ## 8. Verification: `tools/mesh_check.py`
 
 ```bash
-python tools/mesh_check.py "Design/Design.3mf" --bore-r 41 --floor-h 9 [--max-overhang 0.5] [--locate]
+python tools/mesh_check.py "Design/Design.3mf" --bore-r 41 --floor-h 9 [--foot-r 3] [--max-overhang 0.5] [--locate]
 ```
 
 It checks every part of the 3MF, then all parts together:
@@ -493,6 +496,7 @@ It checks every part of the 3MF, then all parts together:
 | `past 60 deg` | % of printed surface, split into bottom 1 cm / body / top 3 cm, and "above 1 mm" | body + top **< 0.5 %** |
 | `past 45 deg` | same split | report only |
 | `closest material to the axis above the floor` | bore clearance | ≥ bore radius |
+| `closest material to the glass`, `seat` (with `--foot-r`) | for a glass that stands on the wood with no floor (§16): distance to the glass envelope, a bore of `--bore-r` from `--floor-h` up with its foot rounded by `--foot-r`; then the pads the glass stands on (area, radial range, largest angular gap) | ≥ 0 (−0.01 tolerance); gap **< 180°** |
 | `RESULT` | PASS or FAIL; exit code 0 / 1 | **PASS** |
 
 `--locate` prints the position of every bad edge (`r`, `phi`, `z`, length). Match those to the design:
@@ -510,9 +514,17 @@ Figures the checker doesn't print, but the hand-off needs:
 
 Both are a few lines on top of `load()` / `surface()`.
 
-**Regions that start in mid-air are the slicer's call, not the checker's.** A vertex test was tried
-and dropped: it looked for lowest points with nothing 0.15 mm below them, but it could not match
-Bambu Studio on these trees.
+**Regions that start in mid-air: slice to find out, `tools/floating_check.py` to find where.**
+Bambu Studio names no position, so the tool takes every surface point lower than all its neighbours
+and asks whether anything is under it (a ray straight down) or just beside and below it (0.5 mm,
+one extrusion width). On tube designs it matches the slicer exactly: 0 on the five it accepted, 1 on
+the Wild Chaotic Tree it refused, which was a fork's end cap lifted off its parent by the fork's own
+arch (§17.1). It over-reports on thin blades (120 on the Braided Tree's 75 leaves), because a leaf's
+lowest edge is carried by the twig beside it in the same layer; only a per-layer island test sees
+that, which is the slicer's job.
+
+An earlier vertex test was tried and dropped: it looked for lowest points with nothing 0.15 mm below
+them, but it could not match Bambu Studio on these trees.
 - **Horizontal leaf bottoms.** A strict "all neighbours higher" test misses them: their vertices all
   sit at the same height.
 - **Leaf edges touching wood.** Almost every other hit was a leaf edge that touches wood sideways,
@@ -917,3 +929,193 @@ thickness and never more than 30 % (25 % for Tangled). The merges tie the cage i
 | An extra shell of 4–14 triangles and zero volume | two bark textures meeting trap a sealed pocket inside the merge | harmless; the Bambu slice has no warnings |
 | A pair test shows 2 shells but the members were meant to merge | the same pocket, not a gap: list the shells with their volumes before worrying | — |
 
+
+---
+
+## 16. Grand Chaotic Tree: a tree that grows around the glass
+
+Folder `art/Math Driven Pots and Vases/Grand Chaotic Tree/`. A bigger glass (96 × 170 mm) held 10 cm
+up in a big rooted tree, 32 cm tall. It keeps the Chaotic approach (unique paths, branches that
+arch over each other and merge about 10 %), but the tree is built like a real one:
+
+- **3 → 7 → 13.** The trunk splits into 3 limbs, the limbs into 7 branches and those into 13.
+- **No floor and no cuts.** The wood grows against the glass like a tree around an obstacle.
+- **The glass stands on the limbs.** The three limbs pass under its foot, which presses their tops flat.
+- **A buttressed base.** The trunk comes down in buttresses that run out into roots across the ground.
+
+The user steered it through drafts: a first split that looks like a real fork, and splits at
+different heights; less straight, more random and sprawling branches; a buttressed base like a
+reference photo instead of a flat foot.
+
+| Parameter | Value |
+|---|---|
+| Glass | 96 × 170 mm, foot rounded 2 mm, clearance 1 mm (98 mm bore); it stands at `lift` = 100 mm; rim at 270 mm; `total_h` 320 mm (the H2C prints 325) |
+| Trunk | waist r 28 mm, slight flare (+4 mm) between 9 buttresses that reach 27–40 mm out over the ground from 50 mm up; turns three-lobed as the first limb parts and ends inside the limbs at the crotch (43.5 mm) |
+| Roots | 9 plus 6 side roots, r 10 → 2.8 mm, 25 cm spread; each starts inside the trunk and runs down under its buttress |
+| Limbs | scale 1.26–1.36 (r ≈ 16 mm at the glass bottom); they part at 28, 38 and 46 mm; the glass presses about 45 % of a limb's thickness flat at its foot |
+| Branches | radius 12 mm × scale; each fork takes 59–72 % of its parent's thickness and the parent thins so the two cross-sections add up; pressed 20 % flat against the glass side; tips taper to 2.6 mm |
+| Wander | three waves of unrelated length sideways (7, 3, 1.1 mm), lifting 4–9 mm off the glass in places, tips flicking 5–12 mm sideways; `wander_seed` 17 of 24 tried |
+| Bark | plates 8.5 × 17 mm, fissures up to 1.5 mm (1.2 on limbs), drifting over several plates; squashed to 40 % where pressed against the glass |
+
+**Measured on the packaged 3MF** (`build_design.py`, 2026-09-19; an H2C project):
+
+| Check | Result |
+|---|---|
+| Size | 220.5 × 226.7 × 319.5 mm, standing on z = 0 (limit 320 mm) |
+| Wood | 499 976 triangles, **0 / 0** edges, 724.8 cm³; 4 shells: the body and 3 sealed pockets inside it (60 mm³ where a root starts inside the trunk foot, and two of ~0 mm³ in merges) |
+| Past 60° | **0.25 %** above the bottom 1 cm (top 3 cm 0.00 %); bottom 1 cm 0.04 % |
+| Past 45° | 1.85 % (report only) |
+| Glass | nothing inside the glass or its 1 mm clearance (closest −0.00 mm, at the side 116 mm up); **seat 1.9 cm²** of pads within one layer of 100 mm, 38.5–46.7 mm from the axis, largest gap between them 100° |
+| Branches | 6 meetings, merge 10–13 %; climb ≥ 35°; tightest bend 1.3 × the tube radius |
+| Bed contact | 113.5 cm² |
+| Bambu Studio slice (H2C, 0.20mm Standard, 35 % infill) | **no warnings**; 13 h 57 min; **430 g** |
+| Render | 23 min 28 s as one body; components 20 s – 6 min |
+
+### 16.1 Techniques
+
+- **The glass as an obstacle, not a cut.** Push every smooth tube vertex out of the glass envelope
+  (a bore cylinder from the floor height up, its foot rounded like the glass's). Then cut the bark
+  into the flattened face, away from the glass. A boolean cut would leave flat facets. The push is
+  a smooth maximum of the signed distance and 0 (k = 2.5 mm), so the flat face blends into the round
+  tube.
+  - **Direction and distance come from two shapes.** The push direction comes from the same
+    envelope with a much rounder foot (12 mm). The distance is the exit along that direction
+    through the true envelope (foot 3 mm). With the true shape's own normal, the direction flips at
+    the foot corner and folds the tube.
+  - **The press is fine up to about half the tube.** Keep the centreline outside the envelope.
+- **A glass standing on branches.** Choose each limb's rise so the glass bottom presses its top
+  flat under the foot. Check, per limb: the pad's radial band (38–46 mm), the deepest press, and
+  that no vertex is left inside the envelope. `mesh_check.py --foot-r` checks the finished mesh, and
+  the three pads must leave no gap of 180° or more.
+- **A limb profile with bounded curvature.** Smoothstep ease-outs bend hardest right at the start:
+  on a 16 mm limb the bend was tighter than the limb (0.94×), which folds the tube. A trapezoid
+  speed profile works: speed rises linearly, holds, falls linearly (`trap(u, a, d)`). Its
+  curvature is `2/a · Δρ/Δz²`, not `6 · Δρ/Δz²`. A grid search over start height, end height,
+  acceleration and deceleration found profiles that keep bend ≥ 1.25× the radius, climb ≥ 37° and
+  a 7–9 mm pad.
+- **A fork that looks like a fork.** The trunk is a radial surface: a smooth maximum of a fading
+  core and each limb's cross-section, i.e. the far side of the limb's circle seen from the axis.
+  The fillet narrows to nothing at the crotch, where the loft ends 3 mm inside the limbs. This
+  needs every limb to contain the axis at the crotch; compute `crotch_z` from that.
+  - **Split heights.** Give each limb its own parting height: the first limb to part sets the
+    crotch, and the others go on as one fused stem and part higher.
+  - **Hide the trunk deeper than the limbs' bark.** The trunk must sink more than the limbs' fissure
+    depth (3 mm against 1.2 mm), or its bark shows through their fissures as a ring.
+  - **Buttresses go on the core.** Add them to the core, not the whole trunk, so they fade out
+    where the limbs take over.
+- **Buttresses.** Each is an angular Gaussian ridge on the trunk radius, `reach · f^2.3` with f
+  rising from 0 at `buttress_h` to 1 at the ground. Its width narrows from 26° to 9° going down,
+  so the flare speeds up towards the ground, like a real root flare. A flaring radial surface only
+  ever faces up and out, so it never overhangs. The roots start inside the trunk and run down under
+  their ridge's crest (`root_zc`), so they come out of the buttress at its foot.
+- **Wander without breaking the layout.** Wander is added on top of the searched layout: sideways
+  mm converted to degrees at the glass radius, and radial lift-off, with a 60 mm fade-in. Any wander
+  changes the meetings, so treat its seed as a search dimension. `wander_seed` scores each seed on
+  worst merge, climb, arch height, stacked meetings and tightest bend over the tube radius; 24
+  seeds took about 1 minute each, 6 at a time.
+- **Twigs that leave their own branch.** A twig placed by a world direction ran into its own branch
+  where the branch swung out. Point each twig along its branch's heading plus outward, and to the
+  side the branch is not moving to, climbing ≥ 45°. Place twigs only where no other member is
+  within 14 mm, no arch or fork is within 40 mm, and the branch doesn't swing out over the twig's
+  first 22 mm.
+
+### 16.2 Traps found
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Bend tighter than the limb (0.94×) at the start of its rise | smoothstep's curvature peaks at the ends | trapezoid speed profile |
+| Bend of 11 mm on a 13 mm limb just above a fork | the centreline follows the radius (`hug_r`), and the fork thinned the parent over 16 mm | thin over 40 mm (10 below to 30 above the fork) |
+| Tips climbing 22–25° | lean and sideways flick together on a short tip | scale both by the room above the rim (`min(1, L/55)`) |
+| A ring of trunk bark round the limbs where the trunk ends | the trunk sat 0.6–1.4 mm inside the limbs, less than their 1.2 mm fissures; the buttresses, added to the whole trunk, fade slowly and pushed it further out | sink the trunk 3 mm inside, add the buttresses to the core only, vary the handover height with angle |
+| A flat-topped "sleeve" at a root's start | the root started too high and too far out, its end cap outside the trunk | start 12 mm inside the trunk foot, lower |
+| Only 0.1 cm² of pad at the glass height | full-depth bark on the pressed face left only the plate tops there | bark squashed to 40 % where pressed; count pad faces within one 0.25 mm layer |
+| **Open:** the slice preview shows top-surface fill on the side of the trunk at the fork | near-level shelves (13 cm² flatter than 37°, 20–35 mm up) where the trunk core fades out faster than the height rises, plus a root start near the surface | not fixed in this design yet ([TODO.md](TODO.md)); the Wild Chaotic Tree fixes it (§17.1) |
+
+---
+
+## 17. Wild Chaotic Tree: seamless joins
+
+Folder `art/Math Driven Pots and Vases/Wild Chaotic Tree/`. The Grand Chaotic Tree (§16) grown for
+the 80 × 130 mm glass, with its own chaotic layout. It is the first design where the trunk,
+buttresses, roots and limbs meet without visible seams, which fixes the open issue in §16.2 and
+[TODO.md](TODO.md).
+
+| Parameter | Value |
+|---|---|
+| Scale | every size × 80/96 = 0.833: Customizer values set directly, fixed lengths in the code multiplied by `sc = glass_d/96` |
+| Glass | 80 × 130 mm, foot 2 mm, clearance 1 mm (82 mm bore); stands at `lift` = 83 mm; rim 213 mm; `total_h` 267 mm |
+| Layout | new 3 → 7 → 13 search (`wild_search.py`, fork heights scaled by the glass height, 130/170): largest empty sector 97°, seat 126°; `wander_seed` 29 of 32 tried |
+| Limbs | start at 7 mm, 5.8 mm off the axis, deep inside the trunk; part at 16, 24 and 32 mm; crotch 34 mm |
+| Base | 9 buttresses (reach 22–33 mm, from 30 mm up, below the fork), 9 roots plus side roots over 208 mm |
+| Calmer than the Grand tree | the shorter glass turns the same angle per glass height 9 % faster sideways, which pushed tips and arches below 30°; wander 0.85, and tip lean and flick at full size only with 58 mm of room above the rim |
+
+**Measured on the packaged 3MF** (`build_design.py`, 2026-09-20; an H2C project):
+
+| Check | Result |
+|---|---|
+| Size | 179.2 × 197.2 × 266.0 mm, standing on z = 0 |
+| Wood | 453 576 triangles, **0 / 0** edges, 394.7 cm³; 6 shells: the body and 5 sealed pockets of ~0 mm³ in merges |
+| Past 60° | **0.03 %** above the bottom 1 cm; bottom 1 cm 0.05 % |
+| Past 45° | 1.33 % (report only) |
+| Glass | nothing inside the glass or its 1 mm clearance; **seat 1.6 cm²** of pads within one layer of 83 mm, 32.1–38.4 mm from the axis, largest gap 98° |
+| Branches | 9 meetings, merge 12–26 %; climb ≥ 38°; tightest bend 1.4 × the tube radius |
+| Mid-air | `floating_check.py`: **0** regions (the first build had 1, §17.2) |
+| Bed contact | 75.0 cm² |
+| Bambu Studio slice (H2C, 0.20mm Standard, 35 % infill) | **no warnings**; 9 h 32 min; **249 g** |
+| Render | 21 min 07 s as one body |
+
+### 17.1 Techniques: defining the contours of interference
+
+A seam shows wherever one separately built solid pokes through another. Two things show at the
+crossing: the crease, because the surfaces meet at an angle, and the change of bark, because each
+solid has its own texture. Both are fixed by deciding where each handover happens and designing the
+two surfaces to match there.
+
+- **One skin for trunk, buttresses and root bases.** The trunk's radial function is a smooth maximum
+  (k = 10 mm) of the core, the buttresses and a copy of each root's base (`root_band`), i.e. the
+  lying, tapering cylinder seen from the axis.
+  - **Placement.** The copy sits inside the root by more than the root's bark depth, so it never shows
+    through the fissures. It sinks 3.3 mm further over the last 8 mm before the foot contour
+    (`root_foot`, just past the buttress's foot), so the fillet fades out before the copy ends.
+  - **Result.** The skin shows only where the smooth maximum makes the fillet between root, buttress
+    and trunk, and the root tube comes out of that fillet at a shallow angle.
+  - **Straight to the contour.** The root is straight out to the foot contour, so the copy matches
+    it; the sweep and meander start there, with the meander ramped over 60 % of the free root (a
+    shorter ramp bent roots tighter than their radius).
+  - **Exact far side.** The copy's far side along a ray is found by bisection (9 steps), because the
+    root tapers. A fixed-point iteration overshot at grazing angles and left splinters.
+- **The limb contour.** `hand_z(a)` wanders 7 mm round the trunk, 4–12 mm below the crotch. The
+  limbs start deep inside the trunk (at 7 mm, 5.8 mm off the axis), so nothing of them shows below
+  the contour.
+  - **Crossing.** Below the contour the limb circles in the skin are 0.3 mm fuller than the limbs; over
+    the 7 mm above it they sink 1.3 mm inside. So the skin covers the limbs, then hands over along a
+    contour where the two surfaces are nearly parallel.
+  - **What didn't work.** An inset that grows over the whole lobe zone left a ring. So did a handover
+    wander that also shifted the core fade: that started the narrowing almost at the ground.
+- **The same bark on both sides.** `wbark(p)` is the trunk's bark as a function of world position:
+  - **Coordinates.** U is the angle round the trunk axis (with the spiral grain). V is
+    (z − max(0, r − trunk_waist))/plate_len, so fissures run up the trunk, down the flare and out along
+    the roots.
+  - **Who wears it.** The skin always does. `bark_tube(..., wmix=function(p) ...)` blends a tube from
+    `wbark` at the skin's depth into its own bark: limbs from the crotch to 17 mm above it, roots
+    from the trunk to 8 mm past the foot contour.
+  - **Result.** Where two surfaces cross near a join, their fissures coincide.
+- **No shelves.** The core narrows at a fixed rate (0.7 mm/mm with a soft start) instead of a
+  smoothstep. The buttresses stop below the fork (30 mm), so the two flares don't add up.
+  - **Check.** Scan the exposed skin (outside every limb circle) for places that narrow faster than
+    1 mm per mm of height. In the handover: 16 samples, steepest 1.44 (the Grand tree's patch was 3.4).
+  - **Near the ground.** Between 10 and 18 mm the scan finds the root fillets, up to 2.1: that is the
+    flare itself, like the tops of the roots.
+- **Sampling.** The trunk loft needs twice the samples round (416) and rings every 0.4 mm up to
+  10 mm for the root bases. A preview takes about 1.5 minutes at Normal quality; use Draft.
+
+### 17.2 Traps found
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Bambu Studio: "object ... has floating regions", and it names no position | a fork's flat end cap hanging outside its parent: the fork's **own arch**, sized for a meeting 15 mm higher, still lifted it 5.3 mm off its parent's centreline at its start | a fork's arches fade in over its first 21 mm (`bump_ramp`), and `arch_h` divides by the same ramp so the arch still clears. Check every fork: its start must sit on its parent's centreline, with its radius inside the parent's |
+| Splinters along the roots at ground level | the skin's copy of a root is found by a fixed-point iteration, which oscillates where the root tapers and overshot at grazing angles | bisection (9 steps) |
+| A blocky ledge where a root leaves the flare | the skin's copy ended abruptly, and the fillet bulge was cut off with it | the copy sinks a further 3.3 mm into the root over the last 8 mm, so the fillet fades out first |
+| Chunky bits along the roots near the trunk | the copy sat 0.5 mm inside the root, less than the bark's 1.25 mm, so it showed through the fissures | the copy sits deeper than the bark (`band_in`) |
+| Roots bending tighter than their own radius | the meander ramped in over 13 mm right after the foot contour | ramp it over 60 % of the free root |
+| Tips climbing 25° on a design scaled down from a bigger one | a shorter glass turns the same angle per glass height faster sideways, so lean, flick, turn and wander add up to more | tip lean and flick scaled by the room above the rim, wander 0.85 |
