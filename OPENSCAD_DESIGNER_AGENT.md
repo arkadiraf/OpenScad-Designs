@@ -31,8 +31,8 @@ Everything scripted lives in `tools/` next to this file:
 
 ```bash
 # 1. design: edit the .scad; the user's OpenSCAD window auto-reloads it (§2)
-# 2. look at it: quick preview render (seconds), read the PNG
-python tools/render_png.py design.scad preview.png --view persp --size 900
+# 2. look at it: quick preview render (seconds), read the PNG - untextured until the shape is right
+python tools/render_png.py design.scad preview.png --view persp --size 900 -D sketch=true
 # 3. test risky components alone with a full render (§6.1)
 # 3b. a searched layout: keep the search beside the design, with the seed that reproduces it (§3.1)
 # 4. package + verify in one go (minutes, parts render in parallel)
@@ -105,7 +105,24 @@ There is no API into the OpenSCAD GUI. **Share a file instead:**
 3. **Step 2: derive every holder dimension from those variables.** Bore radius, floor height,
    stem radius, fork heights and crown height are all expressions in `glass_*`, never literals. Then
    changing the glass in the Customizer rebuilds a correct holder.
-4. **Iterate in preview.** A preview takes about 2 s, a full render about a minute. Render 2–3 angles
+4. **Find the geometry untextured, then texture it.** While the shape is still moving - the layout,
+   the lean, where the branches meet the vessel - bark, knots and fine sampling only slow each look
+   down and hide what matters, the paths and the joins. Give the design a `sketch` flag that keeps
+   everything that decides the shape (the same paths, radii, pressing, arches and joins) and drops
+   the surface: in `bark_tube`, a fixed 6 plates round with 3 samples each, no bark, no knots.
+   - **Check that it *is* the same shape.** Sketch mode must change the surface only, never a path;
+     `part="paths"` gives the same centrelines either way.
+   - **What it saves.** Measured on the Leaning Chaotic Tree: a preview in 15.7 s against 28.9 s, and
+     84 k triangles against 245 k. It is about 2x, not 10x, because with Manifold (§7) most of the
+     time is evaluating the paths, which sketch mode does not skip. For the checks themselves,
+     `part="paths"` and `part="none"` are faster still, since they build no geometry.
+   - **Look at the joins before switching it off.** Seams, splinters and ledges at the
+     trunk/root/limb handovers (§17) are shape problems; they show in sketch mode, and bark only
+     hides them.
+   - Run `part="none"` and read its warnings before any render. OpenSCAD only *warns* about an
+     unknown function and carries `undef` into every coordinate, so a render grinds on for minutes
+     instead of failing.
+5. **Iterate in preview.** A preview takes about 2 s, a full render about a minute. Render 2–3 angles
    (a front 3/4 view, a high view that looks into the opening, a view without the glass) after each
    change, and judge the look there. Also render:
    - **the `iso` view that `build_design.py` will use for the gallery PNG.** Turn the design about z so
@@ -114,10 +131,10 @@ There is no API into the OpenSCAD GUI. **Share a file instead:**
      another limb read as one blob, and cutting the colour parts apart there leaves slivers (§6).
    - **close-ups of the joints** (forks, root-to-plate). Use `openscad.com --camera=eye,centre` with
      `--projection=perspective`. Seams and ledges don't show at full-model scale.
-5. **Before the first full render, test the risky primitives alone** (§6.1). One bad tube invalidates
+6. **Before the first full render, test the risky primitives alone** (§6.1). One bad tube invalidates
    a 15-minute render.
-6. **Build and verify** (§9, §10), fix, rebuild. Only re-render parts whose geometry changed.
-7. **Package and report** (§10, §11).
+7. **Build and verify** (§9, §10), fix, rebuild. Only re-render parts whose geometry changed.
+8. **Package and report** (§10, §11).
 
 ### 3.1 A searched layout is part of the design
 
@@ -492,6 +509,8 @@ exporting the same `part="wood"` from the same sources with both binaries:
 - **It changes how to work.** A layout can be rendered and checked in a minute, so search by
   building rather than by modelling: the wander-seed scan, the component tests and a full
   `build_design.py` run are all cheap enough to repeat.
+- **Untextured first** (§3 step 4): a sketch render halves the time again (15.7 s against 28.9 s on
+  the Leaning Chaotic Tree), and cuts the triangles 3x.
 
 The times below are CGAL on 2021.01, kept because the relative cost of the parts still holds:
 
@@ -542,8 +561,13 @@ It checks every part of the 3MF, then all parts together:
 | `past 60 deg` | % of printed surface, split into bottom 1 cm / body / top 3 cm, and "above 1 mm" | body + top **< 0.5 %** |
 | `past 45 deg` | same split | report only |
 | `closest material to the axis above the floor` | bore clearance | ≥ bore radius |
+| `closest material to the tube`, `cradle` (with `--foot-r` and `--tilt`) | for a vessel held on a leaning axis: the same envelope measured along that axis, `--tilt` degrees from upright towards `--tilt-az`, from its lowest point at `--foot-xy` and `--floor-h`, and open past the mouth, because the vessel slides in along it. Then the wood touching it, and the largest gap between the contacts under its lower third | ≥ 0; gap **< 180°** |
 | `closest material to the glass`, `seat` (with `--foot-r`) | for a glass that stands on the wood with no floor (§16): distance to the glass envelope, a bore of `--bore-r` from `--floor-h` up with its foot rounded by `--foot-r`; then the pads the glass stands on (area, radial range, largest angular gap) | ≥ 0 (−0.01 tolerance); gap **< 180°** |
 | `RESULT` | PASS or FAIL; exit code 0 / 1 | **PASS** |
+
+For members about 1 mm thick, run `floating_check.py` with `--reach 0.35` or less: at its default
+of 0.5 mm, the sideways test lets half a branch's width count as support, and it passed a stub
+whose base hung round a thinner branch like a collar - which the slicer rejected.
 
 `--locate` prints the position of every bad edge (`r`, `phi`, `z`, length). Match those to the design:
 fork angles, branch spread, crossing rows. That is how every trap in §6 was found.
@@ -1231,3 +1255,31 @@ Worth weighing at the same time: the alternative is to let an arch build against
 ends just below it, which would keep the merge instead of dropping it. That is a change to
 `arch_h`'s range rather than to the search, and it would make the layout less sensitive in the
 first place.
+
+---
+
+## 19. Leaning Chaotic Tree (to be continued)
+
+Folder `art/Math Driven Pots and Vases/Leaning Chaotic Tree/`. A single-flower holder for a
+16 × 100 mm science tube, which leans across the tree: its end rests on a root to one side, its
+mouth ends out on the other, and its middle passes over the centre. The folder holds the
+`.scad`, a render of it as it stands and the layout search - no `.3mf` until a build passes.
+**Read `Leaning_Chaotic_Tree_notes.md` first:** it has the requirements as they were given and corrected,
+the decisions and why, everything that went wrong and what fixed it, and the open items in order.
+
+The lessons that reach beyond this design:
+
+- **Find the geometry untextured first** (§3 step 4). This design introduced `sketch`.
+- **A leaning vessel** can use the upright designs' machinery. Keep the members running by world
+  height, move "the middle" to the vessel's axis at that height, correct the gap by `tilt_k`, and
+  measure the obstacle in the vessel's own frame. `mesh_check.py --tilt` checks it.
+- **Keep the vessel-relative placement.** Placing branches against the vessel is what makes these
+  trees grow naturally. A free crown that dodged the vessel was tried and looked wrong. When the
+  vessel is not over the trunk, fix where a limb *starts* (ease it out of the trunk in x and y)
+  rather than the model.
+- **Constants that hung off `lift`** (trunk heights, where arches start, twig and knot heights) all
+  assumed the glass sat on top of the trunk. When it doesn't, every one of them has to stand alone;
+  grep for `lift` and check each.
+- **Fixed-size details on fine members:** a twig stub must be sized to the branch it leaves, or its
+  base stands proud of it and the slicer calls it floating.
+

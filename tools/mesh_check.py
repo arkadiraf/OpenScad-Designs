@@ -139,6 +139,56 @@ def overhang(T, area, nz, top_z, max_over):
     return passed
 
 
+def tube_cradle(V, T, area, bore_r, foot_r, foot_at, tilt, tilt_az):
+    """A vessel held on a leaning axis (no floor, nothing cut for it): the same envelope as
+    glass_seat, but measured in the vessel's own frame - q across its axis, u along it from its
+    lowest point, and open at the top because the vessel slides in and out along that line.
+    Reports the wood actually touching it, how far along the vessel that reaches, and whether the
+    contacts near the bottom cradle it or all sit on one side."""
+    u_ax = np.array([sind(tilt) * cosd(tilt_az), sind(tilt) * sind(tilt_az), cosd(tilt)])
+    e0 = np.array([cosd(tilt) * cosd(tilt_az), cosd(tilt) * sind(tilt_az), -sind(tilt)])
+    e1 = np.cross(u_ax, e0)
+
+    def frame(P):
+        d = P - foot_at
+        u = d @ u_ax
+        w = d - np.outer(u, u_ax)
+        return np.hypot(w @ e0, w @ e1), u, np.degrees(np.arctan2(w @ e1, w @ e0)) % 360
+
+    q, u, phi = frame(V)
+    x = q - (bore_r - foot_r); y = foot_r - u
+    d = np.where((x > 0) & (y > 0), np.hypot(x, y) - foot_r, np.maximum(x, y) - foot_r)
+    k = np.argmin(d)
+    good = d[k] >= -0.01
+    print(f"  {'PASS' if good else 'FAIL'}: closest material to the tube {d[k]:.2f} mm (negative = inside)"
+          f" at z {V[k, 2]:.1f}, {u[k]:.1f} mm along it (bore {bore_r:.2f} mm, end rounded {foot_r:.1f} mm,"
+          f" leaning {tilt:g} deg)")
+    qc, uc, phic = frame(T.mean(axis=1))
+    xc = qc - (bore_r - foot_r); yc = foot_r - uc
+    dc = np.where((xc > 0) & (yc > 0), np.hypot(xc, yc) - foot_r, np.maximum(xc, yc) - foot_r)
+    touch = (dc < 0.25) & (uc > -foot_r)
+    if not touch.any():
+        print("  FAIL: nothing touches the tube at all"); return False
+    print(f"  cradle       {area[touch].sum() / 100:.2f} cm2 of wood within 0.25 mm of the tube,"
+          f" {uc[touch].min():.0f}..{uc[touch].max():.0f} mm along it")
+    # the cradle proper: the contacts over the lowest third, which is what stops it dropping through
+    low = touch & (uc < uc[touch].min() + (uc[touch].max() - uc[touch].min()) / 3)
+    ph = np.sort(phic[low])
+    gap = np.max(np.diff(np.concatenate([ph, [ph[0] + 360]]))) if len(ph) > 1 else 360
+    steady = gap < 180
+    print(f"  {'PASS' if steady else 'FAIL'}: the tube is cradled, not propped"
+          f" (largest gap between the contacts under it {gap:.0f} deg)")
+    return good and steady
+
+
+def sind(a):
+    return np.sin(np.radians(a))
+
+
+def cosd(a):
+    return np.cos(np.radians(a))
+
+
 def glass_seat(V, T, area, nz, bore_r, floor_h, foot_r):
     """A glass that stands on the wood itself (no floor): nothing may enter the glass and its
     clearance, a cylinder of radius bore_r from floor_h up with its foot rounded by foot_r. Also
@@ -176,6 +226,10 @@ def main():
     ap.add_argument('--floor-h', type=float, default=0.0, help='glass floor height (mm); bore check starts above it')
     ap.add_argument('--foot-r', type=float, help='the glass stands on the wood with no floor: check against a bore '
                     'whose foot is rounded by this radius (mm), and report the pads it stands on')
+    ap.add_argument('--tilt', type=float, default=0.0, help='degrees the vessel leans from upright; '
+                    'with it the bore is measured along that axis instead of the Z axis')
+    ap.add_argument('--tilt-az', type=float, default=0.0, help='which way it leans, degrees')
+    ap.add_argument('--foot-xy', help="x,y of the vessel's lowest point (default 0,0)")
     ap.add_argument('--max-overhang', type=float, default=0.5, help='%% of surface past 60 deg allowed above 1 cm')
     ap.add_argument('--locate', action='store_true', help='print the position of every bad edge')
     args = ap.parse_args()
@@ -206,7 +260,12 @@ def main():
               f" (bore {args.bore_r:.2f} mm)")
         all_ok &= good
     if args.bore_r is not None and args.foot_r is not None:
-        all_ok &= glass_seat(Vall, T, area, nz, args.bore_r, args.floor_h, args.foot_r)
+        if args.tilt:
+            fx, fy = ([float(v) for v in args.foot_xy.split(',')] if args.foot_xy else [0.0, 0.0])
+            all_ok &= tube_cradle(Vall, T, area, args.bore_r, args.foot_r,
+                                  np.array([fx, fy, args.floor_h]), args.tilt, args.tilt_az)
+        else:
+            all_ok &= glass_seat(Vall, T, area, nz, args.bore_r, args.floor_h, args.foot_r)
     print("RESULT:", "PASS" if all_ok else "FAIL")
     sys.exit(0 if all_ok else 1)
 
