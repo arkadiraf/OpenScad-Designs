@@ -12,7 +12,7 @@ Files:
 | `Chalice_Tree.scad` | the design. `sketch = true` by default (no bark, for fast iterations) |
 | `Chalice_Tree_layout.py` | the 3 → 7 → 13 layout search; `python Chalice_Tree_layout.py 58 4000` reproduces the tables |
 | `Chalice_Tree_seat_check.py` | glass fit and seat check against the real curved-foot profile (mesh_check.py assumes a straight glass) |
-| `Chalice_Tree.stl` | the print (bark on), binary STL, for the Flashforge |
+| `Chalice_Tree.stl` | the print (bark on), binary STL, for the Flashforge. **Not kept in the repo** (19 MB): export it when needed with the STL command under "How to work on it" |
 | `Chalice_Tree.3mf` | the same mesh as a Bambu Studio project (H2C, Cocoa Brown PLA Basic, 35 % infill) |
 | `Chalice_Tree.png` | isometric render of the `.scad` with bark (a render, not a photo) |
 

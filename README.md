@@ -15,8 +15,8 @@ ships ready to print:
 
 Tree-shaped holders for a plain glass vase. The glass drops straight in from the top. In the first
 five it stands on a stump floor, and you can see the tree's growth rings through the glass bottom. In
-the Wild and Grand Chaotic Trees there is no floor at all: the wood grows around the glass and it
-stands on the branches themselves.
+the Wild and Grand Chaotic Trees and the Chalice Tree there is no floor at all: the wood grows
+around the glass and it stands on the branches themselves.
 
 [<img src="art/Tree%20Vase/Design_Evolution.png" alt="How the tree vase holders evolved: six designs at the same scale">](art/Tree%20Vase/Design_Evolution.png)
 
@@ -108,6 +108,12 @@ is re-run whenever one of the six is rebuilt.
       </a>
       <br><b>Grand Chaotic Tree</b>
     </td>
+    <td align="center" width="33%">
+      <a href="art/Tree%20Vase/Chalice%20Tree/">
+        <img src="art/Tree%20Vase/Chalice%20Tree/Chalice_Tree.png" alt="Chalice Tree" width="190">
+      </a>
+      <br><b>Chalice Tree</b>
+    </td>
   </tr>
   <tr>
     <td valign="top">
@@ -117,6 +123,13 @@ is re-run whenever one of the six is rebuilt.
       it touches, and the glass stands on the three limbs. Joins without seams, like the Wild tree.
       The branches keep their thickness to the end and finish as blunt cut wood rather than
       running out into points.
+    </td>
+    <td valign="top">
+      A 21.5 cm tree for the 80 × 130 mm glass, sized for a 220 mm printer. Instead of bending
+      flat under the glass, the three limbs rise out of the trunk in one smooth cup, never more
+      than about 45° from upright, and the glass's curved foot settles into them like an egg in a
+      cup, 85 mm up. A tight fit with no clearance: the wood is pressed against the glass. The
+      limbs fork into 7 branches and then 13, which end level with the rim.
     </td>
   </tr>
 </table>
@@ -130,21 +143,47 @@ is re-run whenever one of the six is rebuilt.
 | Chaotic Cradle Tree | 80 × 130 | 60 mm, on a floor | 156.4 × 142.6 × 249.1 | Cocoa Brown | 8 h 21 min, 232 g | [scad](art/Tree%20Vase/Chaotic%20Cradle%20Tree/Chaotic_Cradle_Tree.scad) · [3mf](art/Tree%20Vase/Chaotic%20Cradle%20Tree/Chaotic_Cradle_Tree.3mf) |
 | Wild Chaotic Tree | 80 × 130 | 83 mm, on 3 limbs | 179.2 × 197.2 × 266.1 | Cocoa Brown | 9 h 32 min, 249 g | [scad](art/Tree%20Vase/Wild%20Chaotic%20Tree/Wild_Chaotic_Tree.scad) · [3mf](art/Tree%20Vase/Wild%20Chaotic%20Tree/Wild_Chaotic_Tree.3mf) · [layout](art/Tree%20Vase/Wild%20Chaotic%20Tree/Wild_Chaotic_Tree_layout.py) |
 | Grand Chaotic Tree | 100 × 200 | 80 mm, on 3 limbs | 270.9 × 271.2 × 318.5 | Cocoa Brown | 15 h 42 min, 481 g | [scad](art/Tree%20Vase/Grand%20Chaotic%20Tree/Grand_Chaotic_Tree.scad) · [3mf](art/Tree%20Vase/Grand%20Chaotic%20Tree/Grand_Chaotic_Tree.3mf) · [layout](art/Tree%20Vase/Grand%20Chaotic%20Tree/Grand_Chaotic_Tree_layout.py) |
+| Chalice Tree | 80 × 130, curved foot | 85 mm, cupped in 3 limbs | 172.1 × 196.3 × 213.1 | Cocoa Brown | 7 h 05 min, 197 g | [scad](art/Tree%20Vase/Chalice%20Tree/Chalice_Tree.scad) · [3mf](art/Tree%20Vase/Chalice%20Tree/Chalice_Tree.3mf) · [layout](art/Tree%20Vase/Chalice%20Tree/Chalice_Tree_layout.py) · [notes](art/Tree%20Vase/Chalice%20Tree/Chalice_Tree_notes.md) |
 
-Every one leaves 1 mm of clearance around its glass, so the glass lifts straight out of the top. The
-images are renders, not photos. The two trees that hold the glass in their branches carry a
-**layout** script as well: the search that drew their 13 branches, with the seed that reproduces
-the tables in the `.scad` (another seed grows a different tree).
+Every one but the Chalice Tree leaves 1 mm of clearance around its glass, so the glass lifts
+straight out of the top; the Chalice Tree is a tight fit by design (set `clearance` to 0.2-0.3 if
+your glass sits too high). The images above are renders, not photos. The three trees that hold the
+glass in their branches carry a **layout** script as well: the search that drew their 13 branches,
+with the seed that reproduces the tables in the `.scad` (another seed grows a different tree).
+
+### Printed
+
+The Wild and Grand Chaotic Trees off the printer, glass in place, in one colour.
+[Design_Process.png](art/Tree%20Vase/Design_Process.png) sets them under the renders they came from.
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <a href="art/Tree%20Vase/Wild%20Chaotic%20Tree/Wild_Chaotic_Tree_Print.jpg">
+        <img src="art/Tree%20Vase/Wild%20Chaotic%20Tree/Wild_Chaotic_Tree_Print.jpg" alt="The printed Wild Chaotic Tree holding its glass" width="330">
+      </a>
+      <br><b>Wild Chaotic Tree</b>: 80 × 130 mm glass, 26.6 cm tall
+    </td>
+    <td align="center" width="50%">
+      <a href="art/Tree%20Vase/Grand%20Chaotic%20Tree/Grand_Chaotic_Tree_Print.jpg">
+        <img src="art/Tree%20Vase/Grand%20Chaotic%20Tree/Grand_Chaotic_Tree_Print.jpg" alt="The printed Grand Chaotic Tree holding its glass" width="330">
+      </a>
+      <br><b>Grand Chaotic Tree</b>: 100 × 200 mm glass, 31.9 cm tall
+    </td>
+  </tr>
+</table>
 
 ## Printing
 
 - Each `.3mf` is a **Bambu Studio project** for the Bambu Lab H2C: 0.4 mm nozzle, 0.20mm Standard
   process, 35 % sparse infill. Every colour part is already assigned its own PLA Basic filament,
   with purge volumes. Open it and slice.
-- Print upright without supports. All seven holders pass the house rules: no more than 0.5 % of the
+- Print upright without supports. All eight holders pass the house rules: no more than 0.5 % of the
   surface past 60° above the first centimetre, and nothing that starts in mid-air.
 - Height: the Wild (266 mm) and Grand (318.5 mm) Chaotic Trees need an H2-series printer (H2C, H2D,
-  H2D Pro or H2S). The other five are 250 mm or under and fit every printer in the list.
+  H2D Pro or H2S). The other six are 250 mm or under and fit every printer in the list. The Chalice
+  Tree (213 mm, roots within 200 mm) also fits a 220 mm cube such as the Flashforge Adventurer 5 Pro;
+  export an STL for it with `-D sketch=false` (the command is in its notes).
 - For another Bambu printer: `python tools/bambu_3mf.py <file>.3mf --printer X1C`
   (`--list-printers` shows all ten).
 - For a different glass, change `glass_d` and `glass_h` in the Customizer, then rebuild (below).
