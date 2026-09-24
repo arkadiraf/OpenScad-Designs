@@ -1283,3 +1283,47 @@ The lessons that reach beyond this design:
 - **Fixed-size details on fine members:** a twig stub must be sized to the branch it leaves, or its
   base stands proud of it and the slicer calls it floating.
 
+
+---
+
+## 20. Chalice Tree: a glass that sits into its branches
+
+Folder `art/Math Driven Pots and Vases/Chalice Tree/`. A small vase glass (80 × 130 mm) whose
+side curves in over its bottom 17.5 mm (a 50 mm arc), cupped 85 mm up in a 3 → 7 → 13 tree 215 mm
+tall, with roots over 200 mm. It is for a **Flashforge Adventurer 5 Pro** (220 mm cube) and ships
+as an **STL**, not a Bambu project. Zero clearance. **Read `Chalice_Tree_notes.md`**: the
+requirements as given and how each was read (the foot curve in particular), the decisions and the
+measurements.
+
+What it adds to the Wild tree's code, which it is built from:
+
+- **The glass sits into the limbs instead of standing on them.** The limbs no longer pass flat
+  under the glass bottom and turn up round its corner. They rise in a cup and settle onto the
+  curved foot, so the glass bears on them along the whole curve, plus a small pad under the bottom
+  edge. Measure the seat against the real profile (`Chalice_Tree_seat_check.py`): `mesh_check.py
+  --foot-r` models a straight glass, and it would count the wood filling the curve as a clash.
+- **An obstacle with a curved foot.** `env_sdf` in (r, z) is the straight side, then the arc,
+  then the bottom plane, with the edge rounded; `env_dir` is the same with a rounder edge. The exit
+  distance along the push direction is found by bisection (the glass is convex, so the ray leaves
+  it once), replacing the closed form that only held for a straight side.
+- **A hug line must have no kink.** Branches hug `hug_prof(z) + (1 − press)·r`, which follows the
+  foot curve. Where it stops, the slope of the curve jumps, and the limbs bent to **0.3× their
+  radius** right at the glass bottom. Clamping the curve lower only moved the kink. Carrying it
+  on along its **tangent** fixed it (1.33× at worst).
+- **Blend limbs into the line they will follow**, `lerp(rho0, m_rho_g(z), ease(z))`, not to a
+  fixed radius at the arrival height. The curve keeps moving after the limb arrives; a fixed
+  target leaves a knee there.
+- **Tips that end at the rim.** Every "above the rim" formula (lean, flick, tip room) divided by the
+  room above the rim, which is negative here. They now work over each branch's own last
+  `tip_open` mm.
+- **A shorter crown crosses less.** With ~126 mm of branch above the glass bottom, the search aims
+  for 6–14 meetings. Re-check the searched layout in the `.scad`: the search's best (seed 11) needed
+  a 28 mm arch there, while the second best did not.
+- **`member_clearance.py` and limbs sharing a stem.** Limbs that go on together and part later
+  are forks of each other, but the tool only exempts parent and child. Set `--floor` past the last
+  parting (50 here), or it reports them as a 61–100 % overlap.
+- **Sketch mode shows a ring at the limb handover** (18-sided tubes against the finely sampled
+  trunk skin). With bark on, the join is seamless.
+- **OpenSCAD 2021.01 in a cloud container** (apt; no Manifold): the design evaluates in 10 s, a
+  sketch preview renders in 15 s, the bark preview in 42 s, and the sketch STL (118 k triangles)
+  in 3 min 46 s with CGAL.
