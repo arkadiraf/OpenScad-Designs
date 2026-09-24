@@ -12,7 +12,8 @@ Files:
 | `Chalice_Tree.scad` | the design. `sketch = true` by default (no bark, for fast iterations) |
 | `Chalice_Tree_layout.py` | the 3 → 7 → 13 layout search; `python Chalice_Tree_layout.py 58 4000` reproduces the tables |
 | `Chalice_Tree_seat_check.py` | glass fit and seat check against the real curved-foot profile (mesh_check.py assumes a straight glass) |
-| `Chalice_Tree.stl` | the print (bark on), binary STL |
+| `Chalice_Tree.stl` | the print (bark on), binary STL, for the Flashforge |
+| `Chalice_Tree.3mf` | the same mesh as a Bambu Studio project (H2C, Cocoa Brown PLA Basic, 35 % infill) |
 | `Chalice_Tree.png` | isometric render of the `.scad` with bark (a render, not a photo) |
 
 ## Requirements, and how each was read
@@ -76,6 +77,21 @@ Files:
 
 The textured STL figures are in the section below once it has been built.
 
+## Measured (textured, OpenSCAD 2026.09.18 nightly / Manifold, 38 s)
+
+`sketch=false`, `part="wood"`; the STL and the 3MF were exported from the same file (2026-09-24).
+
+| Check | Result |
+|---|---|
+| Size | 172.1 × 196.3 × 213.1 mm, on z = 0; fits the 220 mm cube |
+| Topology | 380 014 triangles, **0 / 0** edges, **1 shell** (4 near-duplicate vertices: checker note only) |
+| Past 60° | **0.00 %** above the bottom 1 cm (0.08 % overall); past 45° 0.80 % |
+| Glass | closest material **+0.000 mm** at z 87.5 (touches, nothing inside); **seat 9.7 cm²** of pads, 2.38 cm² under the bottom edge; largest gap 98° |
+| Mid-air | `floating_check.py --reach 0.35`: **0** regions |
+| Bed contact | 72.1 cm² |
+| Volume | 318.6 cm³ (395 g if solid) |
+| Bambu Studio slice (H2C, 0.20mm Standard, 35 % infill) | **no warnings** (no floating regions); **7 h 05 min**, **197 g** |
+
 ## Known and open
 
 - **Sketch shows a ring where the trunk hands over to the limbs** (about 30 mm up). It comes from
@@ -84,7 +100,7 @@ The textured STL figures are in the section below once it has been built.
 - The fit is **zero clearance** as asked. The print will not be exact, and a glass that is a
   little large will sit higher on the limbs rather than jam. If it sits too high, set `clearance`
   to 0.2–0.3 and re-export.
-- Not yet sliced in Flashforge Orca-Flashforge: check for floating regions and the print time there.
+- Sliced clean in Bambu Studio (H2C). Not yet sliced in Orca-Flashforge for the Adventurer 5 Pro: check the print time there.
 
 ## How to work on it (Windows, OpenSCAD nightly)
 
@@ -96,7 +112,7 @@ python tools/render_png.py "art/Math Driven Pots and Vases/Chalice Tree/Chalice_
 python tools/member_clearance.py paths.echo --floor 50 --limit 0.30
 python tools/cap_height.py paths.echo --limit 215
 # the print: bark on, one body, STL
-& "C:\Program Files\OpenSCAD (Nightly)\openscad.com" --backend Manifold -o Chalice_Tree.stl -D 'part=\"wood\"' -D sketch=false "art/Math Driven Pots and Vases/Chalice Tree/Chalice_Tree.scad"
+& "C:\Program Files\OpenSCAD (Nightly)\openscad.com" --backend Manifold --export-format binstl -o Chalice_Tree.stl -D 'part=\"wood\"' -D sketch=false "art/Math Driven Pots and Vases/Chalice Tree/Chalice_Tree.scad"
 python tools/mesh_check.py Chalice_Tree.stl
 python "art/Math Driven Pots and Vases/Chalice Tree/Chalice_Tree_seat_check.py" Chalice_Tree.stl
 python tools/floating_check.py Chalice_Tree.stl --reach 0.35
