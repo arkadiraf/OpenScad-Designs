@@ -118,12 +118,12 @@ top of the trunk. Here it is only where the tube rests, so these are absolute:
 
 ```bash
 # fast look: the same shapes without bark or knots
-python tools/render_png.py "art/Math Driven Pots and Vases/Leaning Chaotic Tree/Leaning_Chaotic_Tree.scad" sketch.png --view persp --size 900 -D sketch=true
+python tools/render_png.py "art/Tree Vase/Leaning Chaotic Tree/Leaning_Chaotic_Tree.scad" sketch.png --view persp --size 900 -D sketch=true
 ```
 
 ```bash
 # centrelines for the path checks (seconds, no geometry)
-openscad.com -o paths.echo -D 'part="paths"' "art/Math Driven Pots and Vases/Leaning Chaotic Tree/Leaning_Chaotic_Tree.scad"
+openscad.com -o paths.echo -D 'part="paths"' "art/Tree Vase/Leaning Chaotic Tree/Leaning_Chaotic_Tree.scad"
 ```
 
 ```bash
@@ -136,7 +136,7 @@ python tools/cap_height.py paths.echo --limit 100
 
 ```bash
 # the build; mesh_check measures the bore along the leaning axis (take --foot-xy from the echo)
-python tools/build_design.py "art/Math Driven Pots and Vases/Leaning Chaotic Tree/Leaning_Chaotic_Tree.scad" --name "Leaning Chaotic Tree" --out "art/Math Driven Pots and Vases/Leaning Chaotic Tree" --part wood=#6F5034 --check-args "--bore-r 8.25 --floor-h 2.5 --foot-r 8.25 --tilt 25 --tilt-az 11 --foot-xy -20.74,-4.03"
+python tools/build_design.py "art/Tree Vase/Leaning Chaotic Tree/Leaning_Chaotic_Tree.scad" --name "Leaning Chaotic Tree" --out "art/Tree Vase/Leaning Chaotic Tree" --part wood=#6F5034 --check-args "--bore-r 8.25 --floor-h 2.5 --foot-r 8.25 --tilt 25 --tilt-az 11 --foot-xy -20.74,-4.03"
 ```
 
 Sketch mode on this design: a preview in 15.7 s against 28.9 s, and 84 k triangles against 245 k.

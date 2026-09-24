@@ -77,7 +77,7 @@ def wrap(text, f, width):
     return lines + [cur]
 
 
-d.text((M, 40), 'Math Driven Pots and Vases: how the tree vase holders evolved', font=TITLE, fill=INK)
+d.text((M, 40), 'Tree Vase: how the tree vase holders evolved', font=TITLE, fill=INK)
 d.text((M, 96), 'All six hold the same 80 × 130 mm glass and are shown at the same scale. Renders from the '
                 'OpenSCAD sources, not photos.', font=SMALL, fill=SOFT)
 base = TOP + img_h                                                  # common ground line

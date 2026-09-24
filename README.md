@@ -11,37 +11,37 @@ ships ready to print:
 
 ## Gallery
 
-### Math Driven Pots and Vases
+### Tree Vase
 
 Tree-shaped holders for a plain glass vase. The glass drops straight in from the top. In the first
 five it stands on a stump floor, and you can see the tree's growth rings through the glass bottom. In
 the Wild and Grand Chaotic Trees there is no floor at all: the wood grows around the glass and it
 stands on the branches themselves.
 
-[<img src="art/Math%20Driven%20Pots%20and%20Vases/Design_Evolution.png" alt="How the tree vase holders evolved: six designs at the same scale">](art/Math%20Driven%20Pots%20and%20Vases/Design_Evolution.png)
+[<img src="art/Tree%20Vase/Design_Evolution.png" alt="How the tree vase holders evolved: six designs at the same scale">](art/Tree%20Vase/Design_Evolution.png)
 
 The six holders for the 80 × 130 mm glass, at the same scale, and what each one added. The Grand
 Chaotic Tree is not in it: it holds a bigger glass. The picture is drawn from the designs' own
-renders by [Design_Evolution.py](art/Math%20Driven%20Pots%20and%20Vases/Design_Evolution.py), which
+renders by [Design_Evolution.py](art/Tree%20Vase/Design_Evolution.py), which
 is re-run whenever one of the six is rebuilt.
 
 <table>
   <tr>
     <td align="center" width="33%">
-      <a href="art/Math%20Driven%20Pots%20and%20Vases/Braided%20Tree%20Vase%20Holder/">
-        <img src="art/Math%20Driven%20Pots%20and%20Vases/Braided%20Tree%20Vase%20Holder/Braided_Tree_Vase_Holder.png" alt="Braided Tree Vase Holder" width="260">
+      <a href="art/Tree%20Vase/Braided%20Tree%20Vase%20Holder/">
+        <img src="art/Tree%20Vase/Braided%20Tree%20Vase%20Holder/Braided_Tree_Vase_Holder.png" alt="Braided Tree Vase Holder" width="260">
       </a>
       <br><b>Braided Tree Vase Holder</b>
     </td>
     <td align="center" width="33%">
-      <a href="art/Math%20Driven%20Pots%20and%20Vases/Embracing%20Tree/">
-        <img src="art/Math%20Driven%20Pots%20and%20Vases/Embracing%20Tree/Embracing_Tree.png" alt="Embracing Tree" width="245">
+      <a href="art/Tree%20Vase/Embracing%20Tree/">
+        <img src="art/Tree%20Vase/Embracing%20Tree/Embracing_Tree.png" alt="Embracing Tree" width="245">
       </a>
       <br><b>Embracing Tree</b>
     </td>
     <td align="center" width="33%">
-      <a href="art/Math%20Driven%20Pots%20and%20Vases/Cradle%20Tree/">
-        <img src="art/Math%20Driven%20Pots%20and%20Vases/Cradle%20Tree/Cradle_Tree.png" alt="Cradle Tree" width="200">
+      <a href="art/Tree%20Vase/Cradle%20Tree/">
+        <img src="art/Tree%20Vase/Cradle%20Tree/Cradle_Tree.png" alt="Cradle Tree" width="200">
       </a>
       <br><b>Cradle Tree</b>
     </td>
@@ -64,20 +64,20 @@ is re-run whenever one of the six is rebuilt.
   </tr>
   <tr>
     <td align="center" width="33%">
-      <a href="art/Math%20Driven%20Pots%20and%20Vases/Tangled%20Cradle%20Tree/">
-        <img src="art/Math%20Driven%20Pots%20and%20Vases/Tangled%20Cradle%20Tree/Tangled_Cradle_Tree.png" alt="Tangled Cradle Tree" width="200">
+      <a href="art/Tree%20Vase/Tangled%20Cradle%20Tree/">
+        <img src="art/Tree%20Vase/Tangled%20Cradle%20Tree/Tangled_Cradle_Tree.png" alt="Tangled Cradle Tree" width="200">
       </a>
       <br><b>Tangled Cradle Tree</b>
     </td>
     <td align="center" width="33%">
-      <a href="art/Math%20Driven%20Pots%20and%20Vases/Chaotic%20Cradle%20Tree/">
-        <img src="art/Math%20Driven%20Pots%20and%20Vases/Chaotic%20Cradle%20Tree/Chaotic_Cradle_Tree.png" alt="Chaotic Cradle Tree" width="215">
+      <a href="art/Tree%20Vase/Chaotic%20Cradle%20Tree/">
+        <img src="art/Tree%20Vase/Chaotic%20Cradle%20Tree/Chaotic_Cradle_Tree.png" alt="Chaotic Cradle Tree" width="215">
       </a>
       <br><b>Chaotic Cradle Tree</b>
     </td>
     <td align="center" width="33%">
-      <a href="art/Math%20Driven%20Pots%20and%20Vases/Wild%20Chaotic%20Tree/">
-        <img src="art/Math%20Driven%20Pots%20and%20Vases/Wild%20Chaotic%20Tree/Wild_Chaotic_Tree.png" alt="Wild Chaotic Tree" width="215">
+      <a href="art/Tree%20Vase/Wild%20Chaotic%20Tree/">
+        <img src="art/Tree%20Vase/Wild%20Chaotic%20Tree/Wild_Chaotic_Tree.png" alt="Wild Chaotic Tree" width="215">
       </a>
       <br><b>Wild Chaotic Tree</b>
     </td>
@@ -103,8 +103,8 @@ is re-run whenever one of the six is rebuilt.
   </tr>
   <tr>
     <td align="center" width="33%">
-      <a href="art/Math%20Driven%20Pots%20and%20Vases/Grand%20Chaotic%20Tree/">
-        <img src="art/Math%20Driven%20Pots%20and%20Vases/Grand%20Chaotic%20Tree/Grand_Chaotic_Tree.png" alt="Grand Chaotic Tree" width="235">
+      <a href="art/Tree%20Vase/Grand%20Chaotic%20Tree/">
+        <img src="art/Tree%20Vase/Grand%20Chaotic%20Tree/Grand_Chaotic_Tree.png" alt="Grand Chaotic Tree" width="235">
       </a>
       <br><b>Grand Chaotic Tree</b>
     </td>
@@ -123,13 +123,13 @@ is re-run whenever one of the six is rebuilt.
 
 | Design | Glass (mm) | The glass sits at | Size (mm) | Colours (Bambu PLA Basic) | Print on the H2C, 35 % infill | Files |
 |---|---|---|---|---|---|---|
-| Braided Tree Vase Holder | 80 × 130 | 9 mm, on a floor | 153.5 × 150.6 × 177.6 | Cocoa Brown `#6F5034`, Mistletoe Green `#3F8E43` | 7 h 56 min, 188 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Braided%20Tree%20Vase%20Holder/Braided_Tree_Vase_Holder.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Braided%20Tree%20Vase%20Holder/Braided_Tree_Vase_Holder.3mf) |
-| Embracing Tree | 80 × 130 | 8 mm, on a floor | 153.8 × 150.6 × 179.4 | Cocoa Brown, Mistletoe Green, Bright Green `#BECF00` | 6 h 08 min, 91 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Embracing%20Tree/Embracing_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Embracing%20Tree/Embracing_Tree.3mf) |
-| Cradle Tree | 80 × 130 | 60 mm, on a floor | 156.4 × 136.5 × 249.2 | Cocoa Brown | 7 h 52 min, 227 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Cradle%20Tree/Cradle_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Cradle%20Tree/Cradle_Tree.3mf) |
-| Tangled Cradle Tree | 80 × 130 | 60 mm, on a floor | 156.4 × 136.8 × 248.8 | Cocoa Brown | 8 h 32 min, 236 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Tangled%20Cradle%20Tree/Tangled_Cradle_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Tangled%20Cradle%20Tree/Tangled_Cradle_Tree.3mf) |
-| Chaotic Cradle Tree | 80 × 130 | 60 mm, on a floor | 156.4 × 142.6 × 249.1 | Cocoa Brown | 8 h 21 min, 232 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Chaotic%20Cradle%20Tree/Chaotic_Cradle_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Chaotic%20Cradle%20Tree/Chaotic_Cradle_Tree.3mf) |
-| Wild Chaotic Tree | 80 × 130 | 83 mm, on 3 limbs | 179.2 × 197.2 × 266.1 | Cocoa Brown | 9 h 32 min, 249 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Wild%20Chaotic%20Tree/Wild_Chaotic_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Wild%20Chaotic%20Tree/Wild_Chaotic_Tree.3mf) · [layout](art/Math%20Driven%20Pots%20and%20Vases/Wild%20Chaotic%20Tree/Wild_Chaotic_Tree_layout.py) |
-| Grand Chaotic Tree | 100 × 200 | 80 mm, on 3 limbs | 270.9 × 271.2 × 318.5 | Cocoa Brown | 15 h 42 min, 481 g | [scad](art/Math%20Driven%20Pots%20and%20Vases/Grand%20Chaotic%20Tree/Grand_Chaotic_Tree.scad) · [3mf](art/Math%20Driven%20Pots%20and%20Vases/Grand%20Chaotic%20Tree/Grand_Chaotic_Tree.3mf) · [layout](art/Math%20Driven%20Pots%20and%20Vases/Grand%20Chaotic%20Tree/Grand_Chaotic_Tree_layout.py) |
+| Braided Tree Vase Holder | 80 × 130 | 9 mm, on a floor | 153.5 × 150.6 × 177.6 | Cocoa Brown `#6F5034`, Mistletoe Green `#3F8E43` | 7 h 56 min, 188 g | [scad](art/Tree%20Vase/Braided%20Tree%20Vase%20Holder/Braided_Tree_Vase_Holder.scad) · [3mf](art/Tree%20Vase/Braided%20Tree%20Vase%20Holder/Braided_Tree_Vase_Holder.3mf) |
+| Embracing Tree | 80 × 130 | 8 mm, on a floor | 153.8 × 150.6 × 179.4 | Cocoa Brown, Mistletoe Green, Bright Green `#BECF00` | 6 h 08 min, 91 g | [scad](art/Tree%20Vase/Embracing%20Tree/Embracing_Tree.scad) · [3mf](art/Tree%20Vase/Embracing%20Tree/Embracing_Tree.3mf) |
+| Cradle Tree | 80 × 130 | 60 mm, on a floor | 156.4 × 136.5 × 249.2 | Cocoa Brown | 7 h 52 min, 227 g | [scad](art/Tree%20Vase/Cradle%20Tree/Cradle_Tree.scad) · [3mf](art/Tree%20Vase/Cradle%20Tree/Cradle_Tree.3mf) |
+| Tangled Cradle Tree | 80 × 130 | 60 mm, on a floor | 156.4 × 136.8 × 248.8 | Cocoa Brown | 8 h 32 min, 236 g | [scad](art/Tree%20Vase/Tangled%20Cradle%20Tree/Tangled_Cradle_Tree.scad) · [3mf](art/Tree%20Vase/Tangled%20Cradle%20Tree/Tangled_Cradle_Tree.3mf) |
+| Chaotic Cradle Tree | 80 × 130 | 60 mm, on a floor | 156.4 × 142.6 × 249.1 | Cocoa Brown | 8 h 21 min, 232 g | [scad](art/Tree%20Vase/Chaotic%20Cradle%20Tree/Chaotic_Cradle_Tree.scad) · [3mf](art/Tree%20Vase/Chaotic%20Cradle%20Tree/Chaotic_Cradle_Tree.3mf) |
+| Wild Chaotic Tree | 80 × 130 | 83 mm, on 3 limbs | 179.2 × 197.2 × 266.1 | Cocoa Brown | 9 h 32 min, 249 g | [scad](art/Tree%20Vase/Wild%20Chaotic%20Tree/Wild_Chaotic_Tree.scad) · [3mf](art/Tree%20Vase/Wild%20Chaotic%20Tree/Wild_Chaotic_Tree.3mf) · [layout](art/Tree%20Vase/Wild%20Chaotic%20Tree/Wild_Chaotic_Tree_layout.py) |
+| Grand Chaotic Tree | 100 × 200 | 80 mm, on 3 limbs | 270.9 × 271.2 × 318.5 | Cocoa Brown | 15 h 42 min, 481 g | [scad](art/Tree%20Vase/Grand%20Chaotic%20Tree/Grand_Chaotic_Tree.scad) · [3mf](art/Tree%20Vase/Grand%20Chaotic%20Tree/Grand_Chaotic_Tree.3mf) · [layout](art/Tree%20Vase/Grand%20Chaotic%20Tree/Grand_Chaotic_Tree_layout.py) |
 
 Every one leaves 1 mm of clearance around its glass, so the glass lifts straight out of the top. The
 images are renders, not photos. The two trees that hold the glass in their branches carry a
@@ -167,8 +167,8 @@ reference figures for each design. The scripts in [`tools/`](tools/) do the pack
 | `merge_3mf.py`, `render_png.py` | Multi-part 3MF merge; preview renders |
 
 ```bash
-python tools/build_design.py "art/Math Driven Pots and Vases/Embracing Tree/Embracing_Tree.scad" \
-    --name "Embracing Tree" --out "art/Math Driven Pots and Vases/Embracing Tree" \
+python tools/build_design.py "art/Tree Vase/Embracing Tree/Embracing_Tree.scad" \
+    --name "Embracing Tree" --out "art/Tree Vase/Embracing Tree" \
     --part wood=#6F5034 --part leaves_dark=#3F8E43 --part leaves_light=#BECF00 \
     --check-args "--bore-r 41 --floor-h 8"
 ```
@@ -177,8 +177,8 @@ For a design with no floor, the checker is given the glass's rounded foot instea
 and it reports the pads the glass stands on:
 
 ```bash
-python tools/build_design.py "art/Math Driven Pots and Vases/Grand Chaotic Tree/Grand_Chaotic_Tree.scad" \
-    --name "Grand Chaotic Tree" --out "art/Math Driven Pots and Vases/Grand Chaotic Tree" \
+python tools/build_design.py "art/Tree Vase/Grand Chaotic Tree/Grand_Chaotic_Tree.scad" \
+    --name "Grand Chaotic Tree" --out "art/Tree Vase/Grand Chaotic Tree" \
     --part wood=#6F5034 --check-args "--bore-r 51 --floor-h 80 --foot-r 3"
 ```
 

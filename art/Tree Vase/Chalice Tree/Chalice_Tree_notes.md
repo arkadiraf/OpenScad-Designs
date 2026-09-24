@@ -106,15 +106,15 @@ The textured STL figures are in the section below once it has been built.
 
 ```powershell
 # fast look, the same shapes without bark (sketch is the default in the file)
-python tools/render_png.py "art/Math Driven Pots and Vases/Chalice Tree/Chalice_Tree.scad" sketch.png --view persp --size 900
+python tools/render_png.py "art/Tree Vase/Chalice Tree/Chalice_Tree.scad" sketch.png --view persp --size 900
 # centrelines for the path checks (seconds)
-& "C:\Program Files\OpenSCAD (Nightly)\openscad.com" -o paths.echo -D 'part=\"paths\"' "art/Math Driven Pots and Vases/Chalice Tree/Chalice_Tree.scad"
+& "C:\Program Files\OpenSCAD (Nightly)\openscad.com" -o paths.echo -D 'part=\"paths\"' "art/Tree Vase/Chalice Tree/Chalice_Tree.scad"
 python tools/member_clearance.py paths.echo --floor 50 --limit 0.30
 python tools/cap_height.py paths.echo --limit 215
 # the print: bark on, one body, STL
-& "C:\Program Files\OpenSCAD (Nightly)\openscad.com" --backend Manifold --export-format binstl -o Chalice_Tree.stl -D 'part=\"wood\"' -D sketch=false "art/Math Driven Pots and Vases/Chalice Tree/Chalice_Tree.scad"
+& "C:\Program Files\OpenSCAD (Nightly)\openscad.com" --backend Manifold --export-format binstl -o Chalice_Tree.stl -D 'part=\"wood\"' -D sketch=false "art/Tree Vase/Chalice Tree/Chalice_Tree.scad"
 python tools/mesh_check.py Chalice_Tree.stl
-python "art/Math Driven Pots and Vases/Chalice Tree/Chalice_Tree_seat_check.py" Chalice_Tree.stl
+python "art/Tree Vase/Chalice Tree/Chalice_Tree_seat_check.py" Chalice_Tree.stl
 python tools/floating_check.py Chalice_Tree.stl --reach 0.35
 ```
 

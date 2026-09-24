@@ -795,7 +795,7 @@ Design history, i.e. what the traps in §6 looked like in practice:
 
 ## 13. Second design: Embracing Tree
 
-Folder `art/Math Driven Pots and Vases/Embracing Tree/`. A single tree stands behind the glass. Its
+Folder `art/Tree Vase/Embracing Tree/`. A single tree stands behind the glass. Its
 trunk hugs the glass and forks into two limbs that wrap around the sides, while the stem carries on
 as a tall leader. Nine leaf clusters, each a bright new shoot flanked by two mature leaves, ring the
 rim. Below, a scalloped stump plate with growth rings holds the glass in a collar, and surface
@@ -851,7 +851,7 @@ Design history:
 
 ## 14. Third design: Cradle Tree
 
-Folder `art/Math Driven Pots and Vases/Cradle Tree/`. The glass sits 6 cm up in the branches of a
+Folder `art/Tree Vase/Cradle Tree/`. The glass sits 6 cm up in the branches of a
 rooted tree. A trunk with a narrow waist and root buttresses opens into a bowl whose floor, with
 growth rings, carries the glass. Five branches grow out of the bowl as ridges. They spiral around
 the glass (continuing the trunk's grain), lean out above the rim and fork. Every member wears
@@ -930,7 +930,7 @@ Design history:
 
 ## 15. Branches that meet: Tangled and Chaotic Cradle Tree
 
-Folders `art/Math Driven Pots and Vases/Tangled Cradle Tree/` and `.../Chaotic Cradle Tree/`. Both
+Folders `art/Tree Vase/Tangled Cradle Tree/` and `.../Chaotic Cradle Tree/`. Both
 are the Cradle Tree (§14) with its five symmetric branches replaced by a table of unique paths.
 Trunk, roots, bark, knots, stubs and the growth-ring floor are unchanged.
 
@@ -1006,7 +1006,7 @@ thickness and never more than 30 % (25 % for Tangled). The merges tie the cage i
 
 ## 16. Grand Chaotic Tree: a tree that grows around the glass
 
-Folder `art/Math Driven Pots and Vases/Grand Chaotic Tree/`. A big glass (100 × 200 mm) held 8 cm up
+Folder `art/Tree Vase/Grand Chaotic Tree/`. A big glass (100 × 200 mm) held 8 cm up
 in a 32 cm tree whose roots sprawl over 30 cm of ground. It keeps the Chaotic approach (unique
 paths, branches that arch over each other and merge about 10 %), but the tree is built like a real
 one:
@@ -1137,7 +1137,7 @@ repeat the branches of the old one.
 
 ## 17. Wild Chaotic Tree: seamless joins
 
-Folder `art/Math Driven Pots and Vases/Wild Chaotic Tree/`. The Grand Chaotic Tree (§16) grown for
+Folder `art/Tree Vase/Wild Chaotic Tree/`. The Grand Chaotic Tree (§16) grown for
 the 80 × 130 mm glass, with its own chaotic layout. It is the first design where the trunk,
 buttresses, roots and limbs meet without visible seams, which fixed the seams of §16.2; the Grand
 Chaotic Tree was then rebuilt the same way.
@@ -1260,7 +1260,7 @@ first place.
 
 ## 19. Leaning Chaotic Tree (to be continued)
 
-Folder `art/Math Driven Pots and Vases/Leaning Chaotic Tree/`. A single-flower holder for a
+Folder `art/Tree Vase/Leaning Chaotic Tree/`. A single-flower holder for a
 16 × 100 mm science tube, which leans across the tree: its end rests on a root to one side, its
 mouth ends out on the other, and its middle passes over the centre. The folder holds the
 `.scad`, a render of it as it stands and the layout search - no `.3mf` until a build passes.
@@ -1288,7 +1288,7 @@ The lessons that reach beyond this design:
 
 ## 20. Chalice Tree: a glass that sits into its branches
 
-Folder `art/Math Driven Pots and Vases/Chalice Tree/`. A small vase glass (80 × 130 mm) whose
+Folder `art/Tree Vase/Chalice Tree/`. A small vase glass (80 × 130 mm) whose
 side curves in over its bottom 17.5 mm (a 50 mm arc), cupped 85 mm up in a 3 → 7 → 13 tree 215 mm
 tall, with roots over 200 mm. It is for a **Flashforge Adventurer 5 Pro** (220 mm cube) and ships
 as an **STL**, not a Bambu project. Zero clearance. **Read `Chalice_Tree_notes.md`**: the

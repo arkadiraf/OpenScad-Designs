@@ -93,7 +93,7 @@ def wrap(text, f, width):
 
 
 d.text((M, 40), 'OpenSCAD Design Process with Claude Opus', font=TITLE, fill=INK)
-d.text((M, 96), 'Tree Vases: six tree vase holders for the same 80 × 130 mm glass, rendered from '
+d.text((M, 96), 'Tree Vase: six tree vase holders for the same 80 × 130 mm glass, rendered from '
                 'the OpenSCAD sources at one scale; below, the last of them and its bigger sibling, printed.', font=SMALL, fill=SOFT)
 base = TOP + img_h                                                  # common ground line
 for i, (t, (name, _, _, idea, colours, prt)) in enumerate(zip(tiles, D)):
