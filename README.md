@@ -162,13 +162,13 @@ The Wild and Grand Chaotic Trees off the printer, glass in place, in one colour.
       <a href="art/Tree%20Vase/Wild%20Chaotic%20Tree/Wild_Chaotic_Tree_Print.jpg">
         <img src="art/Tree%20Vase/Wild%20Chaotic%20Tree/Wild_Chaotic_Tree_Print.jpg" alt="The printed Wild Chaotic Tree holding its glass" width="330">
       </a>
-      <br><b>Wild Chaotic Tree</b>: 80 × 130 mm glass, 26.6 cm tall
+      <br><b>Wild Chaotic Tree</b>: 80 × 130 mm glass
     </td>
     <td align="center" width="50%">
       <a href="art/Tree%20Vase/Grand%20Chaotic%20Tree/Grand_Chaotic_Tree_Print.jpg">
         <img src="art/Tree%20Vase/Grand%20Chaotic%20Tree/Grand_Chaotic_Tree_Print.jpg" alt="The printed Grand Chaotic Tree holding its glass" width="330">
       </a>
-      <br><b>Grand Chaotic Tree</b>: 100 × 200 mm glass, 31.9 cm tall
+      <br><b>Grand Chaotic Tree</b>: 100 × 200 mm glass
     </td>
   </tr>
 </table>
