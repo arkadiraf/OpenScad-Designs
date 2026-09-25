@@ -7,7 +7,8 @@ glass-insert vase holders in particular, from a brief to a verified, packaged de
 The process was built and debugged while designing **Braided Tree Vase Holder** (2026-09-18/19; §12)
 refined while finishing **Embracing Tree** (2026-09-19; §13), extended with procedural bark on
 **Cradle Tree** (2026-09-19; §14), and with branches that meet and grow together on **Tangled** and
-**Chaotic Cradle Tree** (2026-09-19; §15).
+**Chaotic Cradle Tree** (2026-09-19; §15). The first design that is not a vase holder, the **Kiwi**
+sculpture (2026-09-25; §21), added closed-form support-free bodies, surface fur and scaly legs.
 The print rules (§4) come from the house guides `POT_DESIGNER_AGENT.md` and `WOVEN_DESIGNER_AGENT.md`,
 restated here so this guide can be followed on its own. Those two guides drive the browser apps
 (`EquationDrivenPotDesigner.html`, `EquationDrivenWovenPots.html`). This one drives OpenSCAD.
@@ -24,6 +25,7 @@ Everything scripted lives in `tools/` next to this file:
 | `tools/member_clearance.py` | Gap or overlap between every pair of branches, from the centrelines a design echoes with `part="paths"`; fails above a merge limit (§15.1) |
 | `tools/cap_height.py` | How high each member reaches once its end cap is counted (`r·cos(climb)` above the path end), from the same echo; fails above a height limit (§16.2) |
 | `tools/floating_check.py` | Finds the regions that would start in mid-air, and where they are; Bambu Studio only says that they exist (§8) |
+| `tools/overhang_map.py` | Where the overhang is: surface past 60° per part, summed into x/z bins, largest first; `mesh_check.py` only gives the total (§8) |
 
 ---
 
@@ -79,6 +81,9 @@ The tools find OpenSCAD through `$OPENSCAD`, then the newest install path, then 
 There is no API into the OpenSCAD GUI. **Share a file instead:**
 
 1. Find what is open: `(Get-Process openscad).MainWindowTitle` gives, e.g., `claudeTest.scad - OpenSCAD`.
+   For a new design, open it yourself so the user can watch it grow: start the **nightly GUI**
+   (`"C:\Program Files\OpenSCAD (Nightly)\openscad.exe" <file>.scad`, detached, in the background)
+   right after writing the first version, and check its window title with the command above.
    The command line only names a file if it was opened that way.
 2. Ask the user to turn on **Design → Automatic Reload and Preview**. After that, every save you make
    re-previews in their window.
@@ -169,7 +174,7 @@ it dies with the session.
 | Bottom 1 cm | some overhang is allowed there; the slicer can add "on build plate only" supports | Woven §8 |
 | Topology | 0 boundary / 0 non-manifold edges on **every** part | Both guides |
 | Sits on z = 0 | yes | Both guides |
-| Colours | **Bambu Lab PLA Basic only**, hexes from the table below; pick a combination not already in the palette tables of the other two guides, or used by an OpenSCAD design so far (Braided: Cocoa Brown + Mistletoe Green; Embracing: Cocoa Brown + Mistletoe Green + Bright Green; Cradle, Tangled, Chaotic, Grand Chaotic and Wild Chaotic: Cocoa Brown alone) | Pot §12, user |
+| Colours | **Bambu Lab PLA Basic only**, hexes from the table below; pick a combination not already in the palette tables of the other two guides, or used by an OpenSCAD design so far (Braided: Cocoa Brown + Mistletoe Green; Embracing: Cocoa Brown + Mistletoe Green + Bright Green; Cradle, Tangled, Chaotic, Grand Chaotic and Wild Chaotic: Cocoa Brown alone; Kiwi: Bambu Green + Brown + Beige + Dark Gray + Black). **Up to 5 colours** per design | Pot §12, user |
 | Printer and infill | **Bambu Lab H2C** (0.4 mm nozzle, 0.20mm Standard process), **35 % sparse infill**, unless the user names another | user |
 
 **Bambu Lab PLA Basic colours** (the same list is built into `tools/bambu_3mf.py`; keep the two in
@@ -577,6 +582,10 @@ fork angles, branch spread, crossing rows. That is how every trap in §6 was fou
 `phi`, `z`). Use a union-find over the triangles' vertex indices, as in `topology()`, and
 `surface()` for the volume. Real pieces are hundreds of mm³; slivers are ~1 mm³ or less.
 
+**Where the overhang is:** `python tools/overhang_map.py Design.3mf` lists, per part, the surface
+past 60° in x/z bins, largest first. Its percentages divide by the whole surface, bed faces
+included, so they come out a little under `mesh_check.py`'s (1.47 % against 1.88 % on the Kiwi).
+
 Figures the checker doesn't print, but the hand-off needs:
 - the clearance of the **members**. The bore line reports the collar wall, which sits exactly at the
   bore, so measure the closest material above the collar top.
@@ -689,6 +698,10 @@ It writes the layout Bambu Studio saves itself:
   under VS Code's Electron with `ELECTRON_RUN_AS_NODE=1`, since there is no Node on this machine.
   Bambu Studio's CLI sliced the Embracing Tree project on the H2C using all three filaments (plus
   the purge matrix from the file).
+- **Put the part that touches the bed on filament 1** (list it first in `--part`). On the Kiwi the
+  base (z 0-5 mm) was filament 5 of 5, and the CLI slice printed it in filament 1: filament 5
+  was never loaded (no `M620 S4A`) and the report listed only four weights, yet it said PASS.
+  With the base first, all five sliced. **Check that the slice reports one gram figure per part.**
 - **`--slice` (and step 4 of `build_design.py`)** slices the project with the installed Bambu Studio
   (`$BAMBU_STUDIO`, else `C:\Program Files\Bambu Studio\bambu-studio.exe`), in about 10 s. It
   reports print time, grams per colour and every slicing warning, and fails on any warning. It is
@@ -1327,3 +1340,73 @@ What it adds to the Wild tree's code, which it is built from:
 - **OpenSCAD 2021.01 in a cloud container** (apt; no Manifold): the design evaluates in 10 s, a
   sketch preview renders in 15 s, the bark preview in 42 s, and the sketch STL (118 k triangles)
   in 3 min 46 s with CGAL.
+
+---
+
+## 21. Kiwi: a sculpture on legs
+
+Folder `art/Sculptures/Kiwi/`. A furry kiwi probing the ground, after Hamid Naderi Yeganeh's
+equation-drawn kiwi: 219 × 104 × 151 mm on an oval base, five parts (Base, Fur, Beak + claws, Legs,
+Eyes), 310 g and 8 h 34 min on the H2C. No glass, so no bore or floor: `build_design.py` runs with
+no `--check-args`. It was sketched, textured, packaged and checked in one session. The nightly
+(Manifold) made that possible: 2 s for a sketch preview, 8 s for a textured preview, 10 s to export
+each part (260 k triangles of fur).
+
+The user accepted the result at **1.88 % past 60°** ("up to 60 is fine"), all of it fur on the belly
+underside. The slice passed with no floating regions. For a sculpture, say what the figure is and
+where it is, and let the user decide, rather than flattening the texture on your own.
+
+### 21.1 Techniques
+
+- **A round body on thin legs prints if it is the hull of an ellipsoid and one point.** Put that
+  point (the apex) at the top of the legs. In unit space the ellipsoid is the unit sphere, and the hull is
+  the sphere plus the tangent cone from the apex Q (|Q| = D). Along a ray u from the centre, the
+  surface is at ρ = 1, or, where `-u·Q̂ > 1/D`, at the smallest positive root of
+  `t²(A² − c²) + 2tA/D + 1 = 0` (with A = u·(−Q̂), c² = 1 − 1/D², and on the apex side, tA + D ≥ 0).
+  That is `cone_rho()` in `Kiwi.scad`: a closed form, so it samples like any other parametric
+  surface, and the fur can go on top of it. `hull()` could not carry a texture.
+- **Size the cone from the slope you need.** In the long plane (semi-axes a along x, c up, apex h
+  below the centre), the flattest generator rises at `atan(sqrt(h² − c²) / a)`. The Kiwi's first body
+  (a = 62, c = 42, h = 63) gave 37°, and a 4° nose-down pitch took the front down to 33°. That was too
+  little margin for the fur (21.2). a = 59, h = 67 and no pitch give 41.5°. The cone is steeper
+  across the body (it is narrower), so the long axis sets the limit.
+- **The same trick shapes the face.** Pitch the head ellipsoid along the beak (60° down) and put its
+  apex on the front pole (`[face_taper, 0, 0]`, 2.1 half-lengths out). The face then narrows into the
+  beak, and its underside rises at 60° − 26° = 34°. Start the beak `beak_in` = 14 mm back from the
+  apex, where the cone is still wider than the beak, so the cone's point stays inside it.
+- **Every underside must end on a support.** The belly ends in the legs, and the face ends in the
+  beak, whose tip rests on the base (the kiwi is probing the ground). The pose is part of how it
+  prints.
+- **Fur is a displacement of the sampled surface**, along the radial direction: shingled locks
+  that rise over 80 % of their length towards a tip pointing back and down, then drop. They are
+  `lock_w` wide, with a random length and height per lock, and wave a little sideways. Short, even
+  locks (13 × 4.2 mm) read as basket weave; 24 × 3.2 mm with the wave read as hair. Sample at ≤ 0.7
+  mm (300 rings × 360 points on the body), about 4–5 samples across a lock. Coordinates:
+  `along` = arc length from the back pole; `arc` = arc length down from the dorsal line, scaled by
+  `sin(pol)` so the locks converge at the poles. Mirror the pattern at the dorsal line, which gives
+  a parting down the back.
+- **Scales on a member need a frame fixed to the world, not a transported one.** `tube_f(P, R, ref,
+  sides, f)` takes the ring normal as `ref` projected off the tangent, so a = 0 is always the front of a leg
+  or the top of a toe. `f(t, a)` then adds the relief: an oval section `0.12·r·cos 2a`, transverse
+  scutes (a `shingle()` profile) on the front half, small reticulate scales behind, a knob at the
+  joint. On a near-vertical member the scute's drop face (0.35 mm over 0.65 mm) is nowhere near 60°.
+- **Toes lie on the base with their tips lifted** (`toe_lift`), and each claw curves from the tip
+  down into the base. A claw that ends on the base is supported; the short span under the lifted
+  tip is in the bottom 1 cm.
+
+### 21.2 Traps found
+
+- **Texture on a downward-facing surface counts towards the overhang.** The bare cone at 33–37° was
+  within the rule; its fur pushed 2.9 % past 60°. Steepening the cone to 41.5° and halving the fur on
+  the cones (`cone_fur` = 0.5, blended in over the first 5 % of ρ so no seam shows) brought it to
+  1.9 %. Only flatter fur there would clear 0.5 %. Keep the cone ≥ 10° steeper than 30° if a texture
+  will go on it.
+- **A joint sphere that floats 0.1 mm above the base** (the first ankle: centre at `base_h + 4.5`, r
+  4.4) starts in mid-air under the toes. Use a sole pad centred on the base top (`scale([7, 6, 4])
+  sphere`), so only its upper half shows.
+- **Round the toe ends.** The swept toes ended in flat caps that showed around the claws; a sphere
+  of the tip radius fixes it.
+- **The beak group is subtracted from the legs.** Claws start inside the toe tips and share the
+  Beige part with the beak, so `beak = (beak ∪ claws) − fur − legs − base`. Expect its shell count to
+  be 1 + the number of claws (9).
+- **Filament 5 on the base** was dropped by the slicer CLI (§9.1): list the bed part first.
