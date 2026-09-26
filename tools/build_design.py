@@ -31,14 +31,14 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from merge_3mf import merge                     # noqa: E402
 from bambu_3mf import convert, slice_check, DEFAULT_PRINTER, DEFAULT_INFILL   # noqa: E402
-from render_png import render, openscad_cmd     # noqa: E402
+from render_png import render, openscad_cmd, model_log   # noqa: E402
 
 
 def export_part(scad, part, out_3mf):
     t = time.time()
     r = subprocess.run([*openscad_cmd(), '-o', out_3mf, '-D', f'part="{part}"', scad],
                        capture_output=True, text=True)
-    log = r.stdout + r.stderr
+    log = model_log(r.stdout + r.stderr)
     notes = [l.strip() for l in log.splitlines()
              if any(k in l for k in ('ERROR', 'WARNING', 'Volumes', 'rendering time'))]
     failed = r.returncode != 0 or 'ERROR' in log or not os.path.exists(out_3mf)

@@ -52,6 +52,12 @@ def openscad_cmd():
     return [exe, *_backend(exe)]
 
 
+def model_log(log):
+    """The log without OpenSCAD's startup complaint about an unreachable user library folder
+    (a redirected Documents on a network share); it says nothing about the model."""
+    return '\n'.join(l for l in log.splitlines() if 'cannot make canonical path' not in l)
+
+
 def render(scad, out_png, view='iso', size=2000, defines=(), margin=60, scheme='Tomorrow'):
     rx, ry, rz, proj = VIEWS[view]
     raw = tempfile.mktemp(suffix='.png')
@@ -60,7 +66,7 @@ def render(scad, out_png, view='iso', size=2000, defines=(), margin=60, scheme='
     for d in defines:
         cmd += ['-D', d]
     r = subprocess.run(cmd + [scad], capture_output=True, text=True)
-    log = r.stdout + r.stderr
+    log = model_log(r.stdout + r.stderr)
     if r.returncode or 'ERROR' in log:
         raise SystemExit(f'OpenSCAD failed:\n{log}')
     im = Image.open(raw).convert('RGB')
