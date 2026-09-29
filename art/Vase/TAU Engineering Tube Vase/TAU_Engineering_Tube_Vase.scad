@@ -19,6 +19,13 @@
 // Step 1 is the test tube; every holder dimension is derived from it.
 // All dimensions in mm. OpenSCAD trigonometry uses DEGREES.
 
+/* [0 - Weight: wall and base thickness] */
+// Presets: standard 2.0 / 4, medium 1.5 / 4, light 1.0 / 2.5
+// Wall thickness of each ring (0.4 mm nozzle: 1.0 = 2 lines, 1.5 = 3-4, 2.0 = 5)
+orbit_w = 2.0;          // [1.0:0.1:3.0]
+// Thickness of the base (at least logo_depth + 1)
+base_h = 4;             // [2.5:0.5:6]
+
 /* [Output] */
 part = "assembly"; // [assembly, holder, logo, tube, none]
 // Coarse sampling, for finding the shape
@@ -26,6 +33,12 @@ sketch = false;
 show_tube = true;
 // Preview colours only; the 3MF is always black with a white logo
 preview_colors = "black"; // [black, blue]
+// Batch plate: copies in a grid, all the same way round (1 x 1 = a single vase).
+// Bambu H2C (330 x 320 bed): 4 x 4 at 84 x 80 mm fills the plate evenly (5 across does not fit)
+// Bambu X2D (256 x 256 bed): 3 x 3 at 90 x 90 mm (4 across does not fit)
+plate_cols = 1;         // [1:6]
+plate_rows = 1;         // [1:6]
+plate_pitch = [84, 80]; // centre-to-centre spacing, x and y
 
 /* [1 - Test tube] */
 tube_d = 16;            // outer diameter of the tube
@@ -41,8 +54,7 @@ lead_in = 0.8;          // entry chamfer at the top of the bore
 
 /* [3 - Orbits (the three rings)] */
 orbits = 3;             // number of rings (the logo has 3)
-orbit_w = 2.0;          // wall thickness of each ring (five 0.4 mm lines)
-orbit_grip = 0.5;       // how far each ring's inner arc reaches into the bore (cut flat there)
+orbit_grip = 0.5;       // how far each ring's inner arc reaches into the bore (cut flat there; at most 0.3 x orbit_w)
 orbit_e_bot = 8;        // ring centre off the axis at the bed (sets the width of the belly)
 orbit_e_waist = 3.5;    // ... at the waist
 orbit_e_top = 5.5;      // ... at the top; 5.5 gives the logo's proportions (offset / radius ~ 0.38)
@@ -52,7 +64,6 @@ twist = 150;            // how far the rings turn round the tube from bottom to 
 
 /* [4 - Base (Reuleaux triangle)] */
 base_w = 66;            // width of the Reuleaux triangle (constant in every direction)
-base_h = 4;             // thickness
 base_round = 3;         // rounding of its three corners
 base_chamfer = 1.2;     // top edge chamfer
 
@@ -61,7 +72,9 @@ collar_h = 7;           // height of the straight part of the collar
 collar_t = 2.2;         // wall thickness outside the bore
 
 /* [6 - Logo under the base (the left-hand mark)] */
-logo_r = 24;            // radius of the logo circle (the base's inscribed radius is ~0.42 base_w)
+// false = plain black underside, no logo inlay (single colour)
+with_logo = true;
+logo_r = 24;           // radius of the logo circle (the base's inscribed radius is ~0.42 base_w)
 logo_depth = 1;         // inlay thickness (5 layers at 0.2 mm, so the white stays white)
 // A white outline round the circle; the logo's disc is black like the holder, so
 // without it only the emblem shows
@@ -71,7 +84,11 @@ logo_outline = 0.8;     // width, 0 = none
 include <TAU_Emblem.scad>                               // tau_emblem(), in units of the disc radius
 bore_r = tube_d / 2 + clearance;
 seat_z = floor_h + bore_r;                              // centre of the round seat
-c0 = bore_r + orbit_w / 2 - orbit_grip;                 // ring centreline at its inner arc
+// Thin walls grip less, so the bore leaves at least 70 % of the wall at the grip strips
+grip = min(orbit_grip, 0.3 * orbit_w);
+c0 = bore_r + orbit_w / 2 - grip;                       // ring centreline at its inner arc
+assert(base_h >= logo_depth + 1, "base_h must be at least logo_depth + 1");
+assert(orbit_w >= 0.8, "orbit_w below two 0.4 mm lines");
 hub_r = bore_r + 2;                                     // solid hub round the seat
 corner_r = base_w / sqrt(3);                            // Reuleaux vertex distance
 front = -45;                                            // faces the iso camera (sec. 9 of the guide)
@@ -194,7 +211,7 @@ module holder() {
             collar();
         }
         bore();
-        logo();
+        if (with_logo) logo();
     }
 }
 
@@ -208,15 +225,23 @@ echo(str("TAU tube vase: tube ", tube_d, " x ", tube_h, " mm, bore d ", 2 * bore
          " mm tall, base ", base_w, " mm, belly d ", 2 * (c0 + 2 * orbit_e_bot + orbit_w / 2),
          " mm, waist d ", 2 * (c0 + 2 * orbit_e_waist + orbit_w / 2),
          " mm, mouth d ", 2 * (c0 + 2 * orbit_e_top + orbit_w / 2), " mm, ring wall lean max ",
-         round(lean * 10) / 10, " deg, logo d ", 2 * logo_r, " under the base"));
+         round(lean * 10) / 10, " deg, logo d ", 2 * logo_r, " under the base, ring walls ", orbit_w,
+         " mm (grip ", grip, "), base ", base_h, " mm"));
 
 // ---------------------------------------------------------------- output
-if (part == "assembly") {
+// Copies of the children on the batch grid, centred on the origin
+module plate() {
+    for (i = [0:plate_cols - 1], j = [0:plate_rows - 1])
+        translate([(i - (plate_cols - 1) / 2) * plate_pitch[0], (j - (plate_rows - 1) / 2) * plate_pitch[1], 0])
+            children();
+}
+
+if (part == "assembly") plate() {
     // Bambu PLA Basic Black (lifted, so the preview shades), or Bambu PLA Basic Blue
     color(preview_colors == "blue" ? "#0A2989" : "#1E1E1E") holder();
-    color("#FFFFFF") logo();                           // Bambu PLA Basic Jade White
+    if (with_logo) color("#FFFFFF") logo();            // Bambu PLA Basic Jade White
     if (show_tube) tube();
 }
-if (part == "holder") holder();
-if (part == "logo") logo();
+if (part == "holder") plate() holder();
+if (part == "logo" && with_logo) plate() logo();
 if (part == "tube") tube();

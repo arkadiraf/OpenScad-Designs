@@ -127,7 +127,8 @@ def overhang(T, area, nz, top_z, max_over):
     for lim, lab in [(SIN60, '60'), (SIN45, '45')]:
         over = (~bed) & (nz < -lim)
         bands = []
-        for z0, z1, bl in [(-1, 10, 'bottom 1 cm'), (10, top_z - 30, 'body'), (top_z - 30, top_z + 1, 'top 3 cm')]:
+        top0 = max(10, top_z - 30)          # under 4 cm tall, the top band must not reach into the bottom 1 cm
+        for z0, z1, bl in [(-1, 10, 'bottom 1 cm'), (10, top0, 'body'), (top0, top_z + 1, 'top 3 cm')]:
             p = 100 * area[over & (zmin >= z0) & (zmin < z1)].sum() / total
             bands.append(f"{bl} {p:.2f}%")
             if lab == '60' and bl != 'bottom 1 cm':

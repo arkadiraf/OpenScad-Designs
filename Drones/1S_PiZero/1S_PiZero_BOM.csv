@@ -1,0 +1,37 @@
+Category,Item,Qty,Unit (g),Total (g),Status,Basis / link
+Battery,Molicel INR-18650-P30B (1S),1,48.00,48.00,Given,https://www.molicel.com/inr-18650-p30b/
+Motor,RCINPOWER GTS V3 1203 11500 KV,4,4.50,18.00,Given,https://www.rcinpower.com/G-SERIES/65.html
+Propeller,"Gemfan 2520 Hurricane, 3-blade",4,1.00,4.00,Given,https://www.gemfanhobby.com/2520-hurricane-pc-3-blade.html
+ESC,DYS XSD 7A (16.2 x 11 x 4 mm),4,0.83,3.32,Given,https://www.dys.hk/product/XSD%207A.html
+Flight controller,Bitcraze Crazyflie Bolt 1.1,1,9.20,9.20,Given,https://www.bitcraze.io/products/crazyflie-bolt/
+Sensor deck,Bitcraze Flow deck v2,1,1.60,1.60,Given,https://www.bitcraze.io/products/flow-deck-v2/
+Companion computer,Raspberry Pi Zero 2 W,1,9.00,9.00,Estimate,"size: FR4 65 x 30 x 1.4 mm = 5.0 g, + SiP/shield ~1.5 g, + mini HDMI, 2 x micro USB, SD, camera connectors ~2.5 g"
+Camera,"Waveshare RPi Zero v1.3 camera (flex, adhesive back)",1,0.80,0.80,Estimate,"size: lens module 8 x 8 x 5 mm ~0.4 g, + polyimide flex ~60 x 10 x 0.15 mm ~0.15 g, + parts and stiffener ~0.25 g"
+Frame electronics,"charger, protection, 5 V boost, passives on the frame PCB",1,2.00,2.00,Estimate,"guess for a 1S charger IC, protection FETs, 5 V boost inductor and capacitors; depends on the board"
+Wiring,"Bolt motor outputs to the ESC signal pads, solder",1,1.00,1.00,Estimate,4 short 30 AWG leads + solder; the Pi and Bolt leads are listed with their connectors
+PCB,"Frame PCB, FR4 1.6 mm, bare (63.2 cm2)",1,20.69,20.69,Estimate,"outline area x 1.6 mm x 1.85 g/cm3 = 18.7 g, + copper 2 x 1 oz at 50% = 2.0 g"
+Printed,"Battery cover (Pi posts, camera bosses), PLA Basic",1,7.00,7.00,Estimate,"Bambu Studio slice: H2C, 0.20 mm Standard, 35 % infill, PLA Basic"
+Printed,"Landing gear, PLA Basic",1,4.70,4.70,Estimate,"Bambu Studio slice: H2C, 0.20 mm Standard, 35 % infill, PLA Basic"
+Printed,"Camera harness, PLA Basic",1,2.00,2.00,Estimate,"Bambu Studio slice: H2C, 0.20 mm Standard, 35 % infill, PLA Basic"
+Optional: prop guard,"Prop guard (optional), PLA Basic",1,18.50,18.50,Estimate,"Bambu Studio slice: H2C, 0.20 mm Standard, 35 % infill, PLA Basic"
+Hardware,"M2 x 8 socket head screw, steel",4,0.31,1.24,Estimate,battery cover + PCB + landing gear; from its dimensions and material
+Hardware,"M2 heat-set insert, brass",4,0.18,0.72,Estimate,landing gear bosses; from its dimensions and material
+Hardware,"M2.5 x 5 socket head screw, steel",4,0.41,1.65,Estimate,Pi Zero into the cover posts; from its dimensions and material
+Hardware,"M2.5 heat-set insert, brass",4,0.26,1.04,Estimate,cover posts; from its dimensions and material
+Hardware,"M2 x 6 socket head screw, steel",2,0.27,0.54,Estimate,camera harness to the cover; from its dimensions and material
+Hardware,"M2 heat-set insert, brass",2,0.18,0.36,Estimate,cover front blocks; from its dimensions and material
+Hardware,"M2 x 3 screw, steel (check against the motor's own)",16,0.17,2.72,Estimate,"motors, from under the frame (no guard); from its dimensions and material"
+Hardware,"M2.5 x 5 standoff, female-female, nylon",4,0.10,0.38,Estimate,Bolt under the frame; from its dimensions and material
+Hardware,"M2.5 x 4 socket head screw, steel",8,0.38,3.05,Estimate,"Bolt standoffs, 4 from the frame, 4 from the Bolt; from its dimensions and material"
+Hardware,"Pin header 2.54 mm, per pin",28,0.05,1.51,Estimate,ESCs; from its dimensions and material
+Connectors,"J1 Pi power: JST PH 2-pin header (5V, GND)",1,0.14,0.14,Estimate,frame top; from its dimensions and material
+Connectors,"J2 Pi UART: JST GH 3-pin header (TX, RX, GND)",1,0.14,0.14,Estimate,frame top; from its dimensions and material
+Connectors,"J3 Bolt power: JST PH 2-pin header (VBAT, GND)",1,0.14,0.14,Estimate,frame underside; from its dimensions and material
+Connectors,"J4 Bolt UART: JST GH 3-pin header (TX, RX, GND)",1,0.14,0.14,Estimate,frame underside; from its dimensions and material
+Connectors,"J1 Pi power lead, 60 mm, 2 x 26 AWG",1,0.38,0.38,Estimate,to the Pi's GPIO; from its dimensions and material
+Connectors,"J2 Pi UART lead, 60 mm, 3 x 28 AWG",1,0.29,0.29,Estimate,to the Pi's GPIO; from its dimensions and material
+Connectors,"J3 Bolt power lead, 60 mm, 2 x 26 AWG",1,0.38,0.38,Estimate,to the Bolt; from its dimensions and material
+Connectors,"J4 Bolt UART lead, 60 mm, 3 x 28 AWG",1,0.29,0.29,Estimate,to the Bolt; from its dimensions and material
+Optional: prop guard,M2 x 5 motor screws instead of M2 x 3 (difference),16,0.04,0.67,Estimate,through the guard's pads; from its dimensions and material
+,"All-up weight, without the prop guard",,,146.4,,
+,"All-up weight, with the prop guard",,,165.6,,

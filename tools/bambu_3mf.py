@@ -65,6 +65,7 @@ PRINTERS = [
     dict(id='H2D', model='Bambu Lab H2D', process='0.20mm Standard @BBL H2D', filament='Bambu PLA Basic @BBL H2D', flush=[(1, 130), (1, 145)], bed=(350, 320), height=325),
     dict(id='H2DP', model='Bambu Lab H2D Pro', process='0.20mm Standard @BBL H2DP', filament='Bambu PLA Basic @BBL H2DP', flush=[(1, 130), (1, 145)], bed=(350, 320), height=325),
     dict(id='H2S', model='Bambu Lab H2S', process='0.20mm Standard @BBL H2S', filament='Bambu PLA Basic @BBL H2S', flush=[(1, 145)], bed=(340, 320), height=340),
+    dict(id='X2D', model='Bambu Lab X2D', process='0.20mm Standard @BBL X2D', filament='Bambu PLA Basic @BBL X2D 0.4 nozzle', flush=[(1, 82), (1, 82)], bed=(256, 256), height=261),
     dict(id='X1C', model='Bambu Lab X1 Carbon', process='0.20mm Standard @BBL X1C', filament='Bambu PLA Basic @BBL X1C', flush=[(0, 63)], bed=(256, 256), height=250),
     dict(id='X1E', model='Bambu Lab X1E', process='0.20mm Standard @BBL X1C', filament='Bambu PLA Basic @BBL X1C', flush=[(0, 107)], bed=(256, 256), height=250),
     dict(id='P2S', model='Bambu Lab P2S', process='0.20mm Standard @BBL P2S', filament='Bambu PLA Basic @BBL P2S', flush=[(0, 110)], bed=(256, 256), height=256),

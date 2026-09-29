@@ -17,7 +17,12 @@ usage:
   python build_design.py design.scad --name "Braided Tree Vase Holder" \
       --part bark=#6F5034 --part leaves=#3F8E43 \
       [--out DIR] [--check-args "--bore-r 41 --floor-h 9"] [--keep-exports] \
-      [--printer H2C|H2D|X1C|...|none] [--infill 35]
+      [--printer H2C|H2D|X1C|...|none] [--infill 35] [--define orbit_w=1.0 ...]
+
+--define builds a variant of a design from the same source: each NAME=VALUE is passed to every
+export and to the render as -D NAME=VALUE (write strings with their quotes, e.g. part="x"), and the
+source is used in place instead of being copied under the variant's name, where its defaults would
+not describe that variant.
 
 Output (default DIR = <scad folder>/<name>):
   DIR/<Name_With_Underscores>.scad   copy of the source (the exports are made from this copy)
@@ -34,9 +39,10 @@ from bambu_3mf import convert, slice_check, DEFAULT_PRINTER, DEFAULT_INFILL   # 
 from render_png import render, openscad_cmd, model_log   # noqa: E402
 
 
-def export_part(scad, part, out_3mf):
+def export_part(scad, part, out_3mf, defines=()):
     t = time.time()
-    r = subprocess.run([*openscad_cmd(), '-o', out_3mf, '-D', f'part="{part}"', scad],
+    dargs = [x for d in defines for x in ('-D', d)]
+    r = subprocess.run([*openscad_cmd(), '-o', out_3mf, *dargs, '-D', f'part="{part}"', scad],
                        capture_output=True, text=True)
     log = model_log(r.stdout + r.stderr)
     notes = [l.strip() for l in log.splitlines()
@@ -57,22 +63,26 @@ def main():
     ap.add_argument('--printer', default=DEFAULT_PRINTER,
                     help=f'Bambu printer for the project (default {DEFAULT_PRINTER}); "none" keeps a plain 3MF')
     ap.add_argument('--infill', type=float, default=DEFAULT_INFILL, help=f'sparse infill %% (default {DEFAULT_INFILL})')
+    ap.add_argument('--define', action='append', default=[], metavar='NAME=VALUE',
+                    help='build a variant: passed as -D NAME=VALUE to every export and the render; repeatable')
     a = ap.parse_args()
 
     stem = a.name.replace(' ', '_')
     out = a.out or os.path.join(os.path.dirname(os.path.abspath(a.scad)), a.name)
     os.makedirs(out, exist_ok=True)
     scad = os.path.join(out, stem + '.scad')
-    if os.path.abspath(a.scad) != os.path.abspath(scad):
+    if a.define:
+        scad = a.scad                             # a variant: its settings live in --define, not in a copy
+    elif os.path.abspath(a.scad) != os.path.abspath(scad):
         shutil.copyfile(a.scad, scad)
-    print(f'[1/4] source      {scad}')
+    print(f'[1/4] source      {scad}' + (f'  with {" ".join(a.define)}' if a.define else ''))
 
     parts = [p.split('=', 1) for p in a.part]
     tmp = tempfile.mkdtemp(prefix='scad_parts_')
     kernel = 'Manifold' if '--backend' in openscad_cmd() else 'CGAL; minutes each'
     print(f'[2/4] exporting   {", ".join(p for p, _ in parts)} in parallel ({kernel})...')
     with ThreadPoolExecutor(len(parts)) as ex:
-        jobs = [ex.submit(export_part, scad, p, os.path.join(tmp, p + '.3mf')) for p, _ in parts]
+        jobs = [ex.submit(export_part, scad, p, os.path.join(tmp, p + '.3mf'), a.define) for p, _ in parts]
         results = [j.result() for j in jobs]
     bad = False
     for part, secs, notes, failed in results:
@@ -93,7 +103,7 @@ def main():
             print('      ' + line)
 
     png = os.path.join(out, stem + '.png')
-    size, notes = render(scad, png, 'iso')
+    size, notes = render(scad, png, 'iso', defines=a.define)
     print(f'      rendered    {png} ({size[0]}x{size[1]})  ' + ' | '.join(notes))
 
     print('[4/4] checks')
