@@ -1,0 +1,26 @@
+[1/4] source      art/Tree Vase/Wild Chalice Tree/Wander/Wander_1/Wild_Chalice_Wander_1.scad  with sketch=false
+[2/4] exporting   wood in parallel (Manifold)...
+      wood           61 s  ok  Total rendering time: 0:00:03.101
+[3/4] merged      art/Tree Vase/Wild Chalice Tree/Wander/Wander_1\Wild_Chalice_Wander_1.3mf
+      Bambu Studio project for Bambu Lab H2C (0.4 nozzle, 0.20mm Standard, 35% sparse infill): art/Tree Vase/Wild Chalice Tree/Wander/Wander_1\Wild_Chalice_Wander_1.3mf
+        plate 1: Wild Chalice Wander 1, 198.3 x 178.8 x 267.7 mm
+        Wood           filament 1  Bambu PLA Basic Cocoa Brown #6F5034
+      rendered    art/Tree Vase/Wild Chalice Tree/Wander/Wander_1\Wild_Chalice_Wander_1.png (1029x1692)  ECHO: "Wild Chalice Wander_1 | glass 80 x 130 mm, foot curving in from 20 mm (R 20.8333, bottom d 50) | bore d 80 mm | glass bottom at 85 mm, rim at 215 mm | total height 269 mm | crotch at 52.8 mm | roots 8 over 208 mm | branches 3 -> 7 -> 13 (1 reverse) | radius at the rim [6.2, 6.1, 5.3, 5.3, 5.4, 5.2, 5.4, 4.1, 3.7, 4.4, 4.6, 5.3, 4] | 7 meeting points [branch, under, z, arch]: [[4, 1, 207, 11.5], [6, 5, 238, 13.3], [8, 0, 212, 14.8], [10, 2, 217, 8.1], [10, 3, 182, 10.2], [11, 7, 232, 8.3], [12, 9, 225, 7.1]] | climb >= 32 deg"
+[4/4] checks
+--- Wood: 223634 vertices, 447320 triangles
+  edges        boundary 0   non-manifold 0   shells 2   near-duplicate vertices 7
+  bbox         x -98.3..100.0  y -96.9..81.9  z 0.00..267.74 mm
+  volume       382.4 cm3 -> 474 g PLA at 100 % solid
+--- all parts (1)
+  size         198.3 x 178.8 x 267.7 mm, bottom at z = 0.000
+  volume       382.4 cm3 -> 474 g PLA at 100 % solid (~142 g at typical infill)
+  bed contact  70.5 cm2
+  past 60 deg  0.05%   (bottom 1 cm 0.03%, body 0.02%, top 3 cm 0.00%)   above 1 mm 0.02%
+  past 45 deg  1.50%   (bottom 1 cm 0.11%, body 1.23%, top 3 cm 0.16%)   above 1 mm 1.39%
+  PASS: past 60 deg above the bottom 1 cm = 0.02% (limit 0.5%)
+RESULT: PASS
+Bambu Studio 02.05.00.66 sliced plate 1 for Bambu Lab H2C
+  print time 9h 12m 3s, 35% sparse infill
+  filament 240.6 g #6F5034  (total 241 g)
+  PASS: slicer check
+BUILD: PASS

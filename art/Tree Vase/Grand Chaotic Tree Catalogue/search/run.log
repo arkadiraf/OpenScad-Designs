@@ -1,0 +1,213 @@
+layout 5001: score 166.6, largest empty sector 117 deg
+layout 5002: score 140.6, largest empty sector 116 deg
+layout 5003: score 133.8, largest empty sector 109 deg
+layout 5004: score 133.5, largest empty sector 124 deg
+layout 5005: score 134.2, largest empty sector 109 deg
+layout 5006: score 167.3, largest empty sector 124 deg
+layout 5007: score 146.6, largest empty sector 108 deg
+layout 5008: score 143.9, largest empty sector 104 deg
+layout 5009: score 156.5, largest empty sector 94 deg
+layout 5010: score 133.4, largest empty sector 120 deg
+layout 5011: score 140.5, largest empty sector 91 deg
+layout 5012: score 126.2, largest empty sector 101 deg
+layout 5013: score 108.7, largest empty sector 109 deg
+layout 5014: score 145.6, largest empty sector 121 deg
+layout 5015: score 133.8, largest empty sector 107 deg
+layout 5016: score 153.9, largest empty sector 104 deg
+layout 5017: score 114.4, largest empty sector 114 deg
+layout 5018: score 140.6, largest empty sector 94 deg
+layout 5019: score 131.3, largest empty sector 101 deg
+layout 5020: score 129.0, largest empty sector 129 deg
+layout 5021: score 129.0, largest empty sector 97 deg
+layout 5022: score 148.5, largest empty sector 98 deg
+layout 5023: score 150.9, largest empty sector 126 deg
+layout 5024: score 119.5, largest empty sector 94 deg
+layout 5025: score 127.6, largest empty sector 122 deg
+layout 5026: score 102.5, largest empty sector 102 deg
+layout 5027: score 120.5, largest empty sector 86 deg
+layout 5028: score 137.5, largest empty sector 113 deg
+layout 5029: score 149.1, largest empty sector 99 deg
+layout 5030: score 153.4, largest empty sector 103 deg
+layout 5031: score 101.1, largest empty sector 101 deg
+layout 5032: score 146.5, largest empty sector 103 deg
+layout 5033: score 124.2, largest empty sector 99 deg
+layout 5034: score 106.0, largest empty sector 104 deg
+layout 5035: score 121.6, largest empty sector 97 deg
+layout 5036: score 136.6, largest empty sector 112 deg
+layout 5037: score 109.8, largest empty sector 109 deg
+layout 5038: score 143.2, largest empty sector 103 deg
+layout 5039: score 137.2, largest empty sector 112 deg
+layout 5040: score 135.8, largest empty sector 104 deg
+layout 5041: score 107.4, largest empty sector 107 deg
+layout 5042: score 128.6, largest empty sector 126 deg
+layout 5043: score 103.8, largest empty sector 104 deg
+layout 5044: score 141.7, largest empty sector 117 deg
+layout 5045: score 136.5, largest empty sector 111 deg
+layout 5046: score 139.5, largest empty sector 114 deg
+layout 5047: score 149.2, largest empty sector 88 deg
+layout 5048: score 139.1, largest empty sector 101 deg
+layout 5049: score 114.9, largest empty sector 96 deg
+layout 5050: score 121.0, largest empty sector 96 deg
+layout 5051: score 147.2, largest empty sector 97 deg
+layout 5052: score 143.8, largest empty sector 119 deg
+layout 5053: score 130.2, largest empty sector 92 deg
+layout 5054: score 121.2, largest empty sector 96 deg
+layout 5055: score 123.4, largest empty sector 98 deg
+layout 5056: score 132.9, largest empty sector 118 deg
+layout 5057: score 124.3, largest empty sector 99 deg
+layout 5058: score 144.0, largest empty sector 107 deg
+layout 5059: score 136.8, largest empty sector 101 deg
+layout 5060: score 131.7, largest empty sector 110 deg
+layout 5031: PASS wander 13 (merge 17 %, climb 34 deg, bend 1.38x)
+layout 5026: PASS wander 17 (merge 11 %, climb 33 deg, bend 1.27x)
+layout 5043: fail wander 15 (merge 26 %, climb 27 deg, bend 0.99x)
+layout 5034: PASS wander 4 (merge 30 %, climb 34 deg, bend 1.41x)
+layout 5041: PASS wander 14 (merge 26 %, climb 33 deg, bend 1.36x)
+layout 5013: PASS wander 12 (merge 13 %, climb 36 deg, bend 1.35x)
+5 layouts pass so far
+layout 5037: PASS wander 4 (merge 10 %, climb 33 deg, bend 1.38x)
+layout 5017: fail wander 13 (merge 10 %, climb 28 deg, bend 1.13x)
+layout 5049: PASS wander 24 (merge 12 %, climb 33 deg, bend 1.36x)
+layout 5024: PASS wander 19 (merge 13 %, climb 33 deg, bend 1.28x)
+layout 5027: PASS wander 18 (merge 12 %, climb 31 deg, bend 1.36x)
+layout 5050: PASS wander 22 (merge 11 %, climb 31 deg, bend 1.32x)
+10 layouts pass so far
+layout 5054: PASS wander 15 (merge 19 %, climb 31 deg, bend 1.44x)
+layout 5035: fail wander 21 (merge 18 %, climb 30 deg, bend 1.22x)
+layout 5055: fail wander 21 (merge 12 %, climb 30 deg, bend 1.4x)
+layout 5033: PASS wander 13 (merge 12 %, climb 30 deg, bend 1.33x)
+layout 5057: PASS wander 1 (merge 11 %, climb 37 deg, bend 1.36x)
+layout 5012: fail wander 10 (merge 21 %, climb 31 deg, bend 1.17x)
+13 layouts pass so far
+layout 5025: fail wander 22 (merge 14 %, climb 33 deg, bend 0.85x)
+layout 5042: PASS wander 14 (merge 15 %, climb 32 deg, bend 1.41x)
+layout 5020: PASS wander 19 (merge 18 %, climb 32 deg, bend 1.36x)
+layout 5021: fail wander 18 (merge 11 %, climb 32 deg, bend 0.88x)
+layout 5053: PASS wander 7 (merge 25 %, climb 32 deg, bend 1.34x)
+layout 5019: fail wander 15 (merge 30 %, climb 32 deg, bend 1.24x)
+16 layouts pass so far
+layout 5060: PASS wander 3 (merge 18 %, climb 35 deg, bend 1.32x)
+layout 5056: PASS wander 17 (merge 12 %, climb 30 deg, bend 1.43x)
+layout 5010: fail wander 16 (merge 30 %, climb 27 deg, bend 1.41x)
+layout 5004: PASS wander 1 (merge 12 %, climb 35 deg, bend 1.28x)
+layout 5003: PASS wander 24 (merge 12 %, climb 35 deg, bend 1.32x)
+layout 5015: fail wander 17 (merge 12 %, climb 34 deg, bend 1.39x)
+20 layouts pass so far
+layout 5005: fail wander 16 (merge 21 %, climb 33 deg, bend 1.22x)
+layout 5040: fail wander 7 (merge 12 %, climb 29 deg, bend 1.41x)
+layout 5045: PASS wander 21 (merge 24 %, climb 34 deg, bend 1.34x)
+layout 5036: PASS wander 7 (merge 14 %, climb 31 deg, bend 1.37x)
+layout 5059: fail wander 7 (merge 26 %, climb 31 deg, bend 1.14x)
+layout 5039: PASS wander 15 (merge 11 %, climb 32 deg, bend 1.36x)
+23 layouts pass so far
+layout 5028: fail wander 4 (merge 34 %, climb 29 deg, bend 1.37x)
+layout 5048: PASS wander 19 (merge 11 %, climb 34 deg, bend 1.33x)
+layout 5046: fail wander 2 (merge 32 %, climb 33 deg, bend 0.85x)
+layout 5011: PASS wander 13 (merge 18 %, climb 33 deg, bend 1.37x)
+layout 5002: PASS wander 10 (merge 14 %, climb 34 deg, bend 1.38x)
+layout 5018: PASS wander 6 (merge 16 %, climb 34 deg, bend 1.38x)
+27 layouts pass so far
+GCT_01: layout 5037, wander 4, 11 roots, root seed 5111 (PASS, bend 2.85x, 4 side roots)
+GCT_02: layout 5049, wander 24, 10 roots, root seed 5209 (PASS, bend 2.63x, 7 side roots)
+GCT_03: layout 5003, wander 24, 9 roots, root seed 5309 (PASS, bend 2.99x, 5 side roots)
+GCT_04: layout 5057, wander 1, 8 roots, root seed 5412 (PASS, bend 2.56x, 6 side roots)
+GCT_05: layout 5018, wander 6, 11 roots, root seed 5506 (PASS, bend 2.8x, 9 side roots)
+GCT_06: layout 5004, wander 1, 10 roots, root seed 5609 (PASS, bend 2.79x, 8 side roots)
+GCT_07: layout 5026, wander 17, 9 roots, root seed 5704 (PASS, bend 2.42x, 6 side roots)
+GCT_08: layout 5048, wander 19, 8 roots, root seed 5802 (PASS, bend 2.46x, 5 side roots)
+GCT_09: layout 5002, wander 10, 11 roots, root seed 5905 (PASS, bend 2.63x, 8 side roots)
+GCT_10: layout 5013, wander 12, 10 roots, root seed 6001 (PASS, bend 2.66x, 8 side roots)
+GCT_11: layout 5042, wander 14, 9 roots, root seed 6110 (PASS, bend 2.6x, 6 side roots)
+GCT_12: layout 5027, wander 18, 8 roots, root seed 6204 (PASS, bend 2.96x, 7 side roots)
+GCT_13: layout 5050, wander 22, 11 roots, root seed 6306 (PASS, bend 2.6x, 8 side roots)
+GCT_14: layout 5039, wander 15, 10 roots, root seed 6404 (PASS, bend 2.94x, 4 side roots)
+GCT_15: layout 5024, wander 19, 9 roots, root seed 6510 (PASS, bend 2.42x, 6 side roots)
+GCT_16: layout 5056, wander 17, 8 roots, root seed 6601 (PASS, bend 2.62x, 4 side roots)
+GCT_17: layout 5031, wander 13, 11 roots, root seed 6709 (PASS, bend 2.62x, 7 side roots)
+GCT_18: layout 5060, wander 3, 10 roots, root seed 6803 (PASS, bend 2.63x, 9 side roots)
+GCT_19: layout 5036, wander 7, 9 roots, root seed 6909 (PASS, bend 3.1x, 5 side roots)
+GCT_20: layout 5020, wander 19, 8 roots, root seed 7003 (PASS, bend 2.68x, 5 side roots)
+GCT_21: layout 5011, wander 13, 11 roots, root seed 7107 (PASS, bend 2.67x, 7 side roots)
+GCT_22: layout 5033, wander 13, 10 roots, root seed 7204 (PASS, bend 2.99x, 6 side roots)
+GCT_23: layout 5045, wander 21, 9 roots, root seed 7312 (PASS, bend 2.84x, 3 side roots)
+GCT_24: layout 5041, wander 14, 8 roots, root seed 7406 (PASS, bend 2.89x, 3 side roots)
+GCT_25: layout 5054, wander 15, 11 roots, root seed 7501 (PASS, bend 2.46x, 7 side roots)
+GCT_01: build PASS, slice PASS, 289.6 x 285.8 x 318.5 mm, 15h 47m 4s, 489 g (4.5 min)
+GCT_02: build PASS, slice PASS, 255.7 x 256.6 x 317.2 mm, 15h 37m 25s, 477 g (4.4 min)
+GCT_03: build PASS, slice PASS, 257.5 x 272.0 x 317.6 mm, 15h 31m 40s, 475 g (4.3 min)
+GCT_04: build PASS, slice PASS, 263.6 x 276.9 x 317.9 mm, 15h 14m 8s, 470 g (4.0 min)
+GCT_05: build PASS, slice PASS, 262.2 x 275.4 x 317.7 mm, 16h 2m 57s, 493 g (4.5 min)
+GCT_06: build PASS, slice PASS, 256.0 x 256.6 x 319.5 mm, 15h 33m 36s, 486 g (4.1 min)
+GCT_07: build PASS, slice PASS, 287.8 x 257.5 x 319.3 mm, 15h 44m 56s, 484 g (3.9 min)
+GCT_08: build PASS, slice PASS, 272.4 x 243.1 x 318.1 mm, 15h 1m 54s, 464 g (4.0 min)
+GCT_09: build PASS, slice PASS, 265.7 x 265.0 x 318.0 mm, 15h 53m 6s, 487 g (4.5 min)
+GCT_10: build PASS, slice PASS, 267.0 x 263.1 x 318.6 mm, 15h 43m 45s, 483 g (4.4 min)
+GCT_11: build PASS, slice PASS, 264.7 x 261.2 x 319.7 mm, 15h 50m 25s, 483 g (4.0 min)
+GCT_12: build PASS, slice PASS, 267.2 x 264.9 x 319.7 mm, 15h 32m 48s, 469 g (4.3 min)
+GCT_13: build PASS, slice PASS, 256.4 x 264.9 x 319.0 mm, 15h 48m 53s, 488 g (4.4 min)
+GCT_14: build PASS, slice PASS, 266.4 x 271.1 x 318.0 mm, 15h 27m 57s, 483 g (4.1 min)
+GCT_15: build PASS, slice PASS, 286.3 x 260.3 x 318.3 mm, 15h 40m 28s, 482 g (4.1 min)
+GCT_16: build PASS, slice PASS, 255.5 x 261.6 x 318.1 mm, 15h 12m 6s, 471 g (3.5 min)
+GCT_17: build PASS, slice PASS, 267.9 x 260.0 x 318.5 mm, 16h 17m 32s, 493 g (4.6 min)
+GCT_18: build PASS, slice PASS, 242.3 x 262.3 x 318.0 mm, 15h 45m 12s, 483 g (4.4 min)
+GCT_19: build PASS, slice PASS, 267.3 x 281.6 x 319.2 mm, 15h 31m 6s, 483 g (4.1 min)
+GCT_20: build PASS, slice PASS, 263.0 x 286.2 x 319.5 mm, 14h 52m 50s, 467 g (3.9 min)
+GCT_21: build PASS, slice PASS, 267.2 x 261.3 x 318.4 mm, 15h 52m 9s, 486 g (4.6 min)
+GCT_22: build PASS, slice PASS, 274.7 x 248.9 x 319.4 mm, 15h 49m 42s, 493 g (4.0 min)
+GCT_23: build PASS, slice PASS, 260.3 x 264.0 x 318.9 mm, 15h 10m 59s, 473 g (3.8 min)
+GCT_24: build PASS, slice PASS, 268.9 x 266.2 x 318.8 mm, 15h 20m 44s, 470 g (3.8 min)
+GCT_25: build PASS, slice PASS, 270.0 x 253.6 x 317.3 mm, 16h 26m 39s, 501 g (4.1 min)
+GCT_01: seat PASS 2.6 cm2 gap 108 deg, one solid, 1 internal voids
+GCT_02: seat PASS 3.3 cm2 gap 102 deg, one solid, 0 internal voids
+GCT_03: seat PASS 2.8 cm2 gap 112 deg, one solid, 2 internal voids
+GCT_04: seat PASS 2.8 cm2 gap 101 deg, one solid, 2 internal voids
+GCT_05: seat PASS 3.1 cm2 gap 111 deg, one solid, 4 internal voids
+GCT_06: seat PASS 2.8 cm2 gap 109 deg, one solid, 3 internal voids
+GCT_07: seat PASS 2.9 cm2 gap 97 deg, one solid, 2 internal voids
+GCT_08: seat PASS 2.2 cm2 gap 107 deg, one solid, 1 internal voids
+GCT_09: seat PASS 2.3 cm2 gap 96 deg, one solid, 1 internal voids
+GCT_10: seat PASS 2.8 cm2 gap 104 deg, one solid, 2 internal voids
+GCT_11: seat PASS 2.8 cm2 gap 91 deg, one solid, 4 internal voids
+GCT_12: seat PASS 2.3 cm2 gap 107 deg, one solid, 0 internal voids
+GCT_13: seat PASS 2.3 cm2 gap 96 deg, one solid, 0 internal voids
+GCT_14: seat PASS 2.6 cm2 gap 101 deg, one solid, 2 internal voids
+GCT_15: seat PASS 3.1 cm2 gap 97 deg, one solid, 0 internal voids
+GCT_16: seat PASS 2.9 cm2 gap 95 deg, one solid, 0 internal voids
+GCT_17: seat PASS 2.6 cm2 gap 98 deg, one solid, 3 internal voids
+GCT_18: seat PASS 3.0 cm2 gap 111 deg, one solid, 2 internal voids
+GCT_19: seat PASS 2.7 cm2 gap 97 deg, one solid, 1 internal voids
+GCT_20: seat PASS 2.3 cm2 gap 98 deg, one solid, 3 internal voids
+GCT_21: seat PASS 2.9 cm2 gap 96 deg, one solid, 2 internal voids
+GCT_22: seat PASS 2.5 cm2 gap 104 deg, one solid, 2 internal voids
+GCT_23: seat PASS 2.8 cm2 gap 103 deg, one solid, 3 internal voids
+GCT_24: seat PASS 3.1 cm2 gap 97 deg, one solid, 1 internal voids
+GCT_25: seat PASS 2.7 cm2 gap 100 deg, one solid, 4 internal voids
+wrote Catalogue.png (2044, 3640)
+| Design | Layout | Wander | Roots | Size (mm) | Branch merge | Climb | Seat | H2C slice (35 %) | Checks |
+|---|---|---|---|---|---|---|---|---|---|
+| GCT_01 | 5037 | 4 | 5111 (11) | 289.6 x 285.8 x 318.5 | 10 % | 33° | 2.6 cm², 108° | 15h 47m 4s, 489 g | PASS (1 voids) |
+| GCT_02 | 5049 | 24 | 5209 (10) | 255.7 x 256.6 x 317.2 | 12 % | 33° | 3.3 cm², 102° | 15h 37m 25s, 477 g | PASS |
+| GCT_03 | 5003 | 24 | 5309 (9) | 257.5 x 272.0 x 317.6 | 12 % | 35° | 2.8 cm², 112° | 15h 31m 40s, 475 g | PASS (2 voids) |
+| GCT_04 | 5057 | 1 | 5412 (8) | 263.6 x 276.9 x 317.9 | 11 % | 37° | 2.8 cm², 101° | 15h 14m 8s, 470 g | PASS (2 voids) |
+| GCT_05 | 5018 | 6 | 5506 (11) | 262.2 x 275.4 x 317.7 | 16 % | 34° | 3.1 cm², 111° | 16h 2m 57s, 493 g | PASS (4 voids) |
+| GCT_06 | 5004 | 1 | 5609 (10) | 256.0 x 256.6 x 319.5 | 12 % | 35° | 2.8 cm², 109° | 15h 33m 36s, 486 g | PASS (3 voids) |
+| GCT_07 | 5026 | 17 | 5704 (9) | 287.8 x 257.5 x 319.3 | 11 % | 33° | 2.9 cm², 97° | 15h 44m 56s, 484 g | PASS (2 voids) |
+| GCT_08 | 5048 | 19 | 5802 (8) | 272.4 x 243.1 x 318.1 | 11 % | 34° | 2.2 cm², 107° | 15h 1m 54s, 464 g | PASS (1 voids) |
+| GCT_09 | 5002 | 10 | 5905 (11) | 265.7 x 265.0 x 318.0 | 14 % | 34° | 2.3 cm², 96° | 15h 53m 6s, 487 g | PASS (1 voids) |
+| GCT_10 | 5013 | 12 | 6001 (10) | 267.0 x 263.1 x 318.6 | 13 % | 36° | 2.8 cm², 104° | 15h 43m 45s, 483 g | PASS (2 voids) |
+| GCT_11 | 5042 | 14 | 6110 (9) | 264.7 x 261.2 x 319.7 | 15 % | 32° | 2.8 cm², 91° | 15h 50m 25s, 483 g | PASS (4 voids) |
+| GCT_12 | 5027 | 18 | 6204 (8) | 267.2 x 264.9 x 319.7 | 12 % | 31° | 2.3 cm², 107° | 15h 32m 48s, 469 g | PASS |
+| GCT_13 | 5050 | 22 | 6306 (11) | 256.4 x 264.9 x 319.0 | 11 % | 31° | 2.3 cm², 96° | 15h 48m 53s, 488 g | PASS |
+| GCT_14 | 5039 | 15 | 6404 (10) | 266.4 x 271.1 x 318.0 | 11 % | 32° | 2.6 cm², 101° | 15h 27m 57s, 483 g | PASS (2 voids) |
+| GCT_15 | 5024 | 19 | 6510 (9) | 286.3 x 260.3 x 318.3 | 13 % | 33° | 3.1 cm², 97° | 15h 40m 28s, 482 g | PASS |
+| GCT_16 | 5056 | 17 | 6601 (8) | 255.5 x 261.6 x 318.1 | 12 % | 30° | 2.9 cm², 95° | 15h 12m 6s, 471 g | PASS |
+| GCT_17 | 5031 | 13 | 6709 (11) | 267.9 x 260.0 x 318.5 | 17 % | 34° | 2.6 cm², 98° | 16h 17m 32s, 493 g | PASS (3 voids) |
+| GCT_18 | 5060 | 3 | 6803 (10) | 242.3 x 262.3 x 318.0 | 18 % | 35° | 3.0 cm², 111° | 15h 45m 12s, 483 g | PASS (2 voids) |
+| GCT_19 | 5036 | 7 | 6909 (9) | 267.3 x 281.6 x 319.2 | 14 % | 31° | 2.7 cm², 97° | 15h 31m 6s, 483 g | PASS (1 voids) |
+| GCT_20 | 5020 | 19 | 7003 (8) | 263.0 x 286.2 x 319.5 | 18 % | 32° | 2.3 cm², 98° | 14h 52m 50s, 467 g | PASS (3 voids) |
+| GCT_21 | 5011 | 13 | 7107 (11) | 267.2 x 261.3 x 318.4 | 18 % | 33° | 2.9 cm², 96° | 15h 52m 9s, 486 g | PASS (2 voids) |
+| GCT_22 | 5033 | 13 | 7204 (10) | 274.7 x 248.9 x 319.4 | 12 % | 30° | 2.5 cm², 104° | 15h 49m 42s, 493 g | PASS (2 voids) |
+| GCT_23 | 5045 | 21 | 7312 (9) | 260.3 x 264.0 x 318.9 | 24 % | 34° | 2.8 cm², 103° | 15h 10m 59s, 473 g | PASS (3 voids) |
+| GCT_24 | 5041 | 14 | 7406 (8) | 268.9 x 266.2 x 318.8 | 26 % | 33° | 3.1 cm², 97° | 15h 20m 44s, 470 g | PASS (1 voids) |
+| GCT_25 | 5054 | 15 | 7501 (11) | 270.0 x 253.6 x 317.3 | 19 % | 31° | 2.7 cm², 100° | 16h 26m 39s, 501 g | PASS (4 voids) |
+EXIT 0

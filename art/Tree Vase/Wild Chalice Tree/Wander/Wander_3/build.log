@@ -1,0 +1,26 @@
+[1/4] source      art/Tree Vase/Wild Chalice Tree/Wander/Wander_3/Wild_Chalice_Wander_3.scad  with sketch=false
+[2/4] exporting   wood in parallel (Manifold)...
+      wood           66 s  ok  Total rendering time: 0:00:03.727
+[3/4] merged      art/Tree Vase/Wild Chalice Tree/Wander/Wander_3\Wild_Chalice_Wander_3.3mf
+      Bambu Studio project for Bambu Lab H2C (0.4 nozzle, 0.20mm Standard, 35% sparse infill): art/Tree Vase/Wild Chalice Tree/Wander/Wander_3\Wild_Chalice_Wander_3.3mf
+        plate 1: Wild Chalice Wander 3, 188.7 x 164.8 x 267.3 mm
+        Wood           filament 1  Bambu PLA Basic Cocoa Brown #6F5034
+      rendered    art/Tree Vase/Wild Chalice Tree/Wander/Wander_3\Wild_Chalice_Wander_3.png (1084x1747)  ECHO: "Wild Chalice Wander_3 | glass 80 x 130 mm, foot curving in from 20 mm (R 20.8333, bottom d 50) | bore d 80 mm | glass bottom at 85 mm, rim at 215 mm | total height 269 mm | crotch at 52.8 mm | roots 9 over 208 mm | branches 3 -> 7 -> 13 (1 reverse) | radius at the rim [4, 5.3, 7, 7.2, 4, 5.3, 6, 3.2, 4.5, 4.5, 4.6, 3.2, 4.4] | 13 meeting points [branch, under, z, arch]: [[4, 3, 244, 10.7], [5, 0, 241, 0.8], [6, 3, 207, 14.3], [9, 1, 182, 4.4], [9, 6, 240, 6.6], [10, 2, 256, 11.1], [10, 8, 227, 8.9], [11, 7, 196, 4.2], [12, 4, 175, 11], [12, 7, 177, 7], [12, 7, 205, 3.4], [12, 7, 235, 5.2], [12, 11, 204, 11.8]] | climb >= 32 deg"
+[4/4] checks
+--- Wood: 231763 vertices, 463566 triangles
+  edges        boundary 0   non-manifold 0   shells 1   near-duplicate vertices 1
+  bbox         x -92.0..96.7  y -84.4..80.4  z 0.00..267.34 mm
+  volume       382.8 cm3 -> 475 g PLA at 100 % solid
+--- all parts (1)
+  size         188.7 x 164.8 x 267.3 mm, bottom at z = 0.000
+  volume       382.8 cm3 -> 475 g PLA at 100 % solid (~142 g at typical infill)
+  bed contact  75.7 cm2
+  past 60 deg  0.09%   (bottom 1 cm 0.06%, body 0.02%, top 3 cm 0.00%)   above 1 mm 0.02%
+  past 45 deg  1.88%   (bottom 1 cm 0.15%, body 1.49%, top 3 cm 0.25%)   above 1 mm 1.75%
+  PASS: past 60 deg above the bottom 1 cm = 0.02% (limit 0.5%)
+RESULT: PASS
+Bambu Studio 02.05.00.66 sliced plate 1 for Bambu Lab H2C
+  print time 9h 17m 8s, 35% sparse infill
+  filament 241.7 g #6F5034  (total 242 g)
+  PASS: slicer check
+BUILD: PASS

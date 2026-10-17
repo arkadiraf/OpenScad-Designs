@@ -1,3 +1,6 @@
 __pycache__/
 *.stl
 *.STL
+
+# 3MF exports under art/ are built locally (tools/build_design.py), not committed
+art/**/*.3mf

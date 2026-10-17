@@ -1,0 +1,29 @@
+[1/4] source      C:\WorkSpace_Projects\OpenScad-Designs\art\Tree Vase\Grand Chaotic Tree Catalogue\Designs\GCT_19\Grand_Chaotic_GCT_19.scad
+[2/4] exporting   wood in parallel (Manifold)...
+      wood           67 s  ok  Total rendering time: 0:00:04.149
+[3/4] merged      C:\WorkSpace_Projects\OpenScad-Designs\art\Tree Vase\Grand Chaotic Tree Catalogue\Designs\GCT_19\Grand_Chaotic_GCT_19.3mf
+      Bambu Studio project for Bambu Lab H2C (0.4 nozzle, 0.20mm Standard, 35% sparse infill): C:\WorkSpace_Projects\OpenScad-Designs\art\Tree Vase\Grand Chaotic Tree Catalogue\Designs\GCT_19\Grand_Chaotic_GCT_19.3mf
+        plate 1: Grand Chaotic GCT_19, 267.3 x 281.6 x 319.2 mm
+        Wood           filament 1  Bambu PLA Basic Cocoa Brown #6F5034
+      rendered    C:\WorkSpace_Projects\OpenScad-Designs\art\Tree Vase\Grand Chaotic Tree Catalogue\Designs\GCT_19\Grand_Chaotic_GCT_19.png (1134x1521)  ECHO: "Grand Chaotic Tree GCT 19 | glass 100 x 200 mm | bore d 102 mm | glass bottom at 80 mm, rim at 280 mm | total height 320 mm | crotch at 34.4 mm | roots 9 over 310 mm | branches 3 -> 7 -> 13 (1 reverse) | radius at the rim [7.3, 4.8, 9.1, 6.9, 3.8, 6.4, 5.8, 4.8, 5.2, 3.4, 5.3, 4.9, 3.7] | 11 meeting points [branch, under, z, arch]: [[2, 0, 173, 18.8], [5, 2, 289, 15.6], [6, 4, 292, 7.4], [6, 5, 254, 17.1], [7, 4, 240, 10.9], [8, 2, 265, 17.9], [9, 1, 281, 15.1], [9, 3, 303, 3.4], [10, 8, 296, 9.3], [11, 0, 291, 17.6], [12, 3, 276, 12.8]] | climb >= 31 deg"
+[4/4] checks
+--- Wood: 270103 vertices, 540254 triangles
+  edges        boundary 0   non-manifold 0   shells 2   near-duplicate vertices 1
+  bbox         x -137.2..130.1  y -146.9..134.7  z 0.00..319.18 mm
+  volume       809.4 cm3 -> 1004 g PLA at 100 % solid
+--- all parts (1)
+  size         267.3 x 281.6 x 319.2 mm, bottom at z = 0.000
+  volume       809.4 cm3 -> 1004 g PLA at 100 % solid (~301 g at typical infill)
+  bed contact  141.1 cm2
+  past 60 deg  0.07%   (bottom 1 cm 0.02%, body 0.05%, top 3 cm 0.00%)   above 1 mm 0.05%
+  past 45 deg  2.63%   (bottom 1 cm 0.16%, body 2.38%, top 3 cm 0.09%)   above 1 mm 2.49%
+  PASS: past 60 deg above the bottom 1 cm = 0.05% (limit 0.5%)
+  PASS: closest material to the glass 0.00 mm (negative = inside) at z 119.1 r 51.0 (bore 51.00 mm from 80.0 mm, foot rounded 3.0 mm)
+  seat         2.7 cm2 of pads within 0.25 mm of 80.0 mm, 38.5..48.5 mm from the axis; largest gap between them 97 deg
+  PASS: the glass stands steady (pads all round, no gap of 180 deg or more)
+RESULT: PASS
+Bambu Studio 02.05.00.66 sliced plate 1 for Bambu Lab H2C
+  print time 15h 31m 6s, 35% sparse infill
+  filament 482.7 g #6F5034  (total 483 g)
+  PASS: slicer check
+BUILD: PASS

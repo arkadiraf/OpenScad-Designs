@@ -1,0 +1,26 @@
+[1/4] source      C:\WorkSpace_Projects\OpenScad-Designs\art\Tree Vase\Wild Chalice Tree Catalogue\Designs\WCT_18\Wild_Chalice_WCT_18.scad  with sketch=false
+[2/4] exporting   wood in parallel (Manifold)...
+      wood           81 s  ok  Total rendering time: 0:00:03.617
+[3/4] merged      C:\WorkSpace_Projects\OpenScad-Designs\art\Tree Vase\Wild Chalice Tree Catalogue\Designs\WCT_18\Wild_Chalice_WCT_18.3mf
+      Bambu Studio project for Bambu Lab H2C (0.4 nozzle, 0.20mm Standard, 35% sparse infill): C:\WorkSpace_Projects\OpenScad-Designs\art\Tree Vase\Wild Chalice Tree Catalogue\Designs\WCT_18\Wild_Chalice_WCT_18.3mf
+        plate 1: Wild Chalice WCT_18, 183.2 x 165.2 x 267.9 mm
+        Wood           filament 1  Bambu PLA Basic Cocoa Brown #6F5034
+      rendered    C:\WorkSpace_Projects\OpenScad-Designs\art\Tree Vase\Wild Chalice Tree Catalogue\Designs\WCT_18\Wild_Chalice_WCT_18.png (1038x1715)  ECHO: "Wild Chalice Tree WCT 18 | glass 80 x 130 mm, foot curving in from 20 mm (R 20.8333, bottom d 50) | bore d 80 mm | glass bottom at 85 mm, rim at 215 mm | total height 269 mm | crotch at 52.8 mm | roots 10 over 208 mm | branches 3 -> 7 -> 13 (3 reverse) | radius at the rim [6.3, 4.4, 6.5, 5.4, 6.8, 5.3, 4, 3.6, 5, 3.7, 5.5, 4.9, 3.2] | 11 meeting points [branch, under, z, arch]: [[1, 0, 183, 11.2], [1, 0, 211, 10.8], [5, 4, 215, 12.6], [8, 3, 231, 11.2], [9, 3, 191, 9], [9, 6, 226, 6.8], [11, 2, 219, 11.8], [12, 7, 198, 11.4], [12, 7, 210, 14.4], [12, 7, 228, 13.4], [12, 7, 244, 13.2]] | climb >= 36 deg"
+[4/4] checks
+--- Wood: 231076 vertices, 462176 triangles
+  edges        boundary 0   non-manifold 0   shells 2   near-duplicate vertices 5
+  bbox         x -95.5..87.7  y -81.9..83.3  z 0.00..267.93 mm
+  volume       392.8 cm3 -> 487 g PLA at 100 % solid
+--- all parts (1)
+  size         183.2 x 165.2 x 267.9 mm, bottom at z = 0.000
+  volume       392.8 cm3 -> 487 g PLA at 100 % solid (~146 g at typical infill)
+  bed contact  80.9 cm2
+  past 60 deg  0.07%   (bottom 1 cm 0.04%, body 0.03%, top 3 cm 0.00%)   above 1 mm 0.03%
+  past 45 deg  1.64%   (bottom 1 cm 0.17%, body 1.36%, top 3 cm 0.11%)   above 1 mm 1.47%
+  PASS: past 60 deg above the bottom 1 cm = 0.03% (limit 0.5%)
+RESULT: PASS
+Bambu Studio 02.05.00.66 sliced plate 1 for Bambu Lab H2C
+  print time 9h 23m 44s, 35% sparse infill
+  filament 247.3 g #6F5034  (total 247 g)
+  PASS: slicer check
+BUILD: PASS
