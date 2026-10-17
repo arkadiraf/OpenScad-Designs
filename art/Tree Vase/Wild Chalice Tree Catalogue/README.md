@@ -14,15 +14,21 @@ is the original's.
 |---|---|
 | `Catalogue.png` | the 25 designs, 5 × 5 (renders, not photos) |
 | `catalogue_results.md` | one row per design: seeds, size, branch merge, climb, seat, slice time and mass, checks |
-| `Designs/WCT_NN/` | `Wild_Chalice_WCT_NN.scad` (open it in OpenSCAD), `.3mf` (Bambu Studio project, Cocoa Brown PLA Basic, 35 % infill), `.png`, `build.log` |
+| `Designs/WCT_NN/` | `Wild_Chalice_WCT_NN.scad` (open it in OpenSCAD), `.png`, `build.log`, and the `.3mf` (Bambu Studio project, Cocoa Brown PLA Basic, 35 % infill) once built locally |
 | `catalogue.py` | the whole pipeline (below); its state and every measurement are in `catalogue.json` |
 | `Wild_Chalice_Tree_template.scad` | the design every catalogue tree is written from (the original with seeded roots) |
 | `Wild_Chalice_Tree_layout.py` | the branch-layout search (unchanged from the original) |
 | `Wild_Chalice_Tree_seat_check.py` | glass fit and seat on the real curved base (unchanged) |
 | `search/` | raw search output: one file per layout seed, candidate `.scad`s, `run.log` |
-| `Reference/` | the original design (`.scad`, `.3mf`, `.png`, notes) and the two rounds that led here: `Various/` (5 new branch layouts) and `Wander/` (5 trees whose roots wander too), with their scripts and overviews. Reference copies: run the scripts from their original folders under `../Wild Chalice Tree/` |
+| `Reference/` | the original design (`.scad`, `.png`, notes; its `.3mf` is committed in `../Wild Chalice Tree/`) and the two rounds that led here: `Various/` (5 new branch layouts) and `Wander/` (5 trees whose roots wander too), with their scripts and overviews. Reference copies: run the scripts from their original folders under `../Wild Chalice Tree/` |
 
 ## The process
+
+**3MF files are built locally, not committed.** The `.gitignore` keeps every new `.3mf` under `art/`
+out of git: a clone has each design's `.scad`, render, build log and measurements, but not its
+3MF. `python catalogue.py build` builds every design whose 3MF is missing (about 4 minutes each,
+five at a time); the original's own 3MF stays committed in its design folder.
+
 
 ```bash
 python catalogue.py all 25      # everything, resumable; or one stage at a time:

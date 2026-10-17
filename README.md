@@ -6,7 +6,8 @@ is sized from a real object (here, the glass vase it holds). It is checked for p
 ships ready to print:
 
 - a `.scad` source you can resize in OpenSCAD's Customizer
-- a multi-colour `.3mf` that opens in Bambu Studio as a finished project
+- a multi-colour `.3mf` that opens in Bambu Studio as a finished project (for the catalogues and
+  their variants, you build it locally: see [Catalogues](#catalogues))
 - an isometric render
 
 ## Gallery
@@ -163,6 +164,53 @@ straight out of the top; the Chalice Trees are a tight fit by design (set `clear
 your glass sits too high). The images above are renders, not photos. The four trees that hold the
 glass in their branches carry a **layout** script as well: the search that drew their 13 branches,
 with the seed that reproduces the tables in the `.scad` (another seed grows a different tree).
+
+### Catalogues
+
+Two of the designs, grown 25 times each: every tree has its own branch layout, its own branch
+wander and its own root system, and every one was built, sliced on the H2C with no warnings and
+checked against the same house rules as its original. Each catalogue folder holds the pipeline
+that made it (`catalogue.py`, resumable, and able to grow more), the template `.scad`, a results
+table and a README with the process and what was learned.
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <a href="art/Tree%20Vase/Wild%20Chalice%20Tree%20Catalogue/">
+        <img src="art/Tree%20Vase/Wild%20Chalice%20Tree%20Catalogue/Catalogue.png" alt="Wild Chalice Tree Catalogue: 25 unique trees" width="330">
+      </a>
+      <br><b>Wild Chalice Tree Catalogue</b>: 80 × 130 mm glass, 25 trees,
+      <a href="art/Tree%20Vase/Wild%20Chalice%20Tree%20Catalogue/catalogue_results.md">results</a>
+    </td>
+    <td align="center" width="50%">
+      <a href="art/Tree%20Vase/Grand%20Chaotic%20Tree%20Catalogue/">
+        <img src="art/Tree%20Vase/Grand%20Chaotic%20Tree%20Catalogue/Catalogue.png" alt="Grand Chaotic Tree Catalogue: 25 unique trees" width="330">
+      </a>
+      <br><b>Grand Chaotic Tree Catalogue</b>: 100 × 200 mm glass, 25 trees,
+      <a href="art/Tree%20Vase/Grand%20Chaotic%20Tree%20Catalogue/catalogue_results.md">results</a>
+    </td>
+  </tr>
+</table>
+
+The Wild Chalice Tree folder also keeps the two rounds that led to its catalogue:
+[Various](art/Tree%20Vase/Wild%20Chalice%20Tree/Various/) (five new branch layouts) and
+[Wander](art/Tree%20Vase/Wild%20Chalice%20Tree/Wander/Wander_Trees_notes.md) (five trees whose roots
+wander too).
+
+**The catalogue and variant designs ship without their `.3mf`.** Each one's `.scad`, render and
+build log are in the repository; the 3MF (7-9 MB per tree, about 200 MB per catalogue) is
+generated locally, and `.gitignore` keeps any new `.3mf` under `art/` out of git. The original designs in
+the table above keep their committed 3MFs. To make one:
+
+```bash
+python "art/Tree Vase/Grand Chaotic Tree Catalogue/catalogue.py" build    # every design in a catalogue
+python tools/build_design.py "art/Tree Vase/Wild Chalice Tree Catalogue/Designs/WCT_07/Wild_Chalice_WCT_07.scad" \
+    --name "Wild Chalice WCT_07" --out "art/Tree Vase/Wild Chalice Tree Catalogue/Designs/WCT_07" \
+    --part wood=#6F5034 --define sketch=false                            # one design
+```
+
+A Grand catalogue tree builds the same way with `--check-args "--bore-r 51 --floor-h 80 --foot-r 3"`
+in place of `--define sketch=false`. A build takes about 4 minutes with the nightly OpenSCAD.
 
 ### Printed
 

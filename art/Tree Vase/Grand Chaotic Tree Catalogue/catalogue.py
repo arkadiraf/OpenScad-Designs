@@ -240,7 +240,10 @@ def build_one(st, name):
 
 
 def stage_build(st):
-    todo = [n for n, d in sorted(st['designs'].items()) if not d.get('build', {}).get('build_ok')]
+    # also every design whose 3MF is missing: the 3MFs are not committed (.gitignore), so a fresh
+    # clone has the designs and their measurements but has to build the files locally
+    todo = [n for n, d in sorted(st['designs'].items())
+            if not d.get('build', {}).get('build_ok') or not os.path.exists(design_scad(n)[:-5] + '.3mf')]
     with ThreadPoolExecutor(BUILDS) as ex:
         for n, b in zip(todo, ex.map(lambda n: build_one(st, n), todo)):
             st['designs'][n]['build'] = b
