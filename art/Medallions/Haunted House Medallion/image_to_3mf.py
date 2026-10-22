@@ -7,7 +7,7 @@ polygons and extruded:
   * Transparent pixels are empty; the white disc behind the house is part of the medallion
     (--cut-white cuts it away instead, keeping the ghost)
   * By default the picture is on both faces with a solid black core in the middle for rigidity:
-    colour z = 0 .. f and thickness - f .. thickness, black core of --core mm (default 1) between,
+    colour z = 0 .. f and thickness - f .. thickness, black core of --core mm (default 2) between,
     f = (thickness - core) / 2. The back shows the picture mirrored. --core 0 runs every colour
     the full thickness
   * With --top T: a black base z = 0 .. thickness - T under the whole silhouette and only the
@@ -17,7 +17,7 @@ Each part is a separate mesh in one object, so Bambu Studio / Orca can assign an
 part.
 
 usage:
-  python image_to_3mf.py source.png out.3mf [--width 75] [--thickness 3] [--core 1 | --top 0.6] [--cut-white [--keep-white 125,45]]
+  python image_to_3mf.py source.png out.3mf [--width 75] [--thickness 3] [--core 2 | --top 0.6] [--cut-white [--keep-white 125,45]]
 then:
   python tools/bambu_3mf.py out.3mf --printer H2C
 """
@@ -157,7 +157,7 @@ def main():
     ap.add_argument('--name', default='Haunted House Medallion')
     ap.add_argument('--width', type=float, default=75.0, help='overall width, mm')
     ap.add_argument('--thickness', type=float, default=3.0, help='total thickness, mm')
-    ap.add_argument('--core', type=float, default=1.0, help='black middle layer, mm (0 = colours run through)')
+    ap.add_argument('--core', type=float, default=2.0, help='black middle layer, mm (0 = colours run through)')
     ap.add_argument('--top', type=float, help='colour on the top face only, this thick, mm')
     ap.add_argument('--up', type=int, default=4, help='upsampling before tracing')
     ap.add_argument('--min-feature', type=float, default=0.35, help='smallest colour patch side, mm')
