@@ -6,11 +6,12 @@ polygons and extruded:
 
   * Transparent pixels are empty; the white disc behind the house is part of the medallion
     (--cut-white cuts it away instead, keeping the ghost)
-  * Black base  - the whole silhouette, z = 0 .. base_h (the back of the medallion is black)
-  * Top layer   - z = base_h .. thickness, split into one part per colour; black outlines included
+  * By default every colour runs the full thickness, so the picture shows on both faces
+  * With --top T (< thickness): a black base z = 0 .. thickness - T under the whole silhouette,
+    and only the top T split into colours (the back is black, much less purge waste)
 
-Only the top layers change colour, which keeps purge waste low. Each part is a separate mesh in
-one object, so Bambu Studio / Orca can assign any filament to any part.
+Each part is a separate mesh in one object, so Bambu Studio / Orca can assign any filament to any
+part.
 
 usage:
   python image_to_3mf.py source.png out.3mf [--width 75] [--thickness 3] [--top 0.6] [--cut-white [--keep-white 125,45]]
@@ -153,7 +154,7 @@ def main():
     ap.add_argument('--name', default='Haunted House Medallion')
     ap.add_argument('--width', type=float, default=75.0, help='overall width, mm')
     ap.add_argument('--thickness', type=float, default=3.0, help='total thickness, mm')
-    ap.add_argument('--top', type=float, default=0.6, help='colour layer thickness, mm')
+    ap.add_argument('--top', type=float, help='colour layer thickness, mm (default: full thickness)')
     ap.add_argument('--up', type=int, default=4, help='upsampling before tracing')
     ap.add_argument('--min-feature', type=float, default=0.35, help='smallest colour patch side, mm')
     ap.add_argument('--cut-white', action='store_true', help='cut the white backdrop out (open fretwork)')
@@ -179,7 +180,8 @@ def main():
 
     simp = scale * 0.4
     sil = trace(lab >= 0, scale, h, simp)
-    base_h = a.thickness - a.top
+    top_h = a.thickness if a.top is None else min(a.top, a.thickness)
+    base_h = a.thickness - top_h
 
     geoms, used = {}, Polygon()
     for k, (name, _, _) in enumerate(PALETTE):
@@ -197,9 +199,9 @@ def main():
     for name, _, hexcol in PALETTE:
         if name not in geoms:
             continue
-        top = Manifold.extrude(to_cross_section(geoms[name]), a.top).translate((0, 0, base_h))
+        top = Manifold.extrude(to_cross_section(geoms[name]), top_h).translate((0, 0, base_h))
         man = top
-        if name == 'Black':
+        if name == 'Black' and base_h > 0:
             man = Manifold.extrude(to_cross_section(sil), base_h) + top
         if man.is_empty():
             continue
