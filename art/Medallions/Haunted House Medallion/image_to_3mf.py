@@ -6,15 +6,18 @@ polygons and extruded:
 
   * Transparent pixels are empty; the white disc behind the house is part of the medallion
     (--cut-white cuts it away instead, keeping the ghost)
-  * By default every colour runs the full thickness, so the picture shows on both faces
-  * With --top T (< thickness): a black base z = 0 .. thickness - T under the whole silhouette,
-    and only the top T split into colours (the back is black, much less purge waste)
+  * By default the picture is on both faces with a solid black core in the middle for rigidity:
+    colour z = 0 .. f and thickness - f .. thickness, black core of --core mm (default 1) between,
+    f = (thickness - core) / 2. The back shows the picture mirrored. --core 0 runs every colour
+    the full thickness
+  * With --top T: a black base z = 0 .. thickness - T under the whole silhouette and only the
+    top T split into colours (the back is black, much less purge waste)
 
 Each part is a separate mesh in one object, so Bambu Studio / Orca can assign any filament to any
 part.
 
 usage:
-  python image_to_3mf.py source.png out.3mf [--width 75] [--thickness 3] [--top 0.6] [--cut-white [--keep-white 125,45]]
+  python image_to_3mf.py source.png out.3mf [--width 75] [--thickness 3] [--core 1 | --top 0.6] [--cut-white [--keep-white 125,45]]
 then:
   python tools/bambu_3mf.py out.3mf --printer H2C
 """
@@ -154,7 +157,8 @@ def main():
     ap.add_argument('--name', default='Haunted House Medallion')
     ap.add_argument('--width', type=float, default=75.0, help='overall width, mm')
     ap.add_argument('--thickness', type=float, default=3.0, help='total thickness, mm')
-    ap.add_argument('--top', type=float, help='colour layer thickness, mm (default: full thickness)')
+    ap.add_argument('--core', type=float, default=1.0, help='black middle layer, mm (0 = colours run through)')
+    ap.add_argument('--top', type=float, help='colour on the top face only, this thick, mm')
     ap.add_argument('--up', type=int, default=4, help='upsampling before tracing')
     ap.add_argument('--min-feature', type=float, default=0.35, help='smallest colour patch side, mm')
     ap.add_argument('--cut-white', action='store_true', help='cut the white backdrop out (open fretwork)')
@@ -180,8 +184,16 @@ def main():
 
     simp = scale * 0.4
     sil = trace(lab >= 0, scale, h, simp)
-    top_h = a.thickness if a.top is None else min(a.top, a.thickness)
-    base_h = a.thickness - top_h
+    t = a.thickness
+    if a.top is not None:                              # (z0, z1) slabs
+        faces, core = [(t - min(a.top, t), t)], [(0, t - min(a.top, t))]
+    elif a.core > 0:
+        f = (t - min(a.core, t)) / 2
+        faces, core = [(0, f), (t - f, t)], [(f, t - f)]
+    else:
+        faces, core = [(0, t)], []
+    faces = [z for z in faces if z[1] > z[0]]
+    core = [z for z in core if z[1] > z[0]]
 
     geoms, used = {}, Polygon()
     for k, (name, _, _) in enumerate(PALETTE):
@@ -199,10 +211,12 @@ def main():
     for name, _, hexcol in PALETTE:
         if name not in geoms:
             continue
-        top = Manifold.extrude(to_cross_section(geoms[name]), top_h).translate((0, 0, base_h))
-        man = top
-        if name == 'Black' and base_h > 0:
-            man = Manifold.extrude(to_cross_section(sil), base_h) + top
+        slabs = [(geoms[name], z) for z in faces]
+        if name == 'Black':
+            slabs += [(sil, z) for z in core]
+        man = Manifold()
+        for g, (z0, z1) in slabs:
+            man += Manifold.extrude(to_cross_section(g), z1 - z0).translate((0, 0, z0))
         if man.is_empty():
             continue
         p = os.path.join(tmp, f'{name}.3mf')
