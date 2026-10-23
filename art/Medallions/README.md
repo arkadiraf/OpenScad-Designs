@@ -27,12 +27,16 @@ colour next to them.
 | [Santa UFO Medallion](Santa%20UFO%20Medallion) | 58.2 × 75.0 | Black, Blue, Sunflower Yellow, Mistletoe Green, Red, Jade White | 53 m |
 | [Christmas Spider Medallion](Christmas%20Spider%20Medallion) | 65.4 × 75.0 | Black, Gold, Bronze, Mistletoe Green, Red, Yellow, Jade White | 1 h 7 m |
 | [Christmas Captain Bear Medallion](Christmas%20Captain%20Bear%20Medallion) | 66.2 × 75.0 | Black, Cobalt Blue, Red, Beige, Sunflower Yellow, Mistletoe Green, Jade White | 59 m |
+| [Patchwork Gift Alien Medallion](Patchwork%20Gift%20Alien%20Medallion) | 53.3 × 75.0 | Black, Orange, Purple, Red, Sunflower Yellow, Mistletoe Green, Cyan, Blue, Jade White | 1 h 8 m |
+| [Snowflake Cyclops Alien Medallion](Snowflake%20Cyclops%20Alien%20Medallion) | 59.4 × 75.0 | Black, Orange, Bright Green, Cobalt Blue, Red, Jade White | 54 m |
+| [Coffee Mug Alien Medallion](Coffee%20Mug%20Alien%20Medallion) | 54.2 × 75.0 | Black, Gold, Beige, Cyan, Bright Green, Orange, Red, Cocoa Brown, Jade White | 1 h 1 m |
+| [Christmas Pikachu Medallion](Christmas%20Pikachu%20Medallion) | 61.0 × 75.0 | Black, Gold, Yellow, Mistletoe Green, Red, Blue, Jade White | 59 m |
 
-Each one is 3.0 mm thick, weighs 8–13 g including purge, and has a hang hole of about 3 mm.
+Each one is 3.0 mm thick, weighs 8–13 g including purge, and has a hang hole of 3–6 mm.
 
 The Vini medallion is 85 mm tall instead of 75 mm so that its Hebrew lettering stays printable.
-The back of every medallion is a mirror image, so on Vini the lettering reads backwards from
-behind.
+The back of every medallion is a mirror image, so on Vini and Coffee Mug the lettering reads
+backwards from behind.
 
 Each folder holds:
 
@@ -77,6 +81,10 @@ Each folder holds:
    | `size` | longest side of the medallion, in mm |
    | `palette` | each entry is `[part name, [r, g, b] as it appears in the drawing, PLA Basic hex]`. **The first entry is the core colour.** Entries that share a part name print in the same filament; use this to map dark-brown or navy outline pixels to Black, for example. |
    | `holes` | `[x, y]` pixel coordinates in the source image, one inside the hang hole and one inside any other enclosed opening. Without a seed, the white inside the ring stays solid. |
+   | `bg_min` | background pixels are greyish with every channel above this, default 200. Lower it for a photo with shadowed paper. |
+   | `open_r` | colour strips narrower than 2 × this many mm merge into the core colour, default 0.1. Raise it (e.g. 0.2) to remove blended fringes from a low-resolution source. |
+   | `erase` | `[[x0, y0, x1, y1]]` boxes in source pixels where everything except the near-black outline becomes background, for a stray mark touching the outline in a photo |
+   | `trim` | shave spikes thinner than 2 × this many mm off the medallion's outer edge, e.g. a scribble on the paper touching the outline |
    | `thickness` | total thickness, default 3.0 |
    | `core` | core thickness, default 1.8 (gives 0.6 mm faces). Set it to 0 to run every colour through the full thickness. |
    | `top` | puts colour on the top face only, this many mm thick; the rest is core colour. This needs less purging. |

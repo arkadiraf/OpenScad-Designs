@@ -1,0 +1,20 @@
+{
+  "source": "Snowflake_Cyclops_Alien_Medallion_source.jpg",
+  "size": 75,
+  "erase": [[280, 1900, 520, 2150]],
+  "bg_min": 140,
+  "palette": [
+    ["Black",        [2, 2, 1],       "#000000"],
+    ["Black",        [51, 5, 1],      "#000000"],
+    ["Black",        [62, 58, 52],    "#000000"],
+    ["Orange",       [253, 107, 18],  "#FF6A13"],
+    ["Orange",       [220, 114, 60],  "#FF6A13"],
+    ["Bright Green", [145, 174, 75],  "#BECF00"],
+    ["Cobalt Blue",  [33, 113, 184],  "#0056B8"],
+    ["Red",          [200, 50, 70],   "#C12E1F"],
+    ["Jade White",   [235, 235, 235], "#FFFFFF"],
+    ["Jade White",   [216, 206, 202], "#FFFFFF"],
+    ["Jade White",   [197, 185, 179], "#FFFFFF"]
+  ],
+  "holes": [[889, 252]]
+}

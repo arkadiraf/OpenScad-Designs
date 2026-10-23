@@ -1,0 +1,16 @@
+{
+  "source": "Christmas_Pikachu_Medallion_source.jpg",
+  "size": 75,
+  "open_r": 0.2,
+  "palette": [
+    ["Black",           [4, 3, 2],       "#000000"],
+    ["Black",           [49, 43, 22],    "#000000"],
+    ["Gold",            [225, 183, 35],  "#E4BD68"],
+    ["Yellow",          [246, 216, 4],   "#F4EE2A"],
+    ["Mistletoe Green", [35, 133, 52],   "#3F8E43"],
+    ["Red",             [199, 37, 44],   "#C12E1F"],
+    ["Blue",            [36, 68, 131],   "#0A2989"],
+    ["Jade White",      [242, 242, 240], "#FFFFFF"]
+  ],
+  "holes": [[378, 135]]
+}

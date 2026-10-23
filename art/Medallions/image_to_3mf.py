@@ -11,6 +11,13 @@ Each medallion lives in its own folder with a medallion.json (see README.md):
               outlines and every colour strip too thin to print on its own. Several entries may
               share a part name (e.g. dark-brown and black outlines both print Black).
   holes       [[x, y], ...] source pixels inside the hang hole (and any other enclosed opening)
+  bg_min      background = greyish pixels with every channel above this (default 200); lower it
+              for photos with shadowed paper
+  open_r      colour strips narrower than 2 x this (mm, default 0.1) join the core colour
+  erase       [[x0, y0, x1, y1], ...] source-pixel boxes where everything but near-black outline
+              is background, for stray marks touching the outline in a photo
+  trim        shave spikes thinner than 2 x this (mm) off the silhouette, e.g. a scribble
+              outside the outline in a photo
   optional    thickness (3.0), core (1.8), top (colour on the top face only, this thick),
               min_feature (0.35 mm), cut_white + keep_white (cut the white backdrop away)
 
@@ -53,7 +60,7 @@ OPEN_R = 0.1            # colour strips narrower than 2 x this (mm) join the cor
 SIMPLIFY = 0.02         # outline simplification, mm
 
 
-def load(path, holes):
+def load(path, holes, bg_min=200, erase=()):
     """RGB (float) and object mask at the source resolution."""
     img = Image.open(path)
     if img.mode in ('RGBA', 'LA', 'P'):
@@ -65,7 +72,7 @@ def load(path, holes):
         rgb = cv2.medianBlur(np.asarray(img.convert('RGB')), 3).astype(np.float32)
         mask = np.ones(rgb.shape[:2], bool)
     # near-white paper connected to the border, or to a hole seed, is background
-    light = (rgb.min(-1) > 200) & (np.ptp(rgb, -1) < 40)
+    light = (rgb.min(-1) > bg_min) & (np.ptp(rgb, -1) < 40)
     comp, _ = ndimage.label(light)
     edge = np.concatenate([comp[0], comp[-1], comp[:, 0], comp[:, -1]])
     seeds = [comp[y, x] for x, y in holes]
@@ -73,6 +80,9 @@ def load(path, holes):
         if comp[y, x] == 0:
             print(f'  warning: hole seed {x},{y} is not on a light pixel')
     bg = np.isin(comp, list((set(edge) | set(seeds)) - {0}))
+    for x0, y0, x1, y1 in erase:                       # stray marks next to the outline
+        box = bg[y0:y1, x0:x1]
+        box |= rgb[y0:y1, x0:x1].max(-1) > 40
     return rgb, mask & ~bg
 
 
@@ -208,13 +218,18 @@ def build(folder, printer, do_slice):
     part_of = np.array([parts.index(p[0]) for p in palette])
     hexes = {p[0]: p[2] for p in palette}
 
-    rgb, mask = load(os.path.join(folder, cfg['source']), cfg.get('holes', []))
+    rgb, mask = load(os.path.join(folder, cfg['source']), cfg.get('holes', []), cfg.get('bg_min', 200), cfg.get('erase', []))
     lab, scale, (x0, y0, k) = classify(rgb, mask, palette, cfg['size'])
     lab = np.where(lab >= 0, part_of[np.maximum(lab, 0)], -1)
     h, w = lab.shape
-    lab = clean(lab, len(parts), (cfg.get('min_feature', 0.35) / scale) ** 2, round(OPEN_R / scale))
+    lab = clean(lab, len(parts), (cfg.get('min_feature', 0.35) / scale) ** 2, round(cfg.get('open_r', OPEN_R) / scale))
     white = [i for i, p in enumerate(parts) if hexes[p].upper() == '#FFFFFF']
     keep = [(round((x - x0) * k), round((y - y0) * k)) for x, y in cfg.get('keep_white', [])]
+    if cfg.get('trim'):                                # shave thin spikes off the outline
+        r = round(cfg['trim'] / scale)
+        disk = np.hypot(*np.mgrid[-r:r + 1, -r:r + 1]) <= r
+        m = lab >= 0
+        lab[m & ~ndimage.binary_opening(m, structure=disk)] = -1
     lab = remove_background(lab, white[0] if white else -9, keep, scale, cfg.get('cut_white', False))
     print(f'  size {w * scale:.1f} x {h * scale:.1f} mm')
     hole_report(lab, scale)

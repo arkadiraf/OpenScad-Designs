@@ -1,0 +1,18 @@
+{
+  "source": "Coffee_Mug_Alien_Medallion_source.jpg",
+  "size": 75,
+  "palette": [
+    ["Black",        [2, 3, 3],       "#000000"],
+    ["Gold",         [217, 176, 60],  "#E4BD68"],
+    ["Gold",         [249, 224, 101], "#E4BD68"],
+    ["Gold",         [129, 101, 30],  "#E4BD68"],
+    ["Beige",        [249, 240, 200], "#F7E6DE"],
+    ["Cyan",         [50, 146, 221],  "#0086D6"],
+    ["Bright Green", [153, 226, 41],  "#BECF00"],
+    ["Orange",       [240, 120, 40],  "#FF6A13"],
+    ["Red",          [208, 26, 75],   "#C12E1F"],
+    ["Cocoa Brown",  [90, 55, 28],    "#6F5034"],
+    ["Jade White",   [252, 252, 252], "#FFFFFF"]
+  ],
+  "holes": [[896, 198]]
+}
