@@ -1,0 +1,16 @@
+{
+  "source": "Christmas_Captain_Bear_Medallion_source.jpg",
+  "size": 75,
+  "palette": [
+    ["Black",            [1, 1, 1],       "#000000"],
+    ["Black",            [46, 8, 3],      "#000000"],
+    ["Cobalt Blue",      [56, 120, 174],  "#0056B8"],
+    ["Red",              [197, 53, 47],   "#C12E1F"],
+    ["Red",              [230, 110, 120], "#C12E1F"],
+    ["Beige",            [252, 194, 143], "#F7E6DE"],
+    ["Sunflower Yellow", [242, 192, 58],  "#FEC600"],
+    ["Mistletoe Green",  [64, 137, 78],   "#3F8E43"],
+    ["Jade White",       [245, 245, 245], "#FFFFFF"]
+  ],
+  "holes": [[927, 167]]
+}

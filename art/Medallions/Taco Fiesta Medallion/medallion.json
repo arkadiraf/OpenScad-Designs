@@ -1,0 +1,17 @@
+{
+  "source": "Taco_Fiesta_Medallion_source.jpg",
+  "size": 75,
+  "palette": [
+    ["Black",            [8, 4, 7],       "#000000"],
+    ["Black",            [41, 11, 1],     "#000000"],
+    ["Cobalt Blue",      [40, 87, 161],   "#0056B8"],
+    ["Sunflower Yellow", [241, 182, 45],  "#FEC600"],
+    ["Red",              [193, 54, 47],   "#C12E1F"],
+    ["Red",              [168, 44, 24],   "#C12E1F"],
+    ["Gold",             [226, 179, 99],  "#E4BD68"],
+    ["Mistletoe Green",  [100, 150, 70],  "#3F8E43"],
+    ["Beige",            [244, 224, 180], "#F7E6DE"],
+    ["Jade White",       [250, 250, 250], "#FFFFFF"]
+  ],
+  "holes": [[688, 719]]
+}

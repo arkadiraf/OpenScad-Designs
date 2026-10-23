@@ -1,0 +1,18 @@
+{
+  "source": "Christmas_Spider_Medallion_source.jpg",
+  "size": 75,
+  "palette": [
+    ["Black",           [2, 2, 1],       "#000000"],
+    ["Black",           [15, 39, 19],    "#000000"],
+    ["Black",           [56, 12, 5],     "#000000"],
+    ["Gold",            [207, 169, 69],  "#E4BD68"],
+    ["Bronze",          [140, 107, 27],  "#847D48"],
+    ["Mistletoe Green", [45, 130, 70],   "#3F8E43"],
+    ["Mistletoe Green", [35, 95, 50],    "#3F8E43"],
+    ["Red",             [206, 32, 43],   "#C12E1F"],
+    ["Red",             [157, 46, 52],   "#C12E1F"],
+    ["Yellow",          [250, 224, 12],  "#F4EE2A"],
+    ["Jade White",      [245, 245, 245], "#FFFFFF"]
+  ],
+  "holes": [[896, 288]]
+}

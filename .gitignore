@@ -2,5 +2,5 @@ __pycache__/
 *.stl
 *.STL
 
-# 3MF exports under art/ are built locally (tools/build_design.py), not committed
-art/**/*.3mf
+# 3MF exports under art/Tree Vase are built locally (tools/build_design.py), not committed
+art/Tree Vase/**/*.3mf

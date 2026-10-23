@@ -1,0 +1,14 @@
+{
+  "source": "Santa_UFO_Medallion_source.jpg",
+  "size": 75,
+  "palette": [
+    ["Black",            [3, 6, 9],       "#000000"],
+    ["Black",            [35, 7, 1],      "#000000"],
+    ["Blue",             [24, 57, 99],    "#0A2989"],
+    ["Sunflower Yellow", [244, 199, 33],  "#FEC600"],
+    ["Mistletoe Green",  [64, 152, 86],   "#3F8E43"],
+    ["Red",              [202, 48, 47],   "#C12E1F"],
+    ["Jade White",       [245, 245, 245], "#FFFFFF"]
+  ],
+  "holes": [[690, 628]]
+}

@@ -1,0 +1,16 @@
+{
+  "source": "Vini_Gift_Alien_Medallion_source.jpg",
+  "size": 85,
+  "palette": [
+    ["Blue",             [27, 50, 105],   "#0A2989"],
+    ["Blue",             [48, 28, 97],    "#0A2989"],
+    ["Blue",             [45, 45, 50],    "#0A2989"],
+    ["Cobalt Blue",      [43, 95, 165],   "#0056B8"],
+    ["Sunflower Yellow", [242, 212, 28],  "#FEC600"],
+    ["Orange",           [233, 115, 24],  "#FF6A13"],
+    ["Purple",           [136, 79, 163],  "#5E43B7"],
+    ["Bright Green",     [179, 215, 53],  "#BECF00"],
+    ["Jade White",       [242, 242, 245], "#FFFFFF"]
+  ],
+  "holes": [[665, 755]]
+}

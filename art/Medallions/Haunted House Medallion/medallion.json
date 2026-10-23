@@ -1,0 +1,13 @@
+{
+  "source": "Haunted_House_Medallion_source.png",
+  "size": 75,
+  "palette": [
+    ["Black",       [0, 0, 0],       "#000000"],
+    ["Orange",      [240, 110, 20],  "#FF6A13"],
+    ["Jade White",  [240, 240, 240], "#FFFFFF"],
+    ["Purple",      [100, 70, 170],  "#5E43B7"],
+    ["Bambu Green", [20, 175, 80],   "#00AE42"],
+    ["Yellow",      [245, 230, 20],  "#F4EE2A"]
+  ],
+  "keep_white": [[125, 45]]
+}
