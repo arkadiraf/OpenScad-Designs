@@ -1,0 +1,52 @@
+{
+  "name": "Cheerful Santa Cat Medallion",
+  "size": [
+    62.7,
+    75.0
+  ],
+  "thickness": 3.0,
+  "core": 1.8,
+  "colours": [
+    [
+      "Black",
+      "#000000"
+    ],
+    [
+      "Pumpkin Orange",
+      "#FF9016"
+    ],
+    [
+      "Beige",
+      "#F7E6DE"
+    ],
+    [
+      "Red",
+      "#C12E1F"
+    ],
+    [
+      "Mistletoe Green",
+      "#3F8E43"
+    ],
+    [
+      "Cocoa Brown",
+      "#6F5034"
+    ],
+    [
+      "Sunflower Yellow",
+      "#FEC600"
+    ],
+    [
+      "Jade White",
+      "#FFFFFF"
+    ]
+  ],
+  "holes": [
+    [
+      3.5,
+      3.5
+    ]
+  ],
+  "printer": "H2C",
+  "print_time": "59m 40s",
+  "filament_g": 12.0
+}

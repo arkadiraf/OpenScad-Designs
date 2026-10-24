@@ -1,0 +1,19 @@
+{
+  "source": "Starry_Santa_Kitten_Medallion_source.jpg",
+  "size": 75,
+  "palette": [
+    ["Black",           [3, 1, 2],       "#000000"],
+    ["Black",           [3, 17, 35],     "#000000"],
+    ["Black",           [82, 36, 20],    "#000000"],
+    ["Cobalt Blue",     [22, 105, 167],  "#0056B8"],
+    ["Cobalt Blue",     [44, 98, 137],   "#0056B8"],
+    ["Pumpkin Orange",  [219, 134, 49],  "#FF9016"],
+    ["Pumpkin Orange",  [199, 140, 84],  "#FF9016"],
+    ["Red",             [202, 25, 33],   "#C12E1F"],
+    ["Mistletoe Green", [39, 80, 64],    "#3F8E43"],
+    ["Gold",            [193, 138, 28],  "#E4BD68"],
+    ["Pink",            [234, 158, 171], "#F55A74"],
+    ["Jade White",      [250, 250, 250], "#FFFFFF"]
+  ],
+  "holes": [[894, 384]]
+}

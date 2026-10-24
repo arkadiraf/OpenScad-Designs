@@ -1,0 +1,48 @@
+{
+  "name": "Christmas Captain Bear Medallion",
+  "size": [
+    66.2,
+    75.0
+  ],
+  "thickness": 3.0,
+  "core": 1.8,
+  "colours": [
+    [
+      "Black",
+      "#000000"
+    ],
+    [
+      "Cobalt Blue",
+      "#0056B8"
+    ],
+    [
+      "Red",
+      "#C12E1F"
+    ],
+    [
+      "Beige",
+      "#F7E6DE"
+    ],
+    [
+      "Sunflower Yellow",
+      "#FEC600"
+    ],
+    [
+      "Mistletoe Green",
+      "#3F8E43"
+    ],
+    [
+      "Jade White",
+      "#FFFFFF"
+    ]
+  ],
+  "holes": [
+    [
+      2.9,
+      2.9
+    ]
+  ],
+  "printer": "H2C",
+  "print_time": "59m 20s",
+  "filament_g": 10.0
+}

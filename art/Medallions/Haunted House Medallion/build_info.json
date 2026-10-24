@@ -1,0 +1,44 @@
+{
+  "name": "Haunted House Medallion",
+  "size": [
+    75.0,
+    67.2
+  ],
+  "thickness": 3.0,
+  "core": 1.8,
+  "colours": [
+    [
+      "Black",
+      "#000000"
+    ],
+    [
+      "Orange",
+      "#FF6A13"
+    ],
+    [
+      "Jade White",
+      "#FFFFFF"
+    ],
+    [
+      "Purple",
+      "#5E43B7"
+    ],
+    [
+      "Bambu Green",
+      "#00AE42"
+    ],
+    [
+      "Yellow",
+      "#F4EE2A"
+    ]
+  ],
+  "holes": [
+    [
+      3.7,
+      3.1
+    ]
+  ],
+  "printer": "H2C",
+  "print_time": "1h 9m 57s",
+  "filament_g": 10.0
+}

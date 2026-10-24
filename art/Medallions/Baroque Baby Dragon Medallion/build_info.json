@@ -1,0 +1,48 @@
+{
+  "name": "Baroque Baby Dragon Medallion",
+  "size": [
+    67.2,
+    75.0
+  ],
+  "thickness": 3.0,
+  "core": 1.8,
+  "colours": [
+    [
+      "Black",
+      "#000000"
+    ],
+    [
+      "Blue",
+      "#0A2989"
+    ],
+    [
+      "Sunflower Yellow",
+      "#FEC600"
+    ],
+    [
+      "Cocoa Brown",
+      "#6F5034"
+    ],
+    [
+      "Maroon Red",
+      "#9D2235"
+    ],
+    [
+      "Mistletoe Green",
+      "#3F8E43"
+    ],
+    [
+      "Jade White",
+      "#FFFFFF"
+    ]
+  ],
+  "holes": [
+    [
+      2.5,
+      2.5
+    ]
+  ],
+  "printer": "H2C",
+  "print_time": "59m 56s",
+  "filament_g": 10.0
+}

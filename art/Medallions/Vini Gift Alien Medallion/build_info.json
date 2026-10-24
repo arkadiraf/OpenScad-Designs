@@ -1,0 +1,48 @@
+{
+  "name": "Vini Gift Alien Medallion",
+  "size": [
+    66.0,
+    85.0
+  ],
+  "thickness": 3.0,
+  "core": 1.8,
+  "colours": [
+    [
+      "Blue",
+      "#0A2989"
+    ],
+    [
+      "Cobalt Blue",
+      "#0056B8"
+    ],
+    [
+      "Sunflower Yellow",
+      "#FEC600"
+    ],
+    [
+      "Orange",
+      "#FF6A13"
+    ],
+    [
+      "Purple",
+      "#5E43B7"
+    ],
+    [
+      "Bright Green",
+      "#BECF00"
+    ],
+    [
+      "Jade White",
+      "#FFFFFF"
+    ]
+  ],
+  "holes": [
+    [
+      3.1,
+      2.9
+    ]
+  ],
+  "printer": "H2C",
+  "print_time": "1h 11m 28s",
+  "filament_g": 11.0
+}

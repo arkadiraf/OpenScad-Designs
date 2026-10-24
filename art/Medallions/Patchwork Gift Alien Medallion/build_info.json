@@ -1,0 +1,56 @@
+{
+  "name": "Patchwork Gift Alien Medallion",
+  "size": [
+    53.3,
+    75.0
+  ],
+  "thickness": 3.0,
+  "core": 1.8,
+  "colours": [
+    [
+      "Black",
+      "#000000"
+    ],
+    [
+      "Orange",
+      "#FF6A13"
+    ],
+    [
+      "Purple",
+      "#5E43B7"
+    ],
+    [
+      "Red",
+      "#C12E1F"
+    ],
+    [
+      "Sunflower Yellow",
+      "#FEC600"
+    ],
+    [
+      "Mistletoe Green",
+      "#3F8E43"
+    ],
+    [
+      "Cyan",
+      "#0086D6"
+    ],
+    [
+      "Blue",
+      "#0A2989"
+    ],
+    [
+      "Jade White",
+      "#FFFFFF"
+    ]
+  ],
+  "holes": [
+    [
+      6.4,
+      4.2
+    ]
+  ],
+  "printer": "H2C",
+  "print_time": "1h 7m 31s",
+  "filament_g": 9.0
+}

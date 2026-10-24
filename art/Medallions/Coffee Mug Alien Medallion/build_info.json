@@ -1,0 +1,56 @@
+{
+  "name": "Coffee Mug Alien Medallion",
+  "size": [
+    54.2,
+    75.0
+  ],
+  "thickness": 3.0,
+  "core": 1.8,
+  "colours": [
+    [
+      "Black",
+      "#000000"
+    ],
+    [
+      "Gold",
+      "#E4BD68"
+    ],
+    [
+      "Beige",
+      "#F7E6DE"
+    ],
+    [
+      "Cyan",
+      "#0086D6"
+    ],
+    [
+      "Bright Green",
+      "#BECF00"
+    ],
+    [
+      "Orange",
+      "#FF6A13"
+    ],
+    [
+      "Red",
+      "#C12E1F"
+    ],
+    [
+      "Cocoa Brown",
+      "#6F5034"
+    ],
+    [
+      "Jade White",
+      "#FFFFFF"
+    ]
+  ],
+  "holes": [
+    [
+      3.5,
+      3.4
+    ]
+  ],
+  "printer": "H2C",
+  "print_time": "1h 1m 22s",
+  "filament_g": 10.0
+}

@@ -14,8 +14,10 @@ Each medallion lives in its own folder with a medallion.json (see README.md):
   bg_min      background = greyish pixels with every channel above this (default 200); lower it
               for photos with shadowed paper
   open_r      colour strips narrower than 2 x this (mm, default 0.1) join the core colour
-  erase       [[x0, y0, x1, y1], ...] source-pixel boxes where everything but near-black outline
-              is background, for stray marks touching the outline in a photo
+  erase       [[x0, y0, x1, y1], ...] source-pixel boxes: non-black marks there that connect to
+              the outside background are removed, for stray marks touching the outline in a photo
+  paint       [{"poly": [[x, y], ...], "rgb": [r, g, b]}, ...] fill a source-pixel polygon with one
+              colour before tracing, to cover a smudge in the drawing (JPG sources)
   trim        shave spikes thinner than 2 x this (mm) off the silhouette, e.g. a scribble
               outside the outline in a photo
   optional    thickness (3.0), core (1.8), top (colour on the top face only, this thick),
@@ -38,10 +40,11 @@ Each colour is a separate part of one object; the 3MF is converted to a Bambu St
 usage:
   python image_to_3mf.py "Taco Fiesta Medallion" [more folders ...] [--slice] [--printer H2C]
   python image_to_3mf.py --all --slice
-writes <Folder_Name>.3mf (the Bambu Studio project) and <Folder_Name>.png, a
+writes build_info.json (size, colours, hang hole, print time; read by catalogue.py, which this
+script reruns to refresh Catalogue.md / Catalogue.png), <Folder_Name>.3mf (the Bambu Studio project) and <Folder_Name>.png, a
 top view of the colour map as it will print.
 """
-import argparse, json, os, subprocess, sys, tempfile, zipfile
+import argparse, json, os, re, subprocess, sys, tempfile, zipfile
 
 import cv2
 import numpy as np
@@ -54,13 +57,14 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 TOOLS = os.path.join(HERE, '..', '..', 'tools')
 sys.path.insert(0, TOOLS)
 from bambu_3mf import convert, slice_check   # noqa: E402
+import catalogue                              # noqa: E402  (next to this script)
 
 PX_PER_MM = 40          # resolution the drawing is resampled to before tracing
 OPEN_R = 0.1            # colour strips narrower than 2 x this (mm) join the core colour
 SIMPLIFY = 0.02         # outline simplification, mm
 
 
-def load(path, holes, bg_min=200, erase=()):
+def load(path, holes, bg_min=200, erase=(), paint=()):
     """RGB (float) and object mask at the source resolution."""
     img = Image.open(path)
     if img.mode in ('RGBA', 'LA', 'P'):
@@ -70,6 +74,8 @@ def load(path, holes, bg_min=200, erase=()):
         return rgb, a[..., 0] >= 0.5
     else:
         rgb = cv2.medianBlur(np.asarray(img.convert('RGB')), 3).astype(np.float32)
+        for p in paint:                                # cover smudges in the drawing
+            cv2.fillPoly(rgb, [np.int32(p['poly'])], [float(v) for v in p['rgb']])
         mask = np.ones(rgb.shape[:2], bool)
     # near-white paper connected to the border, or to a hole seed, is background
     light = (rgb.min(-1) > bg_min) & (np.ptp(rgb, -1) < 40)
@@ -80,9 +86,13 @@ def load(path, holes, bg_min=200, erase=()):
         if comp[y, x] == 0:
             print(f'  warning: hole seed {x},{y} is not on a light pixel')
     bg = np.isin(comp, list((set(edge) | set(seeds)) - {0}))
-    for x0, y0, x1, y1 in erase:                       # stray marks next to the outline
-        box = bg[y0:y1, x0:x1]
-        box |= rgb[y0:y1, x0:x1].max(-1) > 40
+    if erase:                                          # stray marks outside the outline
+        cand = np.zeros_like(bg)
+        for x0, y0, x1, y1 in erase:
+            cand[y0:y1, x0:x1] = rgb[y0:y1, x0:x1].max(-1) > 40
+        # only what touches the outside background: the medallion inside the outline stays
+        comp, _ = ndimage.label(bg | cand)
+        bg = np.isin(comp, np.unique(comp[bg]))
     return rgb, mask & ~bg
 
 
@@ -159,14 +169,17 @@ def remove_background(lab, white, keep, scale, cut_white):
 
 
 def hole_report(lab, scale):
-    """Enclosed openings (hang hole) and their size."""
+    """Enclosed openings (hang hole) and their size; returns [(w, h) mm, ...]."""
     comp, n = ndimage.label(lab < 0)
     border = set(np.concatenate([comp[0], comp[-1], comp[:, 0], comp[:, -1]]))
+    holes = []
     for i, sl in enumerate(ndimage.find_objects(comp), 1):
         if i in border:
             continue
         hh, ww = (sl[0].stop - sl[0].start) * scale, (sl[1].stop - sl[1].start) * scale
         print(f'  opening {ww:.1f} x {hh:.1f} mm at {sl[1].start * scale:.0f}, {sl[0].start * scale:.0f} mm')
+        holes.append((round(ww, 1), round(hh, 1)))
+    return holes
 
 
 def trace(mask, scale, h):
@@ -218,7 +231,8 @@ def build(folder, printer, do_slice):
     part_of = np.array([parts.index(p[0]) for p in palette])
     hexes = {p[0]: p[2] for p in palette}
 
-    rgb, mask = load(os.path.join(folder, cfg['source']), cfg.get('holes', []), cfg.get('bg_min', 200), cfg.get('erase', []))
+    rgb, mask = load(os.path.join(folder, cfg['source']), cfg.get('holes', []), cfg.get('bg_min', 200), cfg.get('erase', []),
+                     cfg.get('paint', []))
     lab, scale, (x0, y0, k) = classify(rgb, mask, palette, cfg['size'])
     lab = np.where(lab >= 0, part_of[np.maximum(lab, 0)], -1)
     h, w = lab.shape
@@ -232,9 +246,9 @@ def build(folder, printer, do_slice):
         lab[m & ~ndimage.binary_opening(m, structure=disk)] = -1
     lab = remove_background(lab, white[0] if white else -9, keep, scale, cfg.get('cut_white', False))
     print(f'  size {w * scale:.1f} x {h * scale:.1f} mm')
-    hole_report(lab, scale)
+    holes = hole_report(lab, scale)
 
-    pal = np.array([[int(hexes[p][i:i + 2], 16) for i in (1, 3, 5)] for p in parts] + [[255, 255, 255]], np.uint8)
+    pal = np.array([[int(hexes[p][i:i + 2], 16) for i in (1, 3, 5)] + [255] for p in parts] + [[0, 0, 0, 0]], np.uint8)
     Image.fromarray(pal[lab]).save(stem + '.png')
 
     sil = trace(lab >= 0, scale, h)
@@ -258,7 +272,7 @@ def build(folder, printer, do_slice):
             used = used.union(g)
     geoms[parts[0]] = sil.difference(used)
 
-    specs = []
+    specs, used_parts = [], []
     tmp = tempfile.mkdtemp()
     for i, p in enumerate(parts):
         if p not in geoms:
@@ -273,16 +287,28 @@ def build(folder, printer, do_slice):
         write_mesh_3mf(path, man)
         print(f'  {p:17s} {hexes[p]}  face area {geoms[p].area:7.1f} mm2  volume {man.volume():7.1f} mm3')
         specs.append(f'{p}={path}={hexes[p]}')
+        used_parts.append([p, hexes[p]])
 
     out = stem + '.3mf'
     subprocess.run([sys.executable, os.path.join(TOOLS, 'merge_3mf.py'), out, name] + specs, check=True)
     convert(out, printer_id=printer)
     print('  wrote', out)
+    info = dict(name=name, size=[round(w * scale, 1), round(h * scale, 1)], thickness=t,
+                core=None if cfg.get('top') is not None else cfg.get('core', 1.8),
+                colours=used_parts, holes=holes, printer=printer, print_time=None, filament_g=None)
+    ok = True
     if do_slice:
         ok, lines = slice_check(out)
         print('\n'.join('  ' + l for l in lines))
-        return ok is not False
-    return True
+        for l in lines:
+            m = re.search(r'print time ([^,]+),', l)
+            info['print_time'] = m.group(1) if m else info['print_time']
+            m = re.search(r'\(total ([\d.]+) g\)', l)
+            info['filament_g'] = float(m.group(1)) if m else info['filament_g']
+        ok = ok is not False
+    with open(os.path.join(folder, 'build_info.json'), 'w', encoding='utf-8') as f:
+        json.dump(info, f, indent=2)
+    return ok
 
 
 def main():
@@ -299,6 +325,7 @@ def main():
     if not folders:
         ap.error('no medallion folders given')
     ok = all([build(f, a.printer, a.slice) for f in folders])
+    catalogue.main()
     sys.exit(0 if ok else 1)
 
 

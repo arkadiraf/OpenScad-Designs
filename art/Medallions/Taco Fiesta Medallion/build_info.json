@@ -1,0 +1,52 @@
+{
+  "name": "Taco Fiesta Medallion",
+  "size": [
+    58.0,
+    75.0
+  ],
+  "thickness": 3.0,
+  "core": 1.8,
+  "colours": [
+    [
+      "Black",
+      "#000000"
+    ],
+    [
+      "Cobalt Blue",
+      "#0056B8"
+    ],
+    [
+      "Sunflower Yellow",
+      "#FEC600"
+    ],
+    [
+      "Red",
+      "#C12E1F"
+    ],
+    [
+      "Gold",
+      "#E4BD68"
+    ],
+    [
+      "Mistletoe Green",
+      "#3F8E43"
+    ],
+    [
+      "Beige",
+      "#F7E6DE"
+    ],
+    [
+      "Jade White",
+      "#FFFFFF"
+    ]
+  ],
+  "holes": [
+    [
+      3.5,
+      3.6
+    ]
+  ],
+  "printer": "H2C",
+  "print_time": "1h 9m 7s",
+  "filament_g": 14.0
+}

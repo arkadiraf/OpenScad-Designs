@@ -1,0 +1,48 @@
+{
+  "name": "Christmas Pikachu Medallion",
+  "size": [
+    61.0,
+    75.0
+  ],
+  "thickness": 3.0,
+  "core": 1.8,
+  "colours": [
+    [
+      "Black",
+      "#000000"
+    ],
+    [
+      "Gold",
+      "#E4BD68"
+    ],
+    [
+      "Yellow",
+      "#F4EE2A"
+    ],
+    [
+      "Mistletoe Green",
+      "#3F8E43"
+    ],
+    [
+      "Red",
+      "#C12E1F"
+    ],
+    [
+      "Blue",
+      "#0A2989"
+    ],
+    [
+      "Jade White",
+      "#FFFFFF"
+    ]
+  ],
+  "holes": [
+    [
+      5.9,
+      6.0
+    ]
+  ],
+  "printer": "H2C",
+  "print_time": "59m 25s",
+  "filament_g": 9.0
+}

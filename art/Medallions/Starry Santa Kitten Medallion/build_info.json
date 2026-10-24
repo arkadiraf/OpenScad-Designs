@@ -1,0 +1,52 @@
+{
+  "name": "Starry Santa Kitten Medallion",
+  "size": [
+    50.4,
+    75.0
+  ],
+  "thickness": 3.0,
+  "core": 1.8,
+  "colours": [
+    [
+      "Black",
+      "#000000"
+    ],
+    [
+      "Cobalt Blue",
+      "#0056B8"
+    ],
+    [
+      "Pumpkin Orange",
+      "#FF9016"
+    ],
+    [
+      "Red",
+      "#C12E1F"
+    ],
+    [
+      "Mistletoe Green",
+      "#3F8E43"
+    ],
+    [
+      "Gold",
+      "#E4BD68"
+    ],
+    [
+      "Pink",
+      "#F55A74"
+    ],
+    [
+      "Jade White",
+      "#FFFFFF"
+    ]
+  ],
+  "holes": [
+    [
+      4.8,
+      4.9
+    ]
+  ],
+  "printer": "H2C",
+  "print_time": "1h 1m 0s",
+  "filament_g": 11.0
+}

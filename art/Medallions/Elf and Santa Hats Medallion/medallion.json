@@ -1,0 +1,18 @@
+{
+  "source": "Elf_and_Santa_Hats_Medallion_source.jpg",
+  "size": 75,
+  "palette": [
+    ["Black",            [2, 2, 3],       "#000000"],
+    ["Black",            [49, 12, 8],     "#000000"],
+    ["Black",            [50, 63, 69],    "#000000"],
+    ["Cobalt Blue",      [39, 75, 119],   "#0056B8"],
+    ["Red",              [198, 39, 42],   "#C12E1F"],
+    ["Beige",            [242, 234, 213], "#F7E6DE"],
+    ["Beige",            [250, 250, 248], "#F7E6DE"],
+    ["Mistletoe Green",  [55, 127, 73],   "#3F8E43"],
+    ["Cocoa Brown",      [126, 75, 53],   "#6F5034"],
+    ["Sunflower Yellow", [247, 207, 54],  "#FEC600"],
+    ["Sunflower Yellow", [231, 207, 112], "#FEC600"]
+  ],
+  "holes": [[1194, 162]]
+}

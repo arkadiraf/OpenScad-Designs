@@ -1,0 +1,48 @@
+{
+  "name": "Elf and Santa Hats Medallion",
+  "size": [
+    75.0,
+    67.2
+  ],
+  "thickness": 3.0,
+  "core": 1.8,
+  "colours": [
+    [
+      "Black",
+      "#000000"
+    ],
+    [
+      "Cobalt Blue",
+      "#0056B8"
+    ],
+    [
+      "Red",
+      "#C12E1F"
+    ],
+    [
+      "Beige",
+      "#F7E6DE"
+    ],
+    [
+      "Mistletoe Green",
+      "#3F8E43"
+    ],
+    [
+      "Cocoa Brown",
+      "#6F5034"
+    ],
+    [
+      "Sunflower Yellow",
+      "#FEC600"
+    ]
+  ],
+  "holes": [
+    [
+      5.1,
+      5.1
+    ]
+  ],
+  "printer": "H2C",
+  "print_time": "56m 47s",
+  "filament_g": 10.0
+}

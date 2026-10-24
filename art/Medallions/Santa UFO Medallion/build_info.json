@@ -1,0 +1,44 @@
+{
+  "name": "Santa UFO Medallion",
+  "size": [
+    58.2,
+    75.0
+  ],
+  "thickness": 3.0,
+  "core": 1.8,
+  "colours": [
+    [
+      "Black",
+      "#000000"
+    ],
+    [
+      "Blue",
+      "#0A2989"
+    ],
+    [
+      "Sunflower Yellow",
+      "#FEC600"
+    ],
+    [
+      "Mistletoe Green",
+      "#3F8E43"
+    ],
+    [
+      "Red",
+      "#C12E1F"
+    ],
+    [
+      "Jade White",
+      "#FFFFFF"
+    ]
+  ],
+  "holes": [
+    [
+      3.6,
+      3.6
+    ]
+  ],
+  "printer": "H2C",
+  "print_time": "53m 27s",
+  "filament_g": 8.0
+}

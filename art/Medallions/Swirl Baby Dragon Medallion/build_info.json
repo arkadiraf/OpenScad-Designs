@@ -1,0 +1,48 @@
+{
+  "name": "Swirl Baby Dragon Medallion",
+  "size": [
+    68.3,
+    75.0
+  ],
+  "thickness": 3.0,
+  "core": 1.8,
+  "colours": [
+    [
+      "Black",
+      "#000000"
+    ],
+    [
+      "Blue",
+      "#0A2989"
+    ],
+    [
+      "Maroon Red",
+      "#9D2235"
+    ],
+    [
+      "Sunflower Yellow",
+      "#FEC600"
+    ],
+    [
+      "Pumpkin Orange",
+      "#FF9016"
+    ],
+    [
+      "Turquoise",
+      "#00B1B7"
+    ],
+    [
+      "Mistletoe Green",
+      "#3F8E43"
+    ]
+  ],
+  "holes": [
+    [
+      3.0,
+      3.0
+    ]
+  ],
+  "printer": "H2C",
+  "print_time": "1h 10m 40s",
+  "filament_g": 10.0
+}
