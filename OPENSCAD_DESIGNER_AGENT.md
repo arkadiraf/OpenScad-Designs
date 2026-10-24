@@ -174,7 +174,7 @@ it dies with the session.
 | Bottom 1 cm | some overhang is allowed there; the slicer can add "on build plate only" supports | Woven §8 |
 | Topology | 0 boundary / 0 non-manifold edges on **every** part | Both guides |
 | Sits on z = 0 | yes | Both guides |
-| Colours | **Bambu Lab PLA Basic only**, hexes from the table below; pick a combination not already in the palette tables of the other two guides, or used by an OpenSCAD design so far (Braided: Cocoa Brown + Mistletoe Green; Embracing: Cocoa Brown + Mistletoe Green + Bright Green; Cradle, Tangled, Chaotic, Grand Chaotic and Wild Chaotic: Cocoa Brown alone; Kiwi: Bambu Green + Brown + Beige + Dark Gray + Black). **Up to 5 colours** per design | Pot §12, user |
+| Colours | **Bambu Lab PLA Basic only**, hexes from the table below; pick a combination not already in the palette tables of the other two guides, or used by an OpenSCAD design so far (Braided: Cocoa Brown + Mistletoe Green; Embracing: Cocoa Brown + Mistletoe Green + Bright Green; Cradle, Tangled, Chaotic, Grand Chaotic and Wild Chaotic: Cocoa Brown alone; Kiwi: Bambu Green + Brown + Beige + Dark Gray + Black; Kitten Planter: Pumpkin Orange + Jade White + Pink + Bright Green + Black; Spiral Bract Planter: Mistletoe Green alone). **Up to 5 colours** per design | Pot §12, user |
 | Printer and infill | **Bambu Lab H2C** (0.4 mm nozzle, 0.20mm Standard process), **35 % sparse infill**, unless the user names another | user |
 
 **Bambu Lab PLA Basic colours** (the same list is built into `tools/bambu_3mf.py`; keep the two in
@@ -1410,3 +1410,289 @@ where it is, and let the user decide, rather than flattening the texture on your
   Beige part with the beak, so `beak = (beak ∪ claws) − fur − legs − base`. Expect its shell count to
   be 1 + the number of claws (9).
 - **Filament 5 on the base** was dropped by the slicer CLI (§9.1): list the bed part first.
+
+## 22. Kitten Planter: a hollow sculpture that is a pot
+
+Folder `art/Sculptures/Kitten Planter/`. A sitting kitten whose head is the pot, open on top
+between the ears: 141 × 135 × 200 mm, five parts (Body, White, Pink, Eyes, Pupils), 258 g and
+11 h 37 min on the H2C, 0.30 % past 60°. Built from ellipsoids and hulls, with no swept surface
+except the tail. Each Manifold export takes 2 s.
+
+### 22.1 Techniques
+
+- **A hollow shell from the same primitives.** The inside is every ellipsoid with its semi-axes cut by
+  the wall (`ell(c, s, -w)`), hulled the same way and cut at the floor. Hull of shrunk parts ≈ the hull
+  shrunk; the cut-away showed an even wall. The wall is given in printed mm and divided by the scale
+  (`w = wall / s`), because `height` scales the whole model.
+- **Size from the height.** `s = height / ear_top`, where `ear_top` is the unscaled ear-tip height.
+  Each Customizer length is either a print dimension (wall, floor, drain) or a model-unit shape value.
+- **Inside a sphere, the wall overhangs only above latitude 60°.** Cut the rim at or below that (here 30°)
+  and keep every other ellipsoid's upper cap inside a bigger cavity. Then the shell needs no
+  supports.
+- **A 45° funnel under the rim** (the intersection of the inside with a cone that widens downward from
+  the mouth) gives a solid collar for the ears without a flat ceiling under it.
+- **Flush colour patches by zones in priority order.** Each part is `kitten ∩ zone(k) − zones(0..k−1)`,
+  and the body is `kitten − all zones`, so no two parts can overlap.
+
+### 22.2 Traps found
+
+- **A zone equal to the geometry it colours leaves slivers.** White paws as `zone = paws()` gave the body
+  74 shells and 15 non-manifold edges. Grow the zone by 0.4 mm (`ell(..., g)`).
+- **Colour boundaries count as overhang.** The solid kitten measured 0.04 % past 60° on its own and
+  1.0 % as five parts: the flat tops of the paw zones and the flat bottoms of the inner-ear zones were
+  ceilings between colours. A thin wall cut it to 0.61 %. Cone-topped socks (a hull with a point 45° up the
+  leg) and a deeper inner-ear zone brought it to 0.30 %. To tell the two apart, export the uncoloured
+  solid (`part="whole"`) and check it alone.
+- **OpenCSG previews of nested `intersection`/`difference` come out garbled** (wrong colours,
+  missing parts). Wrap each colour part in `render()`. With Manifold that costs about a second.
+
+
+## 23. Wall Climber Tree: a tree that grows out of the wall, in two parts
+
+Folder `art/Sculptures/Wall Climber Tree/`. A plant climber hung on one 6 mm screw, 148 × 73 ×
+149 mm assembled, Cocoa Brown:
+
+- **Roots** prints flat on its back (26 g, 47 min). It is the wall side: smooth roots crawling out of
+  a burl in every direction, with the back half of the burl.
+- **Tree** prints standing (29 g, 1 h 17 min). It is the front half of the burl, the trunk and the
+  crown: 3 branches splitting into 7 tips.
+
+The tree slides down a dovetail into the roots. The screw goes through both into the wall, so the
+tree clamps the roots. The first version was one piece with roots climbing the wall at ≥ 45° (a
+standing print allows nothing flatter); the user asked for roots that crawl, smoothly joined to the
+trunk, and then for the split.
+
+### 23.1 Techniques
+
+- **Split by print orientation.** Whatever must sprawl flat over the wall goes in a part printed on
+  its back: its overhang check becomes trivial (0.03 %). What must climb goes in a standing part. Cut
+  one surface with a plane parallel to the wall (`split_y`), so both halves share an outline, and
+  keep everything of the roots below that plane (root height 1.35 r < `split_y`).
+- **A burl skin on the wall** (after §17): rings in planes y = h, each a smooth maximum (k = 5) of:
+  - the trunk's section;
+  - a flare;
+  - a lobe under the trunk;
+  - a closed-form copy of each root. A root lying on the wall cuts the plane y = h in a strip of
+    half-width √(r² − (h − 0.35 r)²); the copy is the strip's far side seen from the ring centre,
+    out to the root's foot contour.
+- **Keep the ring centre on every root's line.** The trunk leaves the wall at 50°, so its
+  section in a wall plane is an ellipse whose centre rises 1.19 mm per mm out. Rings that followed it
+  left the sideways roots beside the centre, and the copy bridged the gap with a fin. The rings stay on
+  E0 (where every root starts) up to `hold_h`, past the roots' tops. The trunk ellipse is then found
+  off-centre, by an exact ray–ellipse intersection (`ell_hit`).
+- **Sink a stacked copy by more than one ring step** (`rb = r − 0.3 − 1.6·skin_dh`). Where the
+  copy's top ends between two rings, the loft ramps straight from the root's far end down to the core,
+  and the ramp must stay under the root's round top.
+- **Sliding parts:**
+  - The tongue goes on the standing part. It adds to the foot (1.8 → 3.0 cm² with the wider keel).
+    A groove there opened into the foot and left 0.4 cm².
+  - The groove goes in the flat part, open upwards. Above the split outline the flat part's burl lies
+    lower than the groove, so the open end cuts nothing that shows.
+  - A shelf of the flat part under the standing part's foot is the stop. It also lines the screw holes
+    up.
+  - Check the fit by intersecting the two parts at several slide offsets (0 mm³ at 0, 10, 20 and
+    35 mm).
+- **Children that swell from inside their parent:** start a branch at 60 % of its radius and swell
+  it to full over its first 6 mm (`member_R`). A full-size start cap poked through the parent's
+  fissures and Bambu Studio called it a floating region.
+- **Two packages from one source.** Run `build_design.py --define part=\"roots\"` with its own
+  `--name`. The source is used in place, and the PNG shows that part.
+
+### 23.2 Third version: the Wild Chaotic Tree's base on a wall, and a searched crown
+
+The user asked for bark on the roots and the whole tree, a smoother root-to-trunk blend after the
+Wild Chaotic Tree, branches parting closer to the base, and a crown 150 mm tall above the first
+parting. The result is 220 × 95 × 293 mm assembled, 51 g + 53 g.
+
+- **The Wild tree's base, turned onto the wall.** Its "ground" is the wall, so its buttress and root
+  formulas carry over with z → distance from the wall:
+  - **Buttresses:** ridges `reach·f^1.8` with f rising from 0 at `buttress_h` = 30 mm out to 1 at the
+    wall, narrowing 30 → 11°.
+  - **Root copies:** found by bisection, sinking 4 mm over the last 10 mm before the foot contour.
+  - **Roots:** taper `pow(1−u, 1.25)`, a one-sided sweep u², a meander ramped over 60 %, and side
+    roots on quadratic Béziers.
+  - **Proportions:** the first try (buttress 13 from 20 mm out, exponent 2.3) left the roots as
+    pipes plugged into a 30 mm-tall burl. The buttresses must start at the burl's full depth.
+- **World bark round an inclined axis.** `wbark` measures U round the trunk axis (E0 along A0) and
+  V = (s − max(0, r − trunk_r)) / plate_len with s along that axis. On the wall this makes the
+  fissures radiate along the roots. Up-roots get long plates, because s and r grow almost equally
+  along them, which is harmless. The cross-cracks alias into dashes on the burl's bulge, where V
+  changes fast, so they fade there (`cw = 1 − 0.8·smooth(2, 10, r − trunk_r)`).
+- **A crown that has to print standing is a search, not a table.** `Wall_Climber_Tree_layout.py`
+  draws trees: Béziers that leave the parent between its direction and the chord, and arrive
+  steeper than the chord, plus two wander waves. It rejects any with climb < 45° anywhere,
+  clearance < 2.5 mm or tips over the top, and writes the paths and radii into an include file.
+  The `.scad` asserts the include was made for its trunk.
+  - **Wander eats climb.** A wave of amplitude a and length l turns a member by atan(2πa / l): 3 mm
+    over 30 mm is 32°, against 9° of margin on an outer limb. The first search passed 0 of 400. The
+    fix was to scale the wander by the member's climb margin and keep the short wave under 1 mm over
+    40–60 mm; then 99 of 3000 passed.
+- **The standing part gets taller, not wider at the foot.** The tree now stands 184 mm on 3.5 cm²;
+  recommend a brim.
+
+### 23.3 Iteration 2: 3 -> 7 -> 13, sprawling, grown member by member
+
+The design moved to `iteration_1/` and `iteration_2/` folders (a README above them compares the
+two). Iteration 2 keeps the base and changes the crown to 13 tips:
+
+- **The crown sprawls in all directions.** Each fork gets its own azimuth and climb (52–76°).
+- **Branches end at different lengths.** Length shrinks with the level, and forks high up end
+  short (members 37–214 mm, tips at 162–215 mm).
+
+The tree part is 65 g and 3 h 24 min.
+
+- **Grow a big tree member by member.** Sampling all 13 members and then checking passed 0–1 in
+  1500. Growing the tree with up to 25 candidates per fork works: keep the first candidate that
+  climbs, stays off the wall and clears what is already there, then re-check the whole tree with
+  the final radii (forks thin their parents). That passed about 0.6 %, 20–27 per 4000 draws,
+  2.5 min a seed.
+- **A `sketch` flag for the textured design** (as §3 recommends). Multiply every bark and knot
+  displacement by `tex = sketch ? 0 : 1` and coarsen the sampling. The paths, radii and joins stay
+  the same. A preview takes 12 s against about 60 s, so find the shape untextured.
+
+### 23.4 Iteration 3: random roots, swirled and entangled branches
+
+- **A seed for the roots.** Route every random draw of the roots through
+  `rr(i, k) = rnd(i + 31.7·root_seed, k, root_seed)`. Draw the angles from random gaps
+  (0.45–1.45 of an even share) rather than jittering an even fan, which still reads as a fan.
+  Compare seeds on a contact sheet of sketch renders (6 seeds, 400 px each, about 15 s).
+- **Swirl sized from the climb budget.** A swirl of radius ra and n turns over length L moves
+  sideways at 2π·ra·n / L per mm. A member whose chord climbs at α keeps ≥ 45° while that stays
+  under sin α − cos α, so take ra = 0.6·share·(sin α − cos α)·L / (2π·n), at most 14 mm.
+  - A fixed 5–12 mm swirl tilted a 150 mm leader by about 40°, and 0 of 1800 trees passed.
+  - Sized from the budget, 15–20 % passed.
+  - A fork swirls the opposite way to its parent, so the two wind round each other.
+- **Meetings instead of clearance.** As in §15, branches may merge where they cross: depth ≤ 30 % of
+  the thinner one's thickness, over ≤ 18 mm (a longer fused run reads as one thick branch).
+  - Score 6 points a meeting, up to 10.
+  - **Rewarding meetings bunches the crown** (the first pick had its tips within x −74..33); a
+    minimum tip span along the wall (150 mm) fixed it.
+  - The merges fused into 1 shell with no sealed pockets, and the slice was clean.
+
+### 23.5 Iteration 4: smoother forks, thinner branches, more sprawl
+
+- **A fork that leaves along its parent dips below its chord.** A curve's mean climb is its chord's,
+  so leaving steeper than the chord (along a steep parent) costs 12–15° about a fifth of the way
+  along. Smooth forks therefore need steeper chords (52–66° for limbs, 58–78° for twigs), and
+  the sprawl has to come from length and direction instead. Leave within about 20° of the parent
+  (`d0 = unit(d_par + 0.3·cu + 0.3·up)`), follow it for about 20 % of the length, and arrive
+  along the chord.
+- **Forks thinner than their parent, and inside it while they run together:**
+  `r0 = min(share·r_parent, r_parent − 1)` with share 0.60–0.64, and no swell. Check a child
+  against its parent only past its first half (where it still peels off, that is the joint).
+- **Forks only past their parent's own joint.** A fork leaving a limb 25–45 % of the way up,
+  while the limb still ran along the leader, collided with the leader ("grandparent, deep").
+- **Choose the fork's direction by what is free, not by a fixed turn.** A turn fixed before the
+  retries sent all 25 candidates into the same limb. Sample any azimuth off the wall (mirror one
+  that points into it) and keep, of the candidates that pass, the one whose tip lands furthest
+  from the others. That spreads the crown by itself.
+- **Count the rejections.** A `WHY` counter (no tip, climb, wall, meeting, parent too thin, by
+  level) found each blocker in turn: the shallow middle, wall-bound turns, crowded level-2 forks,
+  and branches too thin to fork. It turned 0 % into about 50 % passing.
+- **A branch collar does not work with tubes.** A collar as thick as the parent allows, narrowing
+  over 22 mm, poked out of the parent near its tilted start: sleeves at the crotches, 8 floating
+  regions, 0.57 % overhang. A fillet needs a smooth union, as in §17's skin.
+
+- **Where a skin hands over to a tube, they must wear the same bark cut the same way.**
+  - **The fault:** the trunk's fissures stopped in scallops against the burl (reported from Bambu
+    Studio's preview).
+  - **Causes:** the burl cut its world bark in along its ring direction (the wall plane), while the
+    trunk cut the same bark along its own normal, 40° away; and the burl faded its cross-cracks from
+    2 mm beyond the trunk.
+  - **Fix:** cut the skin along the tube's normal (away from the trunk axis) once past the roots'
+    tops, and fade the cracks only from 6 mm out.
+  - **Make the crossing steep.** With the bark matched, a smoothstep sink starts flat, the near-tangent
+    crossing left 1 non-manifold edge, and a soft-start linear sink (0.32 mm/mm, about 16°)
+    cleared it.
+
+### 23.6 Iteration 5: patching the connections, zigzag branches
+
+- **Find a step by isolating it.**
+  - Cut the region out of the model with a box (`intersection` with a cube) and render it from four
+    sides with `--viewall`. A camera parked close to the part clips it, and the clip faces look like
+    geometry.
+  - Then render each component alone (burl, crown, trunk): the step lived in none of the places it
+    seemed to.
+- **A skin that wraps a tube must follow the tube's real radius.** The trunk thins where the limbs
+  part (the area rule), and that happened inside the burl. The burl still used the full radius and
+  ended 1.7 mm proud: the "step round the base of the middle branch". Read the tube's radius from
+  the layout at the point's own axial position (two fixed-point passes, since a wall-plane ring
+  cuts the tube obliquely).
+- **Don't let two surfaces cross; keep them parallel.**
+  - **Failed:** a skin sinking under a tube leaves a ledge where it crosses (iteration 4, 0.4 mm), and
+    a skin kept inside leaves a crease where its flare dips under.
+  - **Works:** keep the skin 0.05 mm outside the tube and end it there. The surfaces never
+    intersect, and the end rim is half a layer.
+- **Ring centres that hold an offset must glide back onto the axis.** Where the tube thins, a fixed
+  offset puts the centre outside the section, and the ray–ellipse hit has no solution (NaN in
+  `lookup`).
+- **Fork fillets** from copies of the fork's cross-section in the parent's rings (smooth maximum,
+  k = 3.5): the copy must fade by the time the fork's centre is half a fork radius past the parent's
+  surface. Fading over 1.5 radii left flat fins on the parent.
+- **A path that must stay tangent must not get the fork's tilt:** the leader inherited the forks'
+  tilted start and kinked 20° where the trunk's straight part ended (a crease ring).
+- **Zigzag within the climb budget.** Use bend points alternating ±amp across the chord, joined by a
+  Hermite spline, with amp = 0.35·share·(sin α − cos α)·spacing/2 and the swirl on top at 25 %.
+  About 60 % of grown trees pass.
+- **Entanglement needs a reason to meet:** choosing each fork by the spread of its tip alone gave
+  0–2 meetings, and adding 20 mm of "spread" per branch met (up to 2) gave 5–7.
+
+### 23.7 Iteration 6: a strict 3 -> 7 -> 13, stronger zigzag
+
+- **A strict split needs thickness down the hierarchy.** With 6 different branches of 7 each forking
+  once, the forks off the limbs were too thin by their middle to split again (`WHY`: "L3 parent too
+  thin"). Shares of 68 / 66 / 64 % and tips at 60 % of the start radius fixed it, and the third
+  level gets a second try earlier along a branch.
+- **Size forks from the parent's final radius.** Forks were sized before their parent thinned for
+  its own forks (the leader lost about 46 % over four). One came out thicker than the leader and
+  its start hung in mid-air below the junction. `floating_check.py` found it, and the bark-free
+  export showed it was geometry. Cap each fork at the parent's thinned radius minus the inset,
+  parents first.
+- **A fillet copy must grow in.** A fork's copy appearing at full size bulges the parent through the
+  smooth maximum even while inside it (difference < k): a ring with a ledge where each fork begins.
+  Scale it in over the fork's first 12 mm.
+- **Spans have a ceiling under a climb limit.** A 230 mm tip span was never reached at ≥ 45° (the
+  widest of 15 trees was 226 mm); 215 mm, with the spread weighted ×4 in the score, gave 217.
+
+### 23.8 Iteration 7: grown branches that bend and twist, printed to 60°
+
+- **Grow a branch instead of aiming it.**
+  - Integrate a heading one millimetre at a time. Turn it by a curvature in a bend plane that
+    rotates round it, in a parallel-transported frame: the rotation rate is the twist. Slow
+    rotation gives arcs; fast rotation gives a loose helix of radius κ/(κ² + τ²).
+  - Ramp the curvature in over the first 15–20 mm, so the branch leaves exactly along its start.
+  - Cap the curvature at 1 / (3.5 r), so a tube's rings never fold on the inside of a bend.
+- **Constraints as steering, not rejection.**
+  - Clamp the heading at each step:
+    - Climb: lift it to the hold angle, keeping its azimuth.
+    - The wall: the heading's component towards the wall may be at most (room left) / 20 mm, so
+      the branch turns to run along the wall.
+    - The bed edge and the reach out from the wall: the same rule.
+  - Rejections then come almost only from meetings (`WHY`), and about 60 % of trees pass.
+- **The climb limit makes straight lines.** A branch held at the limit runs straight. Pull it
+  upwards within 16° of the limit (0.012 per mm), so it arcs up off the limit instead.
+- **Choosing by tip spread picks the straightest branch,** since a straight branch reaches
+  furthest. Add the branch's total turning to the choice (×0.6 per degree for limbs). A 215 mm
+  span requirement left only limbs riding the climb limit; 200 mm let them bend.
+- **A whole sphere on a branch end hangs below the end ring** by r(1 − cos α). At 45° it was
+  carried; at 33° `floating_check.py` found it in mid-air, while the Bambu Studio slice passed.
+  - Fix: a forward-facing dome, its back ring 0.3 mm behind the end.
+  - The dome must sit inside the bark's fissures, which on a tube go as deep as depth · r / r_max
+    (about 0.5 mm on a twig's end). At 0.98 r it poked out at two tips, and at a fixed r − 0.45
+    mm at one tip on each of 3 of 25 catalogue trees. Inset it by the tube's own fissure depth
+    plus 0.1 mm.
+- **The design is now the folder's main design**, iterations 1–6 are in `Archive/`, and
+  `Catalogue/` holds 25 variations (`catalogue.py`): each design gets its own crown seed and its
+  own roots (seed, 8–11 roots), in three bend tiers (×1.0, ×1.5, ×2.2 via the layout's `--bend`;
+  the ×2.2 tier also gives the roots more meander). About 7 min per design (both parts, five at
+  a time).
+- 0.24 % of the surface is past 60° with the bark on, at a climb held at 33.5°.
+
+### 23.9 Traps found
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Bambu Studio: floating regions, while `floating_check.py` found none | a **horizontal counterbore under a V-shaped keel**: where the tunnel was wider than the keel below, the keel's sides began in mid-air beside it. A slot down to the bed left paper-thin walls; a 45° roof cut over it made wedges between the roof and the keel's underside | make the keel wider than the counterbore all the way down (`lobe_w` 60°): the tunnel then has walls to the foot. Found by slicing variants of the part with pieces left out (branches, tongue, hole, counterbore) |
+| Floating region at a branch | a knot's swollen rim facing partly down: a ledge | point knots upwards (z ≥ 0.75 of the direction) |
+| Flat sleeves where the roots leave the burl | a ring centre beside the root's line, and the copy's top ending between rings | see 23.1 |
+| The roots part slice crashed the Bambu Studio CLI once (exit code 0xC0000005) | not reproduced: the next build sliced it cleanly | rebuild before investigating |

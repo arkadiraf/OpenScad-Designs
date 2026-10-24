@@ -1,0 +1,55 @@
+==== tree
+[1/4] source      C:\WorkSpace_Projects\OpenScad-Designs\art\Sculptures\Wall Climber Tree\Catalogue\Designs\WCT_11\Wall_Climber_WCT_11.scad
+[2/4] exporting   tree in parallel (Manifold)...
+      tree          181 s  ok  Total rendering time: 0:00:01.997
+[3/4] merged      C:\WorkSpace_Projects\OpenScad-Designs\art\Sculptures\Wall Climber Tree\Catalogue\Designs\WCT_11\Wall_Climber_WCT_11.3mf
+      Bambu Studio project for Bambu Lab H2C (0.4 nozzle, 0.20mm Standard, 35% sparse infill): C:\WorkSpace_Projects\OpenScad-Designs\art\Sculptures\Wall Climber Tree\Catalogue\Designs\WCT_11\Wall_Climber_WCT_11.3mf
+        plate 1: Wall Climber WCT_11, 259.8 x 139.0 x 178.4 mm
+        Tree           filament 1  Bambu PLA Basic Cocoa Brown #6F5034
+      rendered    C:\WorkSpace_Projects\OpenScad-Designs\art\Sculptures\Wall Climber Tree\Catalogue\Designs\WCT_11\Wall_Climber_WCT_11.png (1313x1113)  ECHO: "Wall climber tree: first parting at 63 mm, tips below 213 mm; crown climbs at least 33 deg; roots from x -106 to 119, lowest edge z -68.7" | ECHO: "  foot 12 mm deep from the split; burl under the screw head 12 (must be <= 33.75)"
+[4/4] checks
+--- Tree: 77406 vertices, 154812 triangles
+  edges        boundary 0   non-manifold 0   shells 1   near-duplicate vertices 0
+  bbox         x -123.9..135.9  y 8.5..147.5  z 0.00..178.44 mm
+  volume       100.6 cm3 -> 125 g PLA at 100 % solid
+--- all parts (1)
+  size         259.8 x 139.0 x 178.4 mm, bottom at z = 0.000
+  volume       100.6 cm3 -> 125 g PLA at 100 % solid (~37 g at typical infill)
+  bed contact  4.2 cm2
+  past 60 deg  0.26%   (bottom 1 cm 0.00%, body 0.22%, top 3 cm 0.04%)   above 1 mm 0.26%
+  past 45 deg  7.47%   (bottom 1 cm 0.00%, body 6.23%, top 3 cm 1.24%)   above 1 mm 7.47%
+  PASS: past 60 deg above the bottom 1 cm = 0.26% (limit 0.5%)
+RESULT: PASS
+Bambu Studio 02.05.00.66 sliced plate 1 for Bambu Lab H2C
+  print time 3h 49m 18s, 35% sparse infill
+  filament 72.8 g #6F5034  (total 73 g)
+  PASS: slicer check
+BUILD: PASS
+
+==== roots
+[1/4] source      C:\WorkSpace_Projects\OpenScad-Designs\art\Sculptures\Wall Climber Tree\Catalogue\Designs\WCT_11\Wall_Climber_WCT_11.scad  with part="roots"
+[2/4] exporting   roots in parallel (Manifold)...
+      roots         196 s  ok  Total rendering time: 0:00:01.767
+[3/4] merged      C:\WorkSpace_Projects\OpenScad-Designs\art\Sculptures\Wall Climber Tree\Catalogue\Designs\WCT_11\Wall_Climber_WCT_11_Roots.3mf
+      Bambu Studio project for Bambu Lab H2C (0.4 nozzle, 0.20mm Standard, 35% sparse infill): C:\WorkSpace_Projects\OpenScad-Designs\art\Sculptures\Wall Climber Tree\Catalogue\Designs\WCT_11\Wall_Climber_WCT_11_Roots.3mf
+        plate 1: Wall Climber WCT_11 Roots, 228.3 x 231.4 x 24.2 mm
+        Roots          filament 1  Bambu PLA Basic Cocoa Brown #6F5034
+      rendered    C:\WorkSpace_Projects\OpenScad-Designs\art\Sculptures\Wall Climber Tree\Catalogue\Designs\WCT_11\Wall_Climber_WCT_11_Roots.png (1451x890)  ECHO: "Wall climber tree: first parting at 63 mm, tips below 213 mm; crown climbs at least 33 deg; roots from x -106 to 119, lowest edge z -68.7" | ECHO: "  foot 12 mm deep from the split; burl under the screw head 12 (must be <= 33.75)"
+[4/4] checks
+--- Roots: 52577 vertices, 105158 triangles
+  edges        boundary 0   non-manifold 0   shells 1   near-duplicate vertices 0
+  bbox         x -107.8..120.5  y -162.8..68.6  z 0.00..24.16 mm
+  volume       82.3 cm3 -> 102 g PLA at 100 % solid
+--- all parts (1)
+  size         228.3 x 231.4 x 24.2 mm, bottom at z = 0.000
+  volume       82.3 cm3 -> 102 g PLA at 100 % solid (~31 g at typical infill)
+  bed contact  113.2 cm2
+  past 60 deg  0.13%   (bottom 1 cm 0.12%, body 0.00%, top 3 cm 0.01%)   above 1 mm 0.01%
+  past 45 deg  0.92%   (bottom 1 cm 0.81%, body 0.00%, top 3 cm 0.11%)   above 1 mm 0.13%
+  PASS: past 60 deg above the bottom 1 cm = 0.01% (limit 0.5%)
+RESULT: PASS
+Bambu Studio 02.05.00.66 sliced plate 1 for Bambu Lab H2C
+  print time 2h 4m 17s, 35% sparse infill
+  filament 60.6 g #6F5034  (total 61 g)
+  PASS: slicer check
+BUILD: PASS

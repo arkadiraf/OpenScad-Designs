@@ -10,7 +10,7 @@ from the ground up. Same glass (80 × 130 mm, base curving in to a 50 mm bottom)
 | `trees.json` | per tree: branch layout (tables + search seed), `wander_seed`, `root_seed`, `root_count` |
 | `tree_search.py` | `branches` / `roots` seed searches from the `part="paths"` echo |
 | `Wander_Trees_Overview.py` / `.png` | the original plus the five, side by side |
-| `Wander_N/` | `.scad`, `.png`, `build.log`, and the Bambu H2C `.3mf` (Cocoa Brown PLA Basic, 35 % infill) once built locally: 3MFs are not committed (`.gitignore`); the rebuild commands are below |
+| `Wander_N/` | `.scad`, `.png`, `build.log`, and the Bambu H2C `.3mf` (Cocoa Brown PLA Basic, 35 % infill), committed; the rebuild commands are below |
 
 ## What wanders
 

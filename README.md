@@ -6,8 +6,8 @@ is sized from a real object (here, the glass vase it holds). It is checked for p
 ships ready to print:
 
 - a `.scad` source you can resize in OpenSCAD's Customizer
-- a multi-colour `.3mf` that opens in Bambu Studio as a finished project (for the catalogues and
-  their variants, you build it locally: see [Catalogues](#catalogues))
+- a multi-colour `.3mf` that opens in Bambu Studio as a finished project, committed with every
+  design, the catalogues and their variants included
 - an isometric render
 
 ## Gallery
@@ -197,10 +197,9 @@ The Wild Chalice Tree folder also keeps the two rounds that led to its catalogue
 [Wander](art/Tree%20Vase/Wild%20Chalice%20Tree/Wander/Wander_Trees_notes.md) (five trees whose roots
 wander too).
 
-**The catalogue and variant designs ship without their `.3mf`.** Each one's `.scad`, render and
-build log are in the repository; the 3MF (7-9 MB per tree, about 200 MB per catalogue) is
-generated locally, and `.gitignore` keeps any new `.3mf` under `art/` out of git. The original designs in
-the table above keep their committed 3MFs. To make one:
+**Every catalogue and variant design ships with its `.3mf`**, next to its `.scad`, render and
+build log (7-9 MB per tree, about 200 MB per catalogue), as the original designs in the table
+above do. To rebuild one after changing its `.scad`:
 
 ```bash
 python "art/Tree Vase/Grand Chaotic Tree Catalogue/catalogue.py" build    # every design in a catalogue

@@ -1,0 +1,8 @@
+fit and slide:
+  raised   0.0 mm: overlap   -0.000 mm3   (touching faces only)
+  raised  20.0 mm: overlap   -0.000 mm3   (touching faces only)
+  raised  35.0 mm: overlap    0.000 mm3   (touching faces only)
+floating regions (as printed):
+  tree: PASS: 0 regions start in mid-air
+  roots: PASS: 0 regions start in mid-air
+RESULT: PASS

@@ -14,7 +14,7 @@ is the original's.
 |---|---|
 | `Catalogue.png` | the 25 designs, 5 × 5 (renders, not photos) |
 | `catalogue_results.md` | one row per design: seeds, size, branch merge, climb, seat, slice time and mass, checks |
-| `Designs/WCT_NN/` | `Wild_Chalice_WCT_NN.scad` (open it in OpenSCAD), `.png`, `build.log`, and the `.3mf` (Bambu Studio project, Cocoa Brown PLA Basic, 35 % infill) once built locally |
+| `Designs/WCT_NN/` | `Wild_Chalice_WCT_NN.scad` (open it in OpenSCAD), `.png`, `build.log`, and the `.3mf` (Bambu Studio project, Cocoa Brown PLA Basic, 35 % infill) |
 | `catalogue.py` | the whole pipeline (below); its state and every measurement are in `catalogue.json` |
 | `Wild_Chalice_Tree_template.scad` | the design every catalogue tree is written from (the original with seeded roots) |
 | `Wild_Chalice_Tree_layout.py` | the branch-layout search (unchanged from the original) |
@@ -24,10 +24,9 @@ is the original's.
 
 ## The process
 
-**3MF files are built locally, not committed.** The `.gitignore` keeps every new `.3mf` under `art/`
-out of git: a clone has each design's `.scad`, render, build log and measurements, but not its
-3MF. `python catalogue.py build` builds every design whose 3MF is missing (about 4 minutes each,
-five at a time); the original's own 3MF stays committed in its design folder.
+**Every design's 3MF is committed** in its `Designs/` folder, next to its `.scad`, render, build
+log and measurements. `python catalogue.py build` (re)builds every design whose 3MF is missing
+(about 4 minutes each, five at a time): delete a 3MF to rebuild it after a change.
 
 
 ```bash

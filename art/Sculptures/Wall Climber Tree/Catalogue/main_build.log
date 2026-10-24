@@ -1,0 +1,26 @@
+[1/4] source      art/Sculptures/Wall Climber Tree\Wall_Climber_Tree.scad
+[2/4] exporting   tree in parallel (Manifold)...
+      tree           77 s  ok  Total rendering time: 0:00:01.400
+[3/4] merged      art/Sculptures/Wall Climber Tree\Wall_Climber_Tree.3mf
+      Bambu Studio project for Bambu Lab H2C (0.4 nozzle, 0.20mm Standard, 35% sparse infill): art/Sculptures/Wall Climber Tree\Wall_Climber_Tree.3mf
+        plate 1: Wall Climber Tree, 285.3 x 142.1 x 183.0 mm
+        Tree           filament 1  Bambu PLA Basic Cocoa Brown #6F5034
+      rendered    art/Sculptures/Wall Climber Tree\Wall_Climber_Tree.png (1372x1101)  ECHO: "Wall climber tree: first parting at 67 mm, tips below 217 mm; crown climbs at least 33 deg; roots from x -104 to 103, lowest edge z -60.4" | ECHO: "  foot 11.5 mm deep from the split; burl under the screw head 14.8 (must be <= 33.75)"
+[4/4] checks
+--- Tree: 73207 vertices, 146414 triangles
+  edges        boundary 0   non-manifold 0   shells 1   near-duplicate vertices 2
+  bbox         x -141.3..144.0  y 8.5..150.6  z 0.00..183.00 mm
+  volume       95.8 cm3 -> 119 g PLA at 100 % solid
+--- all parts (1)
+  size         285.3 x 142.1 x 183.0 mm, bottom at z = 0.000
+  volume       95.8 cm3 -> 119 g PLA at 100 % solid (~36 g at typical infill)
+  bed contact  4.0 cm2
+  past 60 deg  0.24%   (bottom 1 cm 0.00%, body 0.21%, top 3 cm 0.03%)   above 1 mm 0.24%
+  past 45 deg  7.43%   (bottom 1 cm 0.00%, body 5.72%, top 3 cm 1.71%)   above 1 mm 7.43%
+  PASS: past 60 deg above the bottom 1 cm = 0.24% (limit 0.5%)
+RESULT: PASS
+Bambu Studio 02.05.00.66 sliced plate 1 for Bambu Lab H2C
+  print time 3h 35m 31s, 35% sparse infill
+  filament 68.9 g #6F5034  (total 69 g)
+  PASS: slicer check
+BUILD: PASS

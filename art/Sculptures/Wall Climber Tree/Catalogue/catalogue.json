@@ -1,0 +1,1354 @@
+{
+ "designs": {
+  "WCT_01": {
+   "name": "WCT_01",
+   "layout": {
+    "seed": 7010,
+    "bend_f": 1.0,
+    "passed": "38/60",
+    "score": 205.4,
+    "tip_gap": 26.2,
+    "meetings": 1,
+    "merge": 0,
+    "climb": 33.5,
+    "turn": 143,
+    "wallward": 257,
+    "span_x": 258,
+    "tips_z": "153..211"
+   },
+   "roots": {
+    "root_seed": 101,
+    "root_count": 10,
+    "root_meander": 6.5,
+    "root_sweep": 20
+   },
+   "build": {
+    "tree": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "262.7 x 140.3 x 181.6",
+     "print_time": "3h 38m 34s",
+     "grams": 70.0,
+     "overhang60": "0.16%"
+    },
+    "roots": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "231.3 x 215.3 x 24.3",
+     "print_time": "1h 54m 23s",
+     "grams": 56.0,
+     "overhang60": "0.01%"
+    },
+    "minutes": 9.1
+   },
+   "check": {
+    "ok": true,
+    "fit_mm3": -0.0,
+    "floating": {
+     "tree": 0,
+     "roots": 0
+    }
+   }
+  },
+  "WCT_02": {
+   "name": "WCT_02",
+   "layout": {
+    "seed": 7020,
+    "bend_f": 1.0,
+    "passed": "42/60",
+    "score": 211.8,
+    "tip_gap": 21.4,
+    "meetings": 5,
+    "merge": 21,
+    "climb": 33.5,
+    "turn": 141,
+    "wallward": 146,
+    "span_x": 278,
+    "tips_z": "167..211"
+   },
+   "roots": {
+    "root_seed": 102,
+    "root_count": 8,
+    "root_meander": 6.5,
+    "root_sweep": 20
+   },
+   "build": {
+    "tree": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "281.0 x 139.4 x 181.7",
+     "print_time": "3h 31m 25s",
+     "grams": 68.0,
+     "overhang60": "0.19%"
+    },
+    "roots": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "200.7 x 215.5 x 24.0",
+     "print_time": "1h 31m 31s",
+     "grams": 46.0,
+     "overhang60": "0.01%"
+    },
+    "minutes": 7.6
+   },
+   "check": {
+    "ok": true,
+    "fit_mm3": -0.0,
+    "floating": {
+     "tree": 0,
+     "roots": 0
+    }
+   }
+  },
+  "WCT_03": {
+   "name": "WCT_03",
+   "layout": {
+    "seed": 7030,
+    "bend_f": 1.0,
+    "passed": "43/60",
+    "score": 201.9,
+    "tip_gap": 31.5,
+    "meetings": 0,
+    "merge": 0,
+    "climb": 33.5,
+    "turn": 155,
+    "wallward": 186,
+    "span_x": 281,
+    "tips_z": "168..211"
+   },
+   "roots": {
+    "root_seed": 103,
+    "root_count": 11,
+    "root_meander": 6.5,
+    "root_sweep": 20
+   },
+   "build": {
+    "tree": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "285.1 x 142.5 x 180.9",
+     "print_time": "3h 47m 17s",
+     "grams": 72.0,
+     "overhang60": "0.26%"
+    },
+    "roots": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "228.7 x 221.4 x 24.0",
+     "print_time": "2h 0m 4s",
+     "grams": 59.0,
+     "overhang60": "0.01%"
+    },
+    "minutes": 9.9
+   },
+   "check": {
+    "ok": true,
+    "fit_mm3": 0.0,
+    "floating": {
+     "tree": 0,
+     "roots": 0
+    }
+   }
+  },
+  "WCT_04": {
+   "name": "WCT_04",
+   "layout": {
+    "seed": 7040,
+    "bend_f": 1.0,
+    "passed": "40/60",
+    "score": 203.5,
+    "tip_gap": 27.4,
+    "meetings": 3,
+    "merge": 24,
+    "climb": 33.5,
+    "turn": 141,
+    "wallward": 131,
+    "span_x": 279,
+    "tips_z": "165..212"
+   },
+   "roots": {
+    "root_seed": 104,
+    "root_count": 9,
+    "root_meander": 6.5,
+    "root_sweep": 20
+   },
+   "build": {
+    "tree": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "283.4 x 129.5 x 182.5",
+     "print_time": "3h 27m 7s",
+     "grams": 67.0,
+     "overhang60": "0.16%"
+    },
+    "roots": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "189.3 x 220.2 x 24.2",
+     "print_time": "1h 44m 2s",
+     "grams": 51.0,
+     "overhang60": "0.01%"
+    },
+    "minutes": 8.2
+   },
+   "check": {
+    "ok": true,
+    "fit_mm3": 0.0,
+    "floating": {
+     "tree": 0,
+     "roots": 0
+    }
+   }
+  },
+  "WCT_05": {
+   "name": "WCT_05",
+   "layout": {
+    "seed": 7050,
+    "bend_f": 1.0,
+    "passed": "41/60",
+    "score": 195.1,
+    "tip_gap": 23.1,
+    "meetings": 3,
+    "merge": 21,
+    "climb": 33.5,
+    "turn": 147,
+    "wallward": 315,
+    "span_x": 235,
+    "tips_z": "160..209"
+   },
+   "roots": {
+    "root_seed": 105,
+    "root_count": 10,
+    "root_meander": 6.5,
+    "root_sweep": 20
+   },
+   "build": {
+    "tree": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 2",
+     "size": "239.3 x 142.9 x 179.1",
+     "print_time": "3h 40m 58s",
+     "grams": 71.0,
+     "overhang60": "0.21%"
+    },
+    "roots": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "200.8 x 236.9 x 24.2",
+     "print_time": "1h 52m 6s",
+     "grams": 55.0,
+     "overhang60": "0.01%"
+    },
+    "minutes": 8.8
+   },
+   "check": {
+    "ok": true,
+    "fit_mm3": -0.0,
+    "floating": {
+     "tree": 0,
+     "roots": 0
+    }
+   }
+  },
+  "WCT_06": {
+   "name": "WCT_06",
+   "layout": {
+    "seed": 7060,
+    "bend_f": 1.0,
+    "passed": "37/60",
+    "score": 200.0,
+    "tip_gap": 19.2,
+    "meetings": 2,
+    "merge": 6,
+    "climb": 33.5,
+    "turn": 115,
+    "wallward": 155,
+    "span_x": 249,
+    "tips_z": "139..212"
+   },
+   "roots": {
+    "root_seed": 106,
+    "root_count": 8,
+    "root_meander": 6.5,
+    "root_sweep": 20
+   },
+   "build": {
+    "tree": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "253.7 x 141.3 x 182.6",
+     "print_time": "3h 32m 17s",
+     "grams": 69.0,
+     "overhang60": "0.21%"
+    },
+    "roots": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "220.7 x 227.2 x 24.1",
+     "print_time": "1h 35m 7s",
+     "grams": 48.0,
+     "overhang60": "0.01%"
+    },
+    "minutes": 6.4
+   },
+   "check": {
+    "ok": true,
+    "fit_mm3": -0.0,
+    "floating": {
+     "tree": 0,
+     "roots": 0
+    }
+   }
+  },
+  "WCT_07": {
+   "name": "WCT_07",
+   "layout": {
+    "seed": 7070,
+    "bend_f": 1.0,
+    "passed": "38/60",
+    "score": 205.9,
+    "tip_gap": 8.4,
+    "meetings": 4,
+    "merge": 12,
+    "climb": 33.5,
+    "turn": 138,
+    "wallward": 87,
+    "span_x": 279,
+    "tips_z": "157..210"
+   },
+   "roots": {
+    "root_seed": 107,
+    "root_count": 11,
+    "root_meander": 6.5,
+    "root_sweep": 20
+   },
+   "build": {
+    "tree": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "284.9 x 143.9 x 180.6",
+     "print_time": "3h 46m 14s",
+     "grams": 74.0,
+     "overhang60": "0.27%"
+    },
+    "roots": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 2",
+     "size": "230.0 x 235.8 x 24.0",
+     "print_time": "2h 1m 41s",
+     "grams": 60.0,
+     "overhang60": "0.01%"
+    },
+    "minutes": 9.5
+   },
+   "check": {
+    "ok": true,
+    "fit_mm3": -0.0,
+    "floating": {
+     "tree": 0,
+     "roots": 0
+    }
+   }
+  },
+  "WCT_08": {
+   "name": "WCT_08",
+   "layout": {
+    "seed": 7080,
+    "bend_f": 1.0,
+    "passed": "38/60",
+    "score": 191.5,
+    "tip_gap": 23.8,
+    "meetings": 4,
+    "merge": 30,
+    "climb": 33.5,
+    "turn": 136,
+    "wallward": 172,
+    "span_x": 254,
+    "tips_z": "174..210"
+   },
+   "roots": {
+    "root_seed": 108,
+    "root_count": 9,
+    "root_meander": 6.5,
+    "root_sweep": 20
+   },
+   "build": {
+    "tree": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "258.6 x 142.6 x 180.2",
+     "print_time": "3h 35m 21s",
+     "grams": 70.0,
+     "overhang60": "0.27%"
+    },
+    "roots": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "217.0 x 221.4 x 24.0",
+     "print_time": "1h 41m 51s",
+     "grams": 50.0,
+     "overhang60": "0.01%"
+    },
+    "minutes": 7.7
+   },
+   "check": {
+    "ok": true,
+    "fit_mm3": 0.0,
+    "floating": {
+     "tree": 0,
+     "roots": 0
+    }
+   }
+  },
+  "WCT_09": {
+   "name": "WCT_09",
+   "layout": {
+    "seed": 7090,
+    "bend_f": 1.0,
+    "passed": "32/60",
+    "score": 195.3,
+    "tip_gap": 19.1,
+    "meetings": 4,
+    "merge": 25,
+    "climb": 33.5,
+    "turn": 149,
+    "wallward": 181,
+    "span_x": 238,
+    "tips_z": "166..212"
+   },
+   "roots": {
+    "root_seed": 109,
+    "root_count": 10,
+    "root_meander": 6.5,
+    "root_sweep": 20
+   },
+   "build": {
+    "tree": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 2",
+     "size": "240.7 x 140.5 x 181.8",
+     "print_time": "3h 34m 11s",
+     "grams": 70.0,
+     "overhang60": "0.18%"
+    },
+    "roots": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "229.1 x 200.6 x 24.0",
+     "print_time": "1h 54m 0s",
+     "grams": 57.0,
+     "overhang60": "0.01%"
+    },
+    "minutes": 9.1
+   },
+   "check": {
+    "ok": true,
+    "fit_mm3": 0.0,
+    "floating": {
+     "tree": 0,
+     "roots": 0
+    }
+   }
+  },
+  "WCT_10": {
+   "name": "WCT_10",
+   "layout": {
+    "seed": 7100,
+    "bend_f": 1.5,
+    "passed": "40/60",
+    "score": 213.9,
+    "tip_gap": 22.1,
+    "meetings": 2,
+    "merge": 18,
+    "climb": 33.5,
+    "turn": 155,
+    "wallward": 95,
+    "span_x": 273,
+    "tips_z": "155..210"
+   },
+   "roots": {
+    "root_seed": 110,
+    "root_count": 8,
+    "root_meander": 7.0,
+    "root_sweep": 23
+   },
+   "build": {
+    "tree": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "276.8 x 141.6 x 180.5",
+     "print_time": "3h 34m 52s",
+     "grams": 70.0,
+     "overhang60": "0.23%"
+    },
+    "roots": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "230.3 x 223.4 x 23.8",
+     "print_time": "1h 35m 31s",
+     "grams": 47.0,
+     "overhang60": "0.02%"
+    },
+    "minutes": 6.9
+   },
+   "check": {
+    "ok": true,
+    "fit_mm3": -0.0,
+    "floating": {
+     "tree": 0,
+     "roots": 0
+    }
+   }
+  },
+  "WCT_11": {
+   "name": "WCT_11",
+   "layout": {
+    "seed": 7110,
+    "bend_f": 1.5,
+    "passed": "43/60",
+    "score": 216.3,
+    "tip_gap": 35.0,
+    "meetings": 3,
+    "merge": 22,
+    "climb": 33.5,
+    "turn": 168,
+    "wallward": 212,
+    "span_x": 255,
+    "tips_z": "165..208"
+   },
+   "roots": {
+    "root_seed": 111,
+    "root_count": 11,
+    "root_meander": 7.0,
+    "root_sweep": 23
+   },
+   "build": {
+    "tree": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "259.8 x 139.0 x 178.4",
+     "print_time": "3h 49m 18s",
+     "grams": 73.0,
+     "overhang60": "0.26%"
+    },
+    "roots": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "228.3 x 231.4 x 24.2",
+     "print_time": "2h 4m 17s",
+     "grams": 61.0,
+     "overhang60": "0.01%"
+    },
+    "minutes": 10.0
+   },
+   "check": {
+    "ok": true,
+    "fit_mm3": -0.0,
+    "floating": {
+     "tree": 0,
+     "roots": 0
+    }
+   }
+  },
+  "WCT_12": {
+   "name": "WCT_12",
+   "layout": {
+    "seed": 7120,
+    "bend_f": 1.5,
+    "passed": "45/60",
+    "score": 218.2,
+    "tip_gap": 25.4,
+    "meetings": 1,
+    "merge": 0,
+    "climb": 33.5,
+    "turn": 171,
+    "wallward": 215,
+    "span_x": 272,
+    "tips_z": "156..213"
+   },
+   "roots": {
+    "root_seed": 112,
+    "root_count": 9,
+    "root_meander": 7.0,
+    "root_sweep": 23
+   },
+   "build": {
+    "tree": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "276.7 x 141.1 x 182.8",
+     "print_time": "3h 44m 44s",
+     "grams": 73.0,
+     "overhang60": "0.33%"
+    },
+    "roots": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "227.6 x 235.9 x 24.1",
+     "print_time": "1h 44m 35s",
+     "grams": 52.0,
+     "overhang60": "0.01%"
+    },
+    "minutes": 8.3
+   },
+   "check": {
+    "ok": true,
+    "fit_mm3": -0.0,
+    "floating": {
+     "tree": 0,
+     "roots": 0
+    }
+   }
+  },
+  "WCT_13": {
+   "name": "WCT_13",
+   "layout": {
+    "seed": 7130,
+    "bend_f": 1.5,
+    "passed": "34/60",
+    "score": 241.4,
+    "tip_gap": 26.4,
+    "meetings": 3,
+    "merge": 26,
+    "climb": 33.5,
+    "turn": 181,
+    "wallward": 264,
+    "span_x": 285,
+    "tips_z": "151..212"
+   },
+   "roots": {
+    "root_seed": 113,
+    "root_count": 10,
+    "root_meander": 7.0,
+    "root_sweep": 23
+   },
+   "build": {
+    "tree": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "291.3 x 139.9 x 181.8",
+     "print_time": "3h 57m 49s",
+     "grams": 78.0,
+     "overhang60": "0.30%"
+    },
+    "roots": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "216.9 x 223.5 x 24.0",
+     "print_time": "1h 50m 38s",
+     "grams": 54.0,
+     "overhang60": "0.01%"
+    },
+    "minutes": 9.7
+   },
+   "check": {
+    "ok": true,
+    "fit_mm3": -0.0,
+    "floating": {
+     "tree": 0,
+     "roots": 0
+    }
+   }
+  },
+  "WCT_14": {
+   "name": "WCT_14",
+   "layout": {
+    "seed": 7140,
+    "bend_f": 1.5,
+    "passed": "40/60",
+    "score": 218.8,
+    "tip_gap": 28.3,
+    "meetings": 2,
+    "merge": 25,
+    "climb": 33.5,
+    "turn": 176,
+    "wallward": 314,
+    "span_x": 259,
+    "tips_z": "160..212"
+   },
+   "roots": {
+    "root_seed": 114,
+    "root_count": 8,
+    "root_meander": 7.0,
+    "root_sweep": 23
+   },
+   "build": {
+    "tree": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "263.5 x 140.6 x 182.3",
+     "print_time": "3h 52m 25s",
+     "grams": 74.0,
+     "overhang60": "0.34%"
+    },
+    "roots": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "212.5 x 222.7 x 23.9",
+     "print_time": "1h 36m 40s",
+     "grams": 47.0,
+     "overhang60": "0.01%"
+    },
+    "minutes": 8.0
+   },
+   "check": {
+    "ok": true,
+    "fit_mm3": -0.0,
+    "floating": {
+     "tree": 0,
+     "roots": 0
+    }
+   }
+  },
+  "WCT_15": {
+   "name": "WCT_15",
+   "layout": {
+    "seed": 7150,
+    "bend_f": 1.5,
+    "passed": "37/60",
+    "score": 220.0,
+    "tip_gap": 16.1,
+    "meetings": 4,
+    "merge": 22,
+    "climb": 33.5,
+    "turn": 168,
+    "wallward": 196,
+    "span_x": 236,
+    "tips_z": "140..209"
+   },
+   "roots": {
+    "root_seed": 115,
+    "root_count": 11,
+    "root_meander": 7.0,
+    "root_sweep": 23
+   },
+   "build": {
+    "tree": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "240.6 x 141.9 x 179.9",
+     "print_time": "3h 27m 22s",
+     "grams": 68.0,
+     "overhang60": "0.24%"
+    },
+    "roots": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "228.0 x 247.1 x 24.2",
+     "print_time": "2h 7m 38s",
+     "grams": 62.0,
+     "overhang60": "0.01%"
+    },
+    "minutes": 10.8
+   },
+   "check": {
+    "ok": true,
+    "fit_mm3": 0.0,
+    "floating": {
+     "tree": 0,
+     "roots": 0
+    }
+   }
+  },
+  "WCT_16": {
+   "name": "WCT_16",
+   "layout": {
+    "seed": 7160,
+    "bend_f": 1.5,
+    "passed": "35/60",
+    "score": 218.0,
+    "tip_gap": 28.1,
+    "meetings": 3,
+    "merge": 20,
+    "climb": 33.5,
+    "turn": 149,
+    "wallward": 130,
+    "span_x": 274,
+    "tips_z": "164..213"
+   },
+   "roots": {
+    "root_seed": 116,
+    "root_count": 9,
+    "root_meander": 7.0,
+    "root_sweep": 23
+   },
+   "build": {
+    "tree": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 2",
+     "size": "280.2 x 141.6 x 183.5",
+     "print_time": "3h 40m 8s",
+     "grams": 72.0,
+     "overhang60": "0.25%"
+    },
+    "roots": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "218.2 x 224.5 x 24.1",
+     "print_time": "1h 40m 51s",
+     "grams": 50.0,
+     "overhang60": "0.01%"
+    },
+    "minutes": 9.2
+   },
+   "check": {
+    "ok": true,
+    "fit_mm3": -0.0,
+    "floating": {
+     "tree": 0,
+     "roots": 0
+    }
+   }
+  },
+  "WCT_17": {
+   "name": "WCT_17",
+   "layout": {
+    "seed": 7170,
+    "bend_f": 1.5,
+    "passed": "40/60",
+    "score": 222.7,
+    "tip_gap": 18.1,
+    "meetings": 6,
+    "merge": 29,
+    "climb": 33.5,
+    "turn": 156,
+    "wallward": 141,
+    "span_x": 222,
+    "tips_z": "138..209"
+   },
+   "roots": {
+    "root_seed": 117,
+    "root_count": 10,
+    "root_meander": 7.0,
+    "root_sweep": 23
+   },
+   "build": {
+    "tree": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "225.9 x 142.3 x 179.4",
+     "print_time": "3h 43m 10s",
+     "grams": 72.0,
+     "overhang60": "0.28%"
+    },
+    "roots": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "220.2 x 208.4 x 24.2",
+     "print_time": "1h 54m 44s",
+     "grams": 57.0,
+     "overhang60": "0.02%"
+    },
+    "minutes": 10.4
+   },
+   "check": {
+    "ok": true,
+    "fit_mm3": -0.0,
+    "floating": {
+     "tree": 0,
+     "roots": 0
+    }
+   }
+  },
+  "WCT_18": {
+   "name": "WCT_18",
+   "layout": {
+    "seed": 7180,
+    "bend_f": 2.2,
+    "passed": "33/60",
+    "score": 232.2,
+    "tip_gap": 22.4,
+    "meetings": 5,
+    "merge": 20,
+    "climb": 33.5,
+    "turn": 229,
+    "wallward": 236,
+    "span_x": 200,
+    "tips_z": "151..210"
+   },
+   "roots": {
+    "root_seed": 118,
+    "root_count": 8,
+    "root_meander": 8.0,
+    "root_sweep": 26
+   },
+   "build": {
+    "tree": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "203.1 x 142.8 x 180.2",
+     "print_time": "3h 35m 46s",
+     "grams": 69.0,
+     "overhang60": "0.28%"
+    },
+    "roots": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "201.0 x 212.4 x 23.9",
+     "print_time": "1h 36m 22s",
+     "grams": 48.0,
+     "overhang60": "0.01%"
+    },
+    "minutes": 8.3
+   },
+   "check": {
+    "ok": true,
+    "fit_mm3": -0.0,
+    "floating": {
+     "tree": 0,
+     "roots": 0
+    }
+   }
+  },
+  "WCT_19": {
+   "name": "WCT_19",
+   "layout": {
+    "seed": 7190,
+    "bend_f": 2.2,
+    "passed": "38/60",
+    "score": 224.3,
+    "tip_gap": 19.0,
+    "meetings": 4,
+    "merge": 18,
+    "climb": 33.5,
+    "turn": 215,
+    "wallward": 235,
+    "span_x": 266,
+    "tips_z": "176..212"
+   },
+   "roots": {
+    "root_seed": 119,
+    "root_count": 11,
+    "root_meander": 8.0,
+    "root_sweep": 26
+   },
+   "build": {
+    "tree": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "269.7 x 144.5 x 182.3",
+     "print_time": "3h 50m 34s",
+     "grams": 75.0,
+     "overhang60": "0.39%"
+    },
+    "roots": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "219.4 x 221.2 x 24.1",
+     "print_time": "2h 1m 36s",
+     "grams": 61.0,
+     "overhang60": "0.01%"
+    },
+    "minutes": 11.1
+   },
+   "check": {
+    "ok": true,
+    "fit_mm3": 0.0,
+    "floating": {
+     "tree": 0,
+     "roots": 0
+    }
+   }
+  },
+  "WCT_20": {
+   "name": "WCT_20",
+   "layout": {
+    "seed": 7200,
+    "bend_f": 2.2,
+    "passed": "38/60",
+    "score": 227.4,
+    "tip_gap": 30.0,
+    "meetings": 3,
+    "merge": 7,
+    "climb": 33.5,
+    "turn": 204,
+    "wallward": 283,
+    "span_x": 247,
+    "tips_z": "153..209"
+   },
+   "roots": {
+    "root_seed": 120,
+    "root_count": 9,
+    "root_meander": 8.0,
+    "root_sweep": 26
+   },
+   "build": {
+    "tree": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "251.1 x 128.9 x 178.9",
+     "print_time": "3h 46m 3s",
+     "grams": 73.0,
+     "overhang60": "0.37%"
+    },
+    "roots": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "212.2 x 204.9 x 23.9",
+     "print_time": "1h 46m 8s",
+     "grams": 52.0,
+     "overhang60": "0.01%"
+    },
+    "minutes": 8.8
+   },
+   "check": {
+    "ok": true,
+    "fit_mm3": -0.0,
+    "floating": {
+     "tree": 0,
+     "roots": 0
+    }
+   }
+  },
+  "WCT_21": {
+   "name": "WCT_21",
+   "layout": {
+    "seed": 7210,
+    "bend_f": 2.2,
+    "passed": "34/60",
+    "score": 257.6,
+    "tip_gap": 32.4,
+    "meetings": 5,
+    "merge": 24,
+    "climb": 33.5,
+    "turn": 203,
+    "wallward": 241,
+    "span_x": 245,
+    "tips_z": "138..209"
+   },
+   "roots": {
+    "root_seed": 121,
+    "root_count": 10,
+    "root_meander": 8.0,
+    "root_sweep": 26
+   },
+   "build": {
+    "tree": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "248.4 x 138.3 x 179.9",
+     "print_time": "3h 43m 16s",
+     "grams": 72.0,
+     "overhang60": "0.34%"
+    },
+    "roots": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "198.1 x 199.7 x 24.1",
+     "print_time": "1h 45m 33s",
+     "grams": 52.0,
+     "overhang60": "0.01%"
+    },
+    "minutes": 8.8
+   },
+   "check": {
+    "ok": true,
+    "fit_mm3": -0.0,
+    "floating": {
+     "tree": 0,
+     "roots": 0
+    }
+   }
+  },
+  "WCT_22": {
+   "name": "WCT_22",
+   "layout": {
+    "seed": 7220,
+    "bend_f": 2.2,
+    "passed": "39/60",
+    "score": 231.2,
+    "tip_gap": 23.5,
+    "meetings": 3,
+    "merge": 5,
+    "climb": 33.5,
+    "turn": 187,
+    "wallward": 325,
+    "span_x": 273,
+    "tips_z": "158..212"
+   },
+   "roots": {
+    "root_seed": 122,
+    "root_count": 8,
+    "root_meander": 8.0,
+    "root_sweep": 26
+   },
+   "build": {
+    "tree": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "275.9 x 141.1 x 182.8",
+     "print_time": "3h 45m 54s",
+     "grams": 72.0,
+     "overhang60": "0.39%"
+    },
+    "roots": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "225.2 x 235.9 x 23.9",
+     "print_time": "1h 32m 41s",
+     "grams": 47.0,
+     "overhang60": "0.01%"
+    },
+    "minutes": 7.5
+   },
+   "check": {
+    "ok": true,
+    "fit_mm3": 0.0,
+    "floating": {
+     "tree": 0,
+     "roots": 0
+    }
+   }
+  },
+  "WCT_23": {
+   "name": "WCT_23",
+   "layout": {
+    "seed": 7230,
+    "bend_f": 2.2,
+    "passed": "41/60",
+    "score": 221.3,
+    "tip_gap": 27.2,
+    "meetings": 3,
+    "merge": 11,
+    "climb": 33.5,
+    "turn": 218,
+    "wallward": 229,
+    "span_x": 256,
+    "tips_z": "167..211"
+   },
+   "roots": {
+    "root_seed": 123,
+    "root_count": 11,
+    "root_meander": 8.0,
+    "root_sweep": 26
+   },
+   "build": {
+    "tree": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "260.4 x 122.3 x 182.0",
+     "print_time": "3h 55m 3s",
+     "grams": 76.0,
+     "overhang60": "0.26%"
+    },
+    "roots": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "215.3 x 237.5 x 24.1",
+     "print_time": "2h 2m 59s",
+     "grams": 61.0,
+     "overhang60": "0.01%"
+    },
+    "minutes": 9.3
+   },
+   "check": {
+    "ok": true,
+    "fit_mm3": 0.0,
+    "floating": {
+     "tree": 0,
+     "roots": 0
+    }
+   }
+  },
+  "WCT_24": {
+   "name": "WCT_24",
+   "layout": {
+    "seed": 7240,
+    "bend_f": 2.2,
+    "passed": "45/60",
+    "score": 253.5,
+    "tip_gap": 29.1,
+    "meetings": 8,
+    "merge": 28,
+    "climb": 33.5,
+    "turn": 183,
+    "wallward": 258,
+    "span_x": 222,
+    "tips_z": "130..211"
+   },
+   "roots": {
+    "root_seed": 124,
+    "root_count": 9,
+    "root_meander": 8.0,
+    "root_sweep": 26
+   },
+   "build": {
+    "tree": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "225.7 x 131.3 x 181.0",
+     "print_time": "3h 33m 53s",
+     "grams": 68.0,
+     "overhang60": "0.28%"
+    },
+    "roots": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "213.5 x 214.9 x 23.9",
+     "print_time": "1h 52m 10s",
+     "grams": 55.0,
+     "overhang60": "0.01%"
+    },
+    "minutes": 7.2
+   },
+   "check": {
+    "ok": true,
+    "fit_mm3": 0.0,
+    "floating": {
+     "tree": 0,
+     "roots": 0
+    }
+   }
+  },
+  "WCT_25": {
+   "name": "WCT_25",
+   "layout": {
+    "seed": 7250,
+    "bend_f": 2.2,
+    "passed": "42/60",
+    "score": 223.4,
+    "tip_gap": 33.1,
+    "meetings": 3,
+    "merge": 17,
+    "climb": 33.5,
+    "turn": 205,
+    "wallward": 144,
+    "span_x": 232,
+    "tips_z": "166..210"
+   },
+   "roots": {
+    "root_seed": 125,
+    "root_count": 10,
+    "root_meander": 8.0,
+    "root_sweep": 26
+   },
+   "build": {
+    "tree": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "236.1 x 139.9 x 180.1",
+     "print_time": "3h 46m 15s",
+     "grams": 73.0,
+     "overhang60": "0.26%"
+    },
+    "roots": {
+     "build_ok": true,
+     "mesh_ok": true,
+     "slice_ok": true,
+     "edges": "boundary 0   non-manifold 0   shells 1",
+     "size": "231.1 x 215.5 x 24.1",
+     "print_time": "1h 54m 20s",
+     "grams": 56.0,
+     "overhang60": "0.01%"
+    },
+    "minutes": 7.6
+   },
+   "check": {
+    "ok": true,
+    "fit_mm3": -0.0,
+    "floating": {
+     "tree": 0,
+     "roots": 0
+    }
+   }
+  }
+ }
+}
