@@ -1,0 +1,52 @@
+{
+  "name": "Santa Octopus Medallion",
+  "size": [
+    45.6,
+    75.0
+  ],
+  "thickness": 3.0,
+  "core": 1.8,
+  "colours": [
+    [
+      "Black",
+      "#000000"
+    ],
+    [
+      "Gold",
+      "#E4BD68"
+    ],
+    [
+      "Mistletoe Green",
+      "#3F8E43"
+    ],
+    [
+      "Red",
+      "#C12E1F"
+    ],
+    [
+      "Cyan",
+      "#0086D6"
+    ],
+    [
+      "Sunflower Yellow",
+      "#FEC600"
+    ],
+    [
+      "Pink",
+      "#F55A74"
+    ],
+    [
+      "Jade White",
+      "#FFFFFF"
+    ]
+  ],
+  "holes": [
+    [
+      2.3,
+      2.2
+    ]
+  ],
+  "printer": "H2C",
+  "print_time": "59m 10s",
+  "filament_g": 11.0
+}

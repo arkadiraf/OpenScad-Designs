@@ -1,0 +1,52 @@
+{
+  "name": "Pink Frame Coffee Alien Medallion",
+  "size": [
+    51.0,
+    75.0
+  ],
+  "thickness": 3.0,
+  "core": 1.8,
+  "colours": [
+    [
+      "Black",
+      "#000000"
+    ],
+    [
+      "Hot Pink",
+      "#F5547C"
+    ],
+    [
+      "Turquoise",
+      "#00B1B7"
+    ],
+    [
+      "Cobalt Blue",
+      "#0056B8"
+    ],
+    [
+      "Sunflower Yellow",
+      "#FEC600"
+    ],
+    [
+      "Orange",
+      "#FF6A13"
+    ],
+    [
+      "Cocoa Brown",
+      "#6F5034"
+    ],
+    [
+      "Jade White",
+      "#FFFFFF"
+    ]
+  ],
+  "holes": [
+    [
+      2.9,
+      2.2
+    ]
+  ],
+  "printer": "H2C",
+  "print_time": "1h 2m 57s",
+  "filament_g": 13.0
+}

@@ -1,0 +1,22 @@
+{
+  "source": "Holly_Mushroom_Alien_Medallion_source.jpg",
+  "size": 85,
+  "palette": [
+    ["Black", [2, 2, 2], "#000000"],
+    ["Black", [32, 14, 7], "#000000"],
+    ["Black", [86, 52, 31], "#000000"],
+    ["Black", [141, 120, 83], "#000000"],
+    ["Bambu Green", [48, 211, 54], "#00AE42"],
+    ["Bambu Green", [186, 214, 33], "#00AE42"],
+    ["Pumpkin Orange", [242, 136, 39], "#FF9016"],
+    ["Pink", [220, 131, 105], "#F55A74"],
+    ["Light Gray", [192, 215, 224], "#D1D3D5"],
+    ["Yellow", [248, 230, 28], "#F4EE2A"],
+    ["Mistletoe Green", [65, 106, 60], "#3F8E43"],
+    ["Purple", [178, 138, 200], "#5E43B7"],
+    ["Cobalt Blue", [50, 96, 204], "#0056B8"],
+    ["Red", [212, 40, 42], "#C12E1F"],
+    ["Jade White", [252, 252, 252], "#FFFFFF"]
+  ],
+  "holes": [[1020, 254]]
+}

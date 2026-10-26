@@ -1,0 +1,23 @@
+{
+  "source": "Christmas_Pegasus_Medallion_source.jpg",
+  "size": 75,
+  "open_r": 0.2,
+  "min_feature": 0.5,
+  "palette": [
+    ["Black", [2, 1, 2], "#000000"],
+    ["Black", [50, 41, 31], "#000000"],
+    ["Black", [102, 65, 56], "#000000"],
+    ["Black", [131, 117, 92], "#000000"],
+    ["Gold", [208, 157, 45], "#E4BD68"],
+    ["Gold", [199, 163, 82], "#E4BD68"],
+    ["Gold", [241, 203, 98], "#E4BD68"],
+    ["Cyan", [168, 215, 229], "#0086D6"],
+    ["Red", [193, 45, 44], "#C12E1F"],
+    ["Pink", [242, 175, 182], "#F55A74"],
+    ["Mistletoe Green", [38, 108, 71], "#3F8E43"],
+    ["Jade White", [243, 238, 219], "#FFFFFF"],
+    ["Jade White", [208, 206, 200], "#FFFFFF"],
+    ["Jade White", [162, 159, 157], "#FFFFFF"]
+  ],
+  "holes": [[258, 30]]
+}

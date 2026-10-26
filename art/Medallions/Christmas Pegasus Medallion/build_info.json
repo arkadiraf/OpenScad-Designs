@@ -1,0 +1,48 @@
+{
+  "name": "Christmas Pegasus Medallion",
+  "size": [
+    70.1,
+    75.0
+  ],
+  "thickness": 3.0,
+  "core": 1.8,
+  "colours": [
+    [
+      "Black",
+      "#000000"
+    ],
+    [
+      "Gold",
+      "#E4BD68"
+    ],
+    [
+      "Cyan",
+      "#0086D6"
+    ],
+    [
+      "Red",
+      "#C12E1F"
+    ],
+    [
+      "Pink",
+      "#F55A74"
+    ],
+    [
+      "Mistletoe Green",
+      "#3F8E43"
+    ],
+    [
+      "Jade White",
+      "#FFFFFF"
+    ]
+  ],
+  "holes": [
+    [
+      3.6,
+      3.6
+    ]
+  ],
+  "printer": "H2C",
+  "print_time": "1h 9m 31s",
+  "filament_g": 11.0
+}

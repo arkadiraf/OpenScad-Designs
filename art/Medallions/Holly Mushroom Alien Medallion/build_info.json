@@ -1,0 +1,64 @@
+{
+  "name": "Holly Mushroom Alien Medallion",
+  "size": [
+    74.7,
+    85.0
+  ],
+  "thickness": 3.0,
+  "core": 1.8,
+  "colours": [
+    [
+      "Black",
+      "#000000"
+    ],
+    [
+      "Bambu Green",
+      "#00AE42"
+    ],
+    [
+      "Pumpkin Orange",
+      "#FF9016"
+    ],
+    [
+      "Pink",
+      "#F55A74"
+    ],
+    [
+      "Light Gray",
+      "#D1D3D5"
+    ],
+    [
+      "Yellow",
+      "#F4EE2A"
+    ],
+    [
+      "Mistletoe Green",
+      "#3F8E43"
+    ],
+    [
+      "Purple",
+      "#5E43B7"
+    ],
+    [
+      "Cobalt Blue",
+      "#0056B8"
+    ],
+    [
+      "Red",
+      "#C12E1F"
+    ],
+    [
+      "Jade White",
+      "#FFFFFF"
+    ]
+  ],
+  "holes": [
+    [
+      4.5,
+      4.5
+    ]
+  ],
+  "printer": "H2C",
+  "print_time": "1h 42m 6s",
+  "filament_g": 17.0
+}

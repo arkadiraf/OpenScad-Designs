@@ -1,0 +1,48 @@
+{
+  "name": "Happy Gift Cauldron Medallion",
+  "size": [
+    66.2,
+    75.0
+  ],
+  "thickness": 3.0,
+  "core": 1.8,
+  "colours": [
+    [
+      "Black",
+      "#000000"
+    ],
+    [
+      "Red",
+      "#C12E1F"
+    ],
+    [
+      "Gold",
+      "#E4BD68"
+    ],
+    [
+      "Cyan",
+      "#0086D6"
+    ],
+    [
+      "Mistletoe Green",
+      "#3F8E43"
+    ],
+    [
+      "Pink",
+      "#F55A74"
+    ],
+    [
+      "Jade White",
+      "#FFFFFF"
+    ]
+  ],
+  "holes": [
+    [
+      4.2,
+      4.3
+    ]
+  ],
+  "printer": "H2C",
+  "print_time": "55m 54s",
+  "filament_g": 10.0
+}

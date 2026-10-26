@@ -1,19 +1,32 @@
 {
-  "order": [
-    "Haunted House Medallion",
-    "Vini Gift Alien Medallion",
-    "Taco Fiesta Medallion",
-    "Santa UFO Medallion",
-    "Christmas Spider Medallion",
-    "Christmas Captain Bear Medallion",
-    "Patchwork Gift Alien Medallion",
-    "Snowflake Cyclops Alien Medallion",
-    "Coffee Mug Alien Medallion",
-    "Christmas Pikachu Medallion",
-    "Swirl Baby Dragon Medallion",
-    "Baroque Baby Dragon Medallion",
-    "Elf and Santa Hats Medallion",
-    "Cheerful Santa Cat Medallion",
-    "Starry Santa Kitten Medallion"
-  ]
+  "numbers": {
+    "Haunted House Medallion": 1,
+    "Vini Gift Alien Medallion": 2,
+    "Taco Fiesta Medallion": 3,
+    "Santa UFO Medallion": 4,
+    "Christmas Spider Medallion": 5,
+    "Christmas Captain Bear Medallion": 6,
+    "Patchwork Gift Alien Medallion": 7,
+    "Snowflake Cyclops Alien Medallion": 8,
+    "Coffee Mug Alien Medallion": 9,
+    "Christmas Pikachu Medallion": 10,
+    "Baroque Baby Dragon Medallion": 12,
+    "Elf and Santa Hats Medallion": 13,
+    "Cheerful Santa Cat Medallion": 14,
+    "Starry Santa Kitten Medallion": 15,
+    "Christmas Pegasus Medallion": 16,
+    "Happy Gift Cauldron Medallion": 17,
+    "Holly Mushroom Alien Medallion": 18,
+    "Pastel Mug Alien Medallion": 19,
+    "Pink Frame Coffee Alien Medallion": 20,
+    "Santa Mushroom Medallion": 21,
+    "Santa Octopus Medallion": 22,
+    "Sky Pegasus Medallion": 23,
+    "Sleepy Gnome Medallion": 24,
+    "Tabby Santa Kitty Medallion": 25,
+    "Yawning Pot Head Medallion": 26
+  },
+  "retired": {
+    "Swirl Baby Dragon Medallion": 11
+  }
 }

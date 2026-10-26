@@ -1,0 +1,18 @@
+{
+  "source": "Tabby_Santa_Kitty_Medallion_source.jpg",
+  "size": 75,
+  "bg_min": 180,
+  "palette": [
+    ["Black", [1, 1, 1], "#000000"],
+    ["Black", [28, 4, 1], "#000000"],
+    ["Mistletoe Green", [50, 107, 63], "#3F8E43"],
+    ["Mistletoe Green", [61, 94, 69], "#3F8E43"],
+    ["Maroon Red", [157, 32, 42], "#9D2235"],
+    ["Pumpkin Orange", [214, 133, 57], "#FF9016"],
+    ["Pumpkin Orange", [195, 137, 84], "#FF9016"],
+    ["Cocoa Brown", [121, 73, 33], "#6F5034"],
+    ["Pink", [240, 170, 180], "#F55A74"],
+    ["Jade White", [252, 252, 252], "#FFFFFF"]
+  ],
+  "holes": [[894, 294]]
+}

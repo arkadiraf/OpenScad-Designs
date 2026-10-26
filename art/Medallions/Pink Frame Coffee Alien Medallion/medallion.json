@@ -1,0 +1,22 @@
+{
+  "source": "Pink_Frame_Coffee_Alien_Medallion_source.jpg",
+  "size": 75,
+  "palette": [
+    ["Black", [4, 2, 4], "#000000"],
+    ["Black", [3, 17, 39], "#000000"],
+    ["Black", [60, 79, 95], "#000000"],
+    ["Hot Pink", [238, 75, 135], "#F5547C"],
+    ["Hot Pink", [202, 95, 131], "#F5547C"],
+    ["Turquoise", [59, 152, 171], "#00B1B7"],
+    ["Turquoise", [83, 134, 159], "#00B1B7"],
+    ["Cobalt Blue", [58, 113, 200], "#0056B8"],
+    ["Sunflower Yellow", [246, 208, 62], "#FEC600"],
+    ["Orange", [249, 104, 58], "#FF6A13"],
+    ["Cocoa Brown", [57, 38, 27], "#6F5034"],
+    ["Jade White", [249, 245, 236], "#FFFFFF"],
+    ["Jade White", [200, 210, 190], "#FFFFFF"],
+    ["Jade White", [209, 191, 175], "#FFFFFF"],
+    ["Jade White", [251, 213, 227], "#FFFFFF"]
+  ],
+  "holes": [[1072, 156]]
+}

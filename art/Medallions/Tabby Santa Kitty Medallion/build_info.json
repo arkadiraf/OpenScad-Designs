@@ -1,7 +1,7 @@
 {
-  "name": "Swirl Baby Dragon Medallion",
+  "name": "Tabby Santa Kitty Medallion",
   "size": [
-    68.3,
+    66.4,
     75.0
   ],
   "thickness": 3.0,
@@ -12,37 +12,37 @@
       "#000000"
     ],
     [
-      "Blue",
-      "#0A2989"
+      "Mistletoe Green",
+      "#3F8E43"
     ],
     [
       "Maroon Red",
       "#9D2235"
     ],
     [
-      "Sunflower Yellow",
-      "#FEC600"
-    ],
-    [
       "Pumpkin Orange",
       "#FF9016"
     ],
     [
-      "Turquoise",
-      "#00B1B7"
+      "Cocoa Brown",
+      "#6F5034"
     ],
     [
-      "Mistletoe Green",
-      "#3F8E43"
+      "Pink",
+      "#F55A74"
+    ],
+    [
+      "Jade White",
+      "#FFFFFF"
     ]
   ],
   "holes": [
     [
-      3.0,
-      3.0
+      4.2,
+      4.2
     ]
   ],
   "printer": "H2C",
-  "print_time": "1h 10m 40s",
+  "print_time": "51m 14s",
   "filament_g": 10.0
 }

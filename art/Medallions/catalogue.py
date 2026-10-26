@@ -2,9 +2,9 @@
 """Medallion catalogue: Catalogue.md (a table of every design) and Catalogue.png (a contact sheet).
 
 Reads each design folder's build_info.json (written by image_to_3mf.py) and preview PNG. The
-numbering is kept in catalogue.json: designs listed there keep their number, new folders are
-appended in alphabetical order, so a design's M-number never changes. image_to_3mf.py runs this
-after every build; run it by hand after renaming or removing a folder.
+numbering is kept in catalogue.json: every design keeps its M-number, new folders get the next
+free numbers (in alphabetical order), and a removed design's number is retired, not reused.
+image_to_3mf.py runs this after every build; run it by hand after renaming or removing a folder.
 
 usage:
   python catalogue.py
@@ -21,15 +21,29 @@ CARD_H = CELL + 150
 
 
 def designs():
-    """[(number, folder, info)] in catalogue order; updates catalogue.json."""
+    """[(number, folder, info)] by number; updates catalogue.json.
+
+    catalogue.json maps each design to its M-number. A removed design's number is retired (listed
+    under "retired") and never reused; new folders get the next number after the highest ever given."""
     found = sorted(d for d in os.listdir(HERE) if os.path.isfile(os.path.join(HERE, d, 'build_info.json')))
-    order = json.load(open(ORDER, encoding='utf-8'))['order'] if os.path.isfile(ORDER) else []
-    order = [d for d in order if d in found] + [d for d in found if d not in order]
+    data = json.load(open(ORDER, encoding='utf-8')) if os.path.isfile(ORDER) else {}
+    if 'order' in data:                            # older layout: a plain list, numbered 1..n
+        data = {'numbers': {d: i for i, d in enumerate(data['order'], 1)}}
+    numbers, retired = data.get('numbers', {}), data.get('retired', {})
+    for d in [d for d in numbers if d not in found]:
+        retired[d] = numbers.pop(d)
+    top = max(list(numbers.values()) + list(retired.values()) + [0])
+    for d in found:
+        if d not in numbers:
+            top += 1
+            numbers[d] = top
+    numbers = dict(sorted(numbers.items(), key=lambda kv: kv[1]))
+    retired = dict(sorted(retired.items(), key=lambda kv: kv[1]))
     with open(ORDER, 'w', encoding='utf-8') as f:
-        json.dump({'order': order}, f, indent=2)
+        json.dump({'numbers': numbers, 'retired': retired}, f, indent=2)
         f.write('\n')
-    return [(i, d, json.load(open(os.path.join(HERE, d, 'build_info.json'), encoding='utf-8')))
-            for i, d in enumerate(order, 1)]
+    return [(n, d, json.load(open(os.path.join(HERE, d, 'build_info.json'), encoding='utf-8')))
+            for d, n in numbers.items()]
 
 
 def preview(folder):
@@ -103,9 +117,10 @@ def write_png(items):
             meta += f' · {info["filament_g"]:.0f} g'
         dr.text((x + 14, ty + 36), meta, font=f_small, fill='#555555')
         cx = x + 14
-        for _, hexc in info['colours']:              # filament chips
+        step = min(38, (CELL - 28 - 30) / max(1, len(info['colours']) - 1))
+        for _, hexc in info['colours']:              # filament chips, squeezed to fit the card
             dr.ellipse((cx, ty + 74, cx + 30, ty + 104), fill=hexc, outline='#888888')
-            cx += 38
+            cx += step
     sheet.save(os.path.join(HERE, 'Catalogue.png'), optimize=True)
 
 

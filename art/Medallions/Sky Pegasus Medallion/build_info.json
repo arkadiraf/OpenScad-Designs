@@ -1,0 +1,56 @@
+{
+  "name": "Sky Pegasus Medallion",
+  "size": [
+    60.6,
+    75.0
+  ],
+  "thickness": 3.0,
+  "core": 1.8,
+  "colours": [
+    [
+      "Black",
+      "#000000"
+    ],
+    [
+      "Gold",
+      "#E4BD68"
+    ],
+    [
+      "Cocoa Brown",
+      "#6F5034"
+    ],
+    [
+      "Cyan",
+      "#0086D6"
+    ],
+    [
+      "Light Gray",
+      "#D1D3D5"
+    ],
+    [
+      "Jade White",
+      "#FFFFFF"
+    ],
+    [
+      "Sunflower Yellow",
+      "#FEC600"
+    ],
+    [
+      "Beige",
+      "#F7E6DE"
+    ],
+    [
+      "Maroon Red",
+      "#9D2235"
+    ]
+  ],
+  "holes": [
+    [
+      3.6,
+      3.6
+    ]
+  ],
+  "printer": "H2C",
+  "print_time": "1h 11m 56s",
+  "filament_g": 11.0
+}
