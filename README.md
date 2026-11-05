@@ -178,10 +178,11 @@ with the seed that reproduces the tables in the `.scad` (another seed grows a di
   </tr>
 </table>
 
-A card box for a deck of playing cards, 70 × 50 × 100 mm with lightly filleted corners, open at the
-top and slotted at the back. A copper tree stands to one side of the front in relief. Its roots run
+A card box for a deck of playing cards, 70 × 50 × 100 mm with lightly filleted corners, a sliding lid
+that snaps shut, and a slot at the back. A copper tree stands to one side of the front in relief. Its roots run
 out to both sides, frame the three-disc logo on the other side and wrap over the corners. [scad](art/Deck%20Holders/Rooted%20Tree%20Deck%20Holder/Rooted_Tree_Deck_Holder.scad) ·
-[3mf](art/Deck%20Holders/Rooted%20Tree%20Deck%20Holder/Rooted_Tree_Deck_Holder.3mf)
+[3mf](art/Deck%20Holders/Rooted%20Tree%20Deck%20Holder/Rooted_Tree_Deck_Holder.3mf) ·
+[lid 3mf](art/Deck%20Holders/Rooted%20Tree%20Deck%20Holder/Rooted_Tree_Deck_Holder_Lid.3mf)
 
 ### Catalogues
 

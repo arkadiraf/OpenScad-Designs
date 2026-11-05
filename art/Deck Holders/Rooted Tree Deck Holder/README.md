@@ -1,7 +1,8 @@
 # Rooted Tree Deck Holder
 
-An upright holder for a deck of playing cards, **70 × 50 × 100 mm** (W × D × H), open at the top and
-slotted at the back so you can push the deck up with a finger and draw it. It is a plain card box
+An upright holder for a deck of playing cards, **70 × 50 × 100 mm** (W × D × H), slotted at the back
+so you can push the deck up with a finger and draw it, and closed by a **sliding lid** that snaps
+shut. It is a plain card box
 with square corners and a light 1.5 mm fillet. Laid out after the reference print:
 - A tree stands to one side of the front. Its three-strand braided trunk leans out and its crown
   spreads over the whole upper face.
@@ -20,10 +21,11 @@ The images are renders, not photos.
 | | mm |
 |---|---|
 | Outer box | 70 × 50 × 100, corners filleted 1.5 (the relief adds up to 2.8 at the front and 1.5 on the sides) |
-| Cavity | 66 × 46 × 98, for 63.5 × 88.9 mm poker cards and a deck up to 44 mm thick |
+| Cavity | 65.2 × 45.2 × 98, for 63.5 × 88.9 mm poker cards and a deck up to 44 mm thick |
 | Deck top below the rim | 9.1 |
 | Back slot | 34 wide, from 28 mm above the bed to the top |
-| Walls / floor | 2 / 2 |
+| Walls / floor | 2.4 / 2 |
+| Lid | 67.8 × 48.4 × 2, its top 1.6 below the rim |
 | Logo | 37 × 12, inlaid 0.6 and standing 0.4 proud |
 
 ## Printing
@@ -34,12 +36,29 @@ The images are renders, not photos.
   reference photo, swap filament 2 to a silk copper in Bambu Studio.
 - Every tree member is sunk into the wall by a share of its radius that depends on its direction,
   so no underside is steeper than 58° from vertical. Mesh check: 0 open / non-manifold edges on
-  all parts, the relief is one shell, 0.35 % of the surface past 60° above the first centimetre
+  all parts, the relief is one shell, 0.36 % of the surface past 60° above the first centimetre
   (house limit 0.5 %).
-- About 62 g at 100 % solid (roughly 19 g at typical infill). Not yet sliced with Bambu Studio:
+- About 71 g at 100 % solid (roughly 21 g at typical infill). Not yet sliced with Bambu Studio:
   the build ran where Bambu Studio is not installed, so check the slice preview before printing.
 - The emblem in the first disc is small (about 6 mm tall). `Logo_trace.py` thickens its strokes
   by 0.1 mm a side so they hold at a 0.4 mm nozzle; expect the finest slits to close up.
+
+## The sliding lid
+
+| The lid, as printed | |
+|---|---|
+| <img src="Rooted_Tree_Deck_Holder_Lid.png" width="300"> | The lid slides in from the back. It runs in a groove round the inside of the side and front walls, 1.2 mm below the rim, and enters through the back wall, which is cut away above the groove floor. The groove ceiling slopes at 45°, so the box still prints without supports, and the lid's top edges are bevelled to match. |
+
+- **Lock.** Near the back of each side, a slot frees a 15 mm spring arm along the lid's edge. A
+  small rounded bump on the arm's free end stands 0.5 mm proud of the edge. When the lid is shut
+  it snaps into a matching dimple in the groove. Pull the lid back by its grip grooves to release it.
+- **Fit, checked on the real geometry.** Shut, the lid and box do not touch (0 mm³). 4 mm open,
+  only the two bumps press 0.5 mm into the walls, and the arms flex inward into their slots.
+  Fully open, the lid runs free.
+- **Printing.** The lid is a separate package, `Rooted_Tree_Deck_Holder_Lid.3mf` (Jade White,
+  about 8 g solid, 2 g at typical infill). It prints flat, top up. The 0.2 mm clearance suits a
+  0.4 mm nozzle; if your lid is tight, raise `lid_clear` to 0.25–0.3 and rebuild both packages.
+- `lid = false` removes the grooves and the lid, for the open-top box.
 
 ## How the joints work
 
@@ -77,7 +96,10 @@ sink is smoothed along each member, so no chord or sink jump cuts a tube under t
 | `plaque_content` | `logo` (the default, no words), `text`, or `logo_and_text` |
 | `logo_file`, `logo_w` | The logo (`Logo.svg`) and its width |
 | `line_en1` … `line_he2`, `text_size`, `plaque_layout` | Optional plaque text (English and Hebrew), stacked or side by side |
-| `part` | `assembly` to look at; `box`, `relief`, `logo` are the three colour parts |
+| `lid`, `lid_t`, `lid_groove_d`, `lid_lip`, `lid_clear` | The sliding lid and its groove |
+| `detent_h`, `detent_arm` | The lock: bump height and spring arm length |
+| `part` | `assembly` to look at; `box`, `relief`, `logo` are the three colour parts; `lid` the lid as printed |
+| `view`, `lid_open` | What the assembly shows (`lid`: the lid alone) and how far the lid is drawn open |
 
 Any change needs the parts exported again:
 
@@ -85,6 +107,9 @@ Any change needs the parts exported again:
 python tools/build_design.py "art/Deck Holders/Rooted Tree Deck Holder/Rooted_Tree_Deck_Holder.scad" \
     --name "Rooted Tree Deck Holder" --out "art/Deck Holders/Rooted Tree Deck Holder" \
     --part box=#FFFFFF --part relief=#9D432C --part logo=#000000
+python tools/build_design.py "art/Deck Holders/Rooted Tree Deck Holder/Rooted_Tree_Deck_Holder.scad" \
+    --name "Rooted Tree Deck Holder Lid" --out "art/Deck Holders/Rooted Tree Deck Holder" \
+    --define 'view="lid"' --part lid=#FFFFFF
 ```
 
 ## The logo

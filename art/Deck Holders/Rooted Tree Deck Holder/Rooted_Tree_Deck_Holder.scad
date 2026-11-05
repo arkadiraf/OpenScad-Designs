@@ -23,14 +23,14 @@
 card_w = 63.5;          // card width, mm (poker 63.5, bridge 57)
 card_h = 88.9;          // card height, mm
 deck_t = 44;            // deck thickness you want to hold, mm (about 0.3 mm per card, 0.6 sleeved)
-side_clear = 1.25;      // clearance each side of the card, mm
+side_clear = 0.85;      // clearance each side of the card, mm
 
 /* [Box] */
 box_h = 100;            // outer height, mm
-wall = 2.0;             // wall thickness, mm
+wall = 2.4;             // wall thickness, mm (2.4 leaves 1.4 mm beside the lid groove)
 floor_t = 2.0;          // floor thickness, mm
 corner_r = 1.5;         // fillet on the vertical box edges, mm (a card box: square corners, lightly rounded)
-front_clear = 2.0;      // depth clearance in front of + behind the deck, mm (total)
+front_clear = 1.2;      // depth clearance in front of + behind the deck, mm (total)
 slot_w = 34;            // width of the back slot, mm
 slot_bottom = 28;       // height of the bottom of the back slot above the bed, mm
 
@@ -60,8 +60,19 @@ font_he = "DejaVu Sans:style=Bold";
 plaque_proud = 0.4;     // how far the logo / text stands out of the wall, mm
 plaque_inlay = 0.6;     // how deep it is inlaid, mm
 
+/* [Lid] */
+lid = true;             // a sliding lid: grooves in the side and front walls, entry through the back
+lid_t = 2.0;            // lid thickness, mm
+lid_groove_d = 1.0;     // how far the groove runs into the walls, mm
+lid_lip = 1.2;          // wall left above the groove, mm
+lid_clear = 0.2;        // clearance round the lid in the groove, mm
+detent_h = 0.5;         // how far the lock bump stands out of the lid edge, mm
+detent_arm = 15;        // length of the spring arm that carries the bump, mm
+lid_open = 30;          // preview only: how far the lid is drawn slid open, mm
+
 /* [Output] */
-part = "assembly";      // [assembly, box, relief, logo, none, paths]
+part = "assembly";      // [assembly, box, relief, logo, lid, none, paths]
+view = "box";           // [box, lid] what the assembly preview shows (lid: the lid as printed)
 sketch = false;         // coarse tubes, no bark: for fast previews
 show_deck = false;      // preview only: the deck in place
 
@@ -358,7 +369,71 @@ module back_slot() {
             translate([-slot_w / 2, -box_h - 5, -2 * wall]) cube([slot_w, 1, 4 * wall]);
         }
 }
-module shell() { difference() { outer(); cavity(); back_slot(); } }
+module shell() { difference() { outer(); cavity(); back_slot(); if (lid) lid_cuts(); } }
+
+// ---------------------------------------------------------------- the sliding lid
+// The lid runs in a groove round the inside of the side and front walls, a lid_lip below the rim,
+// and enters through the back wall, which is cut away above the groove floor. The groove ceiling
+// slopes at 45 deg, so the box prints without supports; the lid's top edge is bevelled to match.
+// Lock: near the back of each side the lid edge is a spring arm (a slot frees it from the plate);
+// a small rounded bump on the arm's free end snaps into a dimple in the groove when the lid is shut.
+cw = box_w - 2 * wall;                      // cavity
+cd = box_d - 2 * wall;
+lc = lid_clear;
+lgd = lid_groove_d;
+gz0 = box_h - lid_lip - (lc + lid_t + 0.4); // groove floor
+gz1 = box_h - lid_lip;                      // groove top (inner face)
+lz0 = gz0 + lc;                             // lid bottom, closed
+lz1 = lz0 + lid_t;                          // lid top
+lzb = lz1 - (lgd - lc) + 0.1;               // where the lid edge starts its 45 deg bevel
+lid_edge = cw / 2 + lgd - lc;               // lid side edge, |x|
+det_y = box_d / 2 - wall - 7;               // bump position along y when shut
+det_r = 1.0;                                // bump radius (a vertical rounded rib)
+module inner_fp(o) { footprint(-wall + o); }
+// footprint of the lid at depth o into the walls: runs out through the back face
+module lid_fp(o) { hull() { inner_fp(o); translate([-(cw / 2 + o), 0]) square([cw + 2 * o, box_d / 2]); } }
+module groove() {
+    hull() {
+        translate([0, 0, gz0]) linear_extrude(gz1 - lgd - gz0) inner_fp(lgd);
+        translate([0, 0, gz1 - 0.01]) linear_extrude(0.01) inner_fp(0);
+    }
+}
+module lid_cuts() {
+    groove();
+    // the entry: the back wall above the groove floor, as wide as the groove
+    translate([-(cw / 2 + lgd), cd / 2 - 0.01, gz0]) cube([cw + 2 * lgd, wall + 1, box_h]);
+    // the lock dimples
+    for (sx = [-1, 1]) translate([sx * (lid_edge + detent_h - det_r), det_y, gz0])
+        cylinder(r = det_r + 0.15, h = lzb - gz0, $fn = 32);
+}
+// the lid in box coordinates, shut
+module lid_body() {
+    arm_w = 2.6;                            // spring arm width
+    difference() {
+        union() {
+            intersection() {
+                hull() {
+                    translate([0, 0, lz0]) linear_extrude(lzb - lz0) lid_fp(lgd - lc);
+                    translate([0, 0, lz1 - 0.01]) linear_extrude(0.01) lid_fp(lgd - lc - (lz1 - lzb));
+                }
+                translate([-box_w, -box_d, 0]) cube([2 * box_w, 1.5 * box_d, box_h]);   // flush with the back face
+            }
+            // the lock bumps: vertical rounded ribs on the edge, below the bevel
+            for (sx = [-1, 1]) translate([sx * (lid_edge + detent_h - det_r), det_y, lz0])
+                cylinder(r = det_r, h = lzb - lz0, $fn = 32);
+        }
+        // spring arms: a slot along each edge, and a cut across the free (back) end
+        for (sx = [-1, 1]) {
+            translate([sx > 0 ? lid_edge - arm_w - 1 : -lid_edge + arm_w, det_y - detent_arm + 2.5, lz0 - 1])
+                cube([1, detent_arm, lid_t + 2]);
+            translate([sx > 0 ? lid_edge - arm_w - 1 : -lid_edge - 1, det_y + 2.5, lz0 - 1])
+                cube([arm_w + 2, 1, lid_t + 2]);
+        }
+        // finger grip: three shallow grooves across the back end
+        for (k = [0:2]) translate([-(cw / 2 - 8), box_d / 2 - 3 - 2.5 * k, lz1 - 0.6]) cube([cw - 16, 1.2, 1]);
+    }
+}
+module lid_print() { translate([0, 0, -lz0]) lid_body(); }
 
 // ---------------------------------------------------------------- the plaque
 module he_text(t) { text(t, size = text_size, font = font_he, halign = "center", valign = "center",
@@ -420,12 +495,18 @@ echo(str("Deck holder: outer ", box_w, " x ", box_d, " x ", box_h, " mm; cavity 
          deck_t, " mm; the deck stands ", box_h - floor_t - card_h, " mm below the rim; back slot ", slot_w,
          " mm wide from z ", slot_bottom, "; ", len(members), " tree members (", len(limbs), " crown, ",
          len(roots) + len(shoots), " roots)"));
+if (lid) echo(str("Lid: ", lid_t, " mm, runs ", lgd - lc, " mm into a ", lgd, " mm groove at z ", gz0, "-", gz1,
+                  "; top ", box_h - lz1, " mm below the rim; lock bumps ", detent_h, " mm on ", detent_arm,
+                  " mm spring arms, ", box_d / 2 - det_y, " mm in from the back"));
 
 // ---------------------------------------------------------------- parts
-if (part == "assembly") {
+if (part == "assembly" && view == "lid") {
+    color("#F4F4F0") lid_print();
+} else if (part == "assembly") {
     color("#F4F4F0") difference() { shell(); plaque_solid(); }
     color("#B5651D") relief();
     color("#111111") plaque_solid();
+    if (lid) color("#E8E8E2") translate([0, lid_open, 0]) lid_body();
     if (show_deck) deck();
 } else if (part == "box") {
     difference() { shell(); plaque_solid(); }
@@ -433,6 +514,8 @@ if (part == "assembly") {
     relief();
 } else if (part == "logo") {
     plaque_solid();
+} else if (part == "lid") {
+    lid_print();
 } else if (part == "paths") {
     for (m = members) echo(m[0]);
 }
