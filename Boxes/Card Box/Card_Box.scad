@@ -1,9 +1,7 @@
 // Card Box - a two-piece box for a deck of playing cards.
-// Base tray with thumb notches on the long sides, and a lid that slips over a
-// thin lip at the top of the base. Closed, the lid's top rests on the rim and its
-// skirt meets the base wall flush, so the outside reads as one solid block: the
-// thumb notches only cut the lip and the inner part of the wall, hidden by the
-// lid and the outer skin. A small pull notch at the seam on each short end
+// Base tray and a lid that slips over a thin lip at the top of the base.
+// Closed, the lid's top rests on the rim and its skirt meets the base wall
+// flush, so the outside reads as one solid block. A small pull notch at the seam on each short end
 // gives a fingertip something to open it with.
 // The lid top carries the TAU Engineering ECE logo as a black inlay, flush with
 // the white surface (it prints in the lid's first layers, top down on the bed).
@@ -28,10 +26,6 @@ lip_h  = 8;      // [4:1:30] height of the lip the lid slides over, mm
 lid_wall = 1.2;  // [0.8:0.4:2] lid skirt thickness, mm
 fit    = 0.2;    // [0:0.05:0.5] radial clearance between lip and lid, mm
 
-/* [Thumb notches] */
-notch_w = 24;    // [0:1:50] width of the notch on each long side (0 = none)
-notch_d = 10;    // [0:1:40] depth of the notch below the rim
-
 /* [Pull notch] */
 pull_w = 18;     // [0:1:40] width of the pull notch at the seam, short ends (0 = none)
 pull_h = 2.5;    // [1:0.5:5] height the notch cuts into the lid edge, mm
@@ -55,7 +49,6 @@ lip_t   = wall - lid_wall - fit;      // thickness left in the lip
 lid_h   = floor_t + lip_h;
 gap     = 10;                         // spacing between pieces on the plate
 assert(lip_t >= 0.8, "wall too thin for lid_wall + fit: lip under 0.8 mm");
-assert(notch_d < inner_d - 2, "notch deeper than the box");
 assert(logo_w <= outer_l - 2*lid_wall - 4, "logo wider than the lid top");
 assert(logo_depth < floor_t - 0.6, "logo inlay too deep for the lid top");
 white = "#FFFFFF";   // Bambu PLA Basic Jade White
@@ -81,21 +74,6 @@ module base() {
         // cavity
         translate([0, 0, floor_t])
             rbox(inner_l, inner_w, base_h, corner_r - wall);
-        // thumb notches: U shape cut from the rim on both long sides, kept
-        // inside the lip footprint so the outer skin below the lid stays solid
-        if (notch_w > 0 && notch_d > 0)
-          intersection() {
-            translate([0, 0, -eps])
-                rbox(outer_l - 2*(lid_wall + fit), outer_w - 2*(lid_wall + fit),
-                     base_h + 1, corner_r - lid_wall - fit);
-            for (s = [-1, 1])
-                translate([0, s*outer_w/2, base_h - notch_d + notch_w/2])
-                    rotate([90, 0, 0]) hull() {
-                        cylinder(r = notch_w/2, h = 2*wall + 2, center = true);
-                        translate([0, notch_d, 0])
-                            cube([notch_w, eps, 2*wall + 2], center = true);
-                    }
-          }
         // pull scoops: shallow half-ellipse just below the seam, short ends
         if (pull_w > 0)
             for (s = [-1, 1])
