@@ -37,7 +37,7 @@ logo_w = 90;      // [0:1:100] logo width on the lid top, mm (0 = no logo)
 logo_depth = 0.6; // [0.2:0.2:1.2] inlay depth, mm (3 layers at 0.2)
 
 /* [Output] */
-part = "assembly"; // [assembly, base, lid, logo, closed, none]
+part = "assembly"; // [assembly, base, lid, logo, closed, showcase, none]
 
 /* [Hidden] */
 $fn = 64;
@@ -128,4 +128,20 @@ if (part == "closed") {
     color(white) base();
     color("#F2F2F2") closed_lid() lid();
     color(black) closed_lid() logo_inlay();
+}
+
+// showcase (render only): closed box on the left; open base with its lid
+// beside it, logo up, on the right
+module closed_box() {
+    color(white) base();
+    color("#F2F2F2") closed_lid() lid();
+    color(black) closed_lid() logo_inlay();
+}
+if (part == "showcase") {
+    translate([-(outer_l/2 + gap), 0, 0]) closed_box();
+    translate([outer_l/2 + gap, 0, 0]) color(white) base();
+    translate([outer_l/2 + gap, -(outer_w + gap), -(base_h + floor_t - lid_h)]) {
+        color("#F2F2F2") closed_lid() lid();
+        color(black) closed_lid() logo_inlay();
+    }
 }
