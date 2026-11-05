@@ -1,6 +1,10 @@
 // Card Box - a two-piece box for a deck of playing cards.
 // Base tray with thumb notches on the long sides, and a lid that slips over a
-// thin lip at the top of the base, flush with the base's outer wall when closed.
+// thin lip at the top of the base. Closed, the lid's top rests on the rim and its
+// skirt meets the base wall flush, so the outside reads as one solid block: the
+// thumb notches only cut the lip and the inner part of the wall, hidden by the
+// lid and the outer skin. A small pull notch at the seam on each short end
+// gives a fingertip something to open it with.
 // Step 1 is the cavity: inner 100 x 70 mm, 25 mm deep (base floor to base rim).
 // Both pieces print open side up / lid top down on the bed, no supports.
 
@@ -15,13 +19,19 @@ floor_t = 1.6;   // [1.2:0.2:3] base floor and lid top thickness, mm
 corner_r = 4;    // [1:0.5:10] outer corner radius, mm
 
 /* [Lid] */
-lip_h  = 12;     // [5:1:30] height of the lip the lid slides over, mm
+lip_h  = 8;      // [4:1:30] height of the lip the lid slides over, mm
 lid_wall = 1.2;  // [0.8:0.4:2] lid skirt thickness, mm
 fit    = 0.2;    // [0:0.05:0.5] radial clearance between lip and lid, mm
 
 /* [Thumb notches] */
 notch_w = 24;    // [0:1:50] width of the notch on each long side (0 = none)
-notch_d = 16;    // [0:1:40] depth of the notch below the rim
+notch_d = 10;    // [0:1:40] depth of the notch below the rim
+
+/* [Pull notch] */
+pull_w = 18;     // [0:1:40] width of the pull notch at the seam, short ends (0 = none)
+pull_h = 2.5;    // [1:0.5:5] height the notch cuts into the lid edge, mm
+pull_depth = 1;  // [0.4:0.2:1.6] depth of the matching scoop in the base wall, mm
+pull_drop = 3;   // [1:0.5:8] how far the base scoop reaches below the seam, mm
 
 /* [Output] */
 part = "assembly"; // [assembly, base, lid, closed, none]
@@ -58,8 +68,13 @@ module base() {
         // cavity
         translate([0, 0, floor_t])
             rbox(inner_l, inner_w, base_h, corner_r - wall);
-        // thumb notches: U shape cut from the rim on both long sides
+        // thumb notches: U shape cut from the rim on both long sides, kept
+        // inside the lip footprint so the outer skin below the lid stays solid
         if (notch_w > 0 && notch_d > 0)
+          intersection() {
+            translate([0, 0, -eps])
+                rbox(outer_l - 2*(lid_wall + fit), outer_w - 2*(lid_wall + fit),
+                     base_h + 1, corner_r - lid_wall - fit);
             for (s = [-1, 1])
                 translate([0, s*outer_w/2, base_h - notch_d + notch_w/2])
                     rotate([90, 0, 0]) hull() {
@@ -67,6 +82,14 @@ module base() {
                         translate([0, notch_d, 0])
                             cube([notch_w, eps, 2*wall + 2], center = true);
                     }
+          }
+        // pull scoops: shallow half-ellipse just below the seam, short ends
+        if (pull_w > 0)
+            for (s = [-1, 1])
+                translate([s*outer_l/2, 0, base_h - lip_h])
+                    scale([1, pull_w/2, pull_drop])
+                        rotate([0, 90, 0])
+                            cylinder(r = 1, h = 2*pull_depth, center = true);
     }
 }
 
@@ -77,6 +100,13 @@ module lid() {
         translate([0, 0, floor_t])
             rbox(outer_l - 2*lid_wall, outer_w - 2*lid_wall, lid_h,
                  corner_r - lid_wall);
+        // pull notches: half-ellipse cut into the skirt's open edge, short ends
+        if (pull_w > 0)
+            for (s = [-1, 1])
+                translate([s*outer_l/2, 0, lid_h])
+                    scale([1, pull_w/2, pull_h])
+                        rotate([0, 90, 0])
+                            cylinder(r = 1, h = 4*lid_wall, center = true);
     }
 }
 
@@ -91,6 +121,6 @@ if (part == "lid" || part == "assembly")
     color("#C12E1F") translate([0, outer_w + gap, 0]) lid();
 if (part == "closed") {
     color("#C12E1F") base();
-    color("#C12E1F", 0.6)
+    color("#D8402F")
         translate([0, 0, base_h + floor_t]) mirror([0, 0, 1]) lid();
 }
