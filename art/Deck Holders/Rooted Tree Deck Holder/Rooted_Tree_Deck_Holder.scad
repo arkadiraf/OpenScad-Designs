@@ -22,7 +22,7 @@
 /* [Cards] */
 card_w = 63.5;          // card width, mm (poker 63.5, bridge 57)
 card_h = 88.9;          // card height, mm
-deck_t = 44;            // deck thickness you want to hold, mm (about 0.3 mm per card, 0.6 sleeved)
+deck_t = 19;            // deck thickness you want to hold, mm (about 0.3 mm per card: 19 holds ~60 cards)
 side_clear = 0.85;      // clearance each side of the card, mm
 
 /* [Box] */
@@ -67,7 +67,7 @@ lid_groove_d = 1.0;     // how far the groove runs into the walls, mm
 lid_lip = 1.2;          // wall left above the groove, mm
 lid_clear = 0.2;        // clearance round the lid in the groove, mm
 detent_h = 0.5;         // how far the lock bump stands out of the lid edge, mm
-detent_arm = 15;        // length of the spring arm that carries the bump, mm
+detent_arm = 11;        // length of the spring arm that carries the bump, mm
 lid_open = 30;          // preview only: how far the lid is drawn slid open, mm
 
 /* [Output] */
@@ -88,8 +88,11 @@ K_OVER = pow(sin(58), 2);                   // overhang limit: steepest undersid
 
 fa = box_w / 2 - rc;                        // half of the flat front of the guide surface
 fq = rc * PI / 2;                           // corner arc length
-fb = box_d - 2 * rc;                        // flat side length
-u_side_end = fa + fq + fb;                  // where the side ends at the back corner
+fb = box_d - 2 * rc;                        // flat side length of the guide
+fb_ref = 34;                                // the root tables were written for a 50 mm deep box (34 mm of flat side)
+side_m = 0.92 * fb;                         // so their run along a side eases into the side there is:
+function side_run(t) = let(e = exp(2 * t / side_m)) side_m * (e - 1) / (e + 1);   // m tanh(t / m): 1:1 at the corner
+u_side_end = fa + fq + fb_ref;              // where the side ends at the back corner, in table units
 
 z_base = 40;                                // where the roots leave the trunk
 strand_top = [55, 68, 61];                  // where each trunk strand turns into a limb
@@ -151,7 +154,7 @@ function surf(u, rr = corner_r) =
               : w <= e + qa ? let(t = (w - e) / rr * 180 / PI)
                     [[box_w / 2 - rr + rr * sin(t), -box_d / 2 + rr - rr * cos(t)], [sin(t), -cos(t)]]
               : [[box_w / 2, -box_d / 2 + rr + (w - e - qa)], [1, 0]]
-          : [[box_w / 2, -box_d / 2 + rc + (v - fa - fq)], [1, 0]])
+          : [[box_w / 2, -box_d / 2 + rc + side_run(v - fa - fq)], [1, 0]])
     [[s * r[0][0], r[0][1]], [s * r[1][0], r[1][1]]];
 
 // sink share from the direction: cos^2 of the climb is u'^2 / |t|^2
@@ -387,7 +390,7 @@ lz0 = gz0 + lc;                             // lid bottom, closed
 lz1 = lz0 + lid_t;                          // lid top
 lzb = lz1 - (lgd - lc) + 0.1;               // where the lid edge starts its 45 deg bevel
 lid_edge = cw / 2 + lgd - lc;               // lid side edge, |x|
-det_y = box_d / 2 - wall - 7;               // bump position along y when shut
+det_y = box_d / 2 - wall - 5;               // bump position along y when shut
 det_r = 1.0;                                // bump radius (a vertical rounded rib)
 module inner_fp(o) { footprint(-wall + o); }
 // footprint of the lid at depth o into the walls: runs out through the back face
@@ -495,6 +498,8 @@ echo(str("Deck holder: outer ", box_w, " x ", box_d, " x ", box_h, " mm; cavity 
          deck_t, " mm; the deck stands ", box_h - floor_t - card_h, " mm below the rim; back slot ", slot_w,
          " mm wide from z ", slot_bottom, "; ", len(members), " tree members (", len(limbs), " crown, ",
          len(roots) + len(shoots), " roots)"));
+assert(box_d > 2 * path_r + 2, "box_d must exceed 2 * path_r + 2: the root guide needs a flat side");
+assert(!lid || detent_arm + 4 < box_d - 2 * wall, "the lid's spring arm is longer than the lid is deep");
 if (lid) echo(str("Lid: ", lid_t, " mm, runs ", lgd - lc, " mm into a ", lgd, " mm groove at z ", gz0, "-", gz1,
                   "; top ", box_h - lz1, " mm below the rim; lock bumps ", detent_h, " mm on ", detent_arm,
                   " mm spring arms, ", box_d / 2 - det_y, " mm in from the back"));
