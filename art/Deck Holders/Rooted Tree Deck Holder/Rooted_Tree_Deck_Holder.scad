@@ -2,8 +2,9 @@
 // ---------------------------------------------------------------------------------------------
 // An upright holder for a deck of playing cards, 70 x 50 x 100 mm (width x depth x height), open
 // at the top and slotted at the back so the deck can be pushed up and drawn. A copper tree grows
-// on the front in relief: a braided trunk, a crown that fills the upper face, and roots that
-// spread over the corners onto both sides and frame a name plaque at the bottom.
+// on the front in relief, laid out after the reference print: the tree stands to one side, its
+// braided trunk leaning out and its crown spreading over the whole upper face, and its roots run
+// across over a name plaque on the other side, frame it and wrap round the corners onto the sides.
 //
 // Step 1 is the deck: the cavity is sized from the card and the deck thickness, and the outer box
 // is the cavity plus the walls. Every tree member is a tube swept along a path written on the
@@ -33,6 +34,7 @@ slot_w = 34;            // width of the back slot, mm
 slot_bottom = 28;       // height of the bottom of the back slot above the bed, mm
 
 /* [Tree] */
+trunk_side = -1;        // [-1:left, 1:right] side the tree stands on; the plaque takes the other
 seed = 7;               // changes the crown and the rootlets
 crown_depth = 5;        // levels of forking in the crown
 limb_len = 17;          // length of the first limbs, mm
@@ -44,6 +46,7 @@ twist = 9;              // bark twist, degrees per ring
 
 /* [Plaque] */
 show_text = true;
+plaque_layout = "stacked";   // [stacked, side_by_side]
 line_en1 = "TEL AVIV";
 line_en2 = "UNIVERSITY";
 line_he1 = "אוניברסיטת";
@@ -52,7 +55,7 @@ text_size = 3.6;        // cap height-ish, mm
 font_en = "Liberation Sans:style=Bold";
 font_he = "DejaVu Sans:style=Bold";
 logo_file = "";         // optional emblem (SVG or DXF), placed above the text
-logo_w = 44;            // emblem width, mm
+logo_w = 34;            // emblem width, mm
 text_proud = 0.4;       // how far the text stands out of the wall, mm
 text_inlay = 0.6;       // how deep it is inlaid, mm
 
@@ -75,12 +78,13 @@ fq = rc * PI / 2;                           // corner arc length
 fb = box_d - 2 * rc;                        // flat side length
 u_side_end = fa + fq + fb;                  // where the side ends at the back corner
 
-z_base = 42;                                // where the roots leave the trunk
-strand_top = [58, 71, 63];                  // where each trunk strand turns into a limb
-strand_amp = 3.2;
+z_base = 40;                                // where the roots leave the trunk
+strand_top = [55, 68, 61];                  // where each trunk strand turns into a limb
+function trunk_u(z) = trunk_side * lerp(7, 12, clamp((z - z_base) / 28, 0, 1));   // leans outwards
+strand_amp = 2.9;
 strand_wave = 30;
 
-plaque = [[-25, 27], [5, 36]];              // [u range], [z range] kept clear of the tree
+plaque = trunk_side < 0 ? [[-11, 29], [5, 32]] : [[-29, 11], [5, 32]];   // [u], [z] under the roots
 
 // ---------------------------------------------------------------- library
 function unit(v) = v / norm(v);
@@ -165,7 +169,7 @@ function limb(p, a0, a1, L, r, r1, k, s0 = 0.1, bury = true) =
         P = [for (i = [0:n]) let(t = i / n, b = bez(p, p1, p2, t), g = unit(bezd(p, p1, p2, t)))
                  b + [-g[1], g[0]] * w * sin(180 * t)],
         R = [for (i = [0:n]) lerp(r, r1, i / n)],
-        S = [for (i = [0:n]) bury ? lerp(s0, 1.05, smooth(0.72, 1, i / n)) : s0])
+        S = [for (i = [0:n]) bury ? lerp(s0, 1.2, smooth(0.72, 1, i / n)) : s0])
     [P, R, S, ang(p2 - p1)];
 
 // The crown: each member forks into 2 (sometimes 3) until depth runs out.
@@ -189,7 +193,7 @@ function crown(p, a0, a1_, L, r, d, k) =
     concat([[m[0], m[1], m[2]]], kids);
 
 // Trunk strands: three tubes braided round the trunk axis.
-function strand_u(i, z) = strand_amp * sin(360 * (z - z_base) / strand_wave + 120 * i);
+function strand_u(i, z) = trunk_u(z) + strand_amp * sin(360 * (z - z_base) / strand_wave + 120 * i);
 function strand(i) = let(z0 = z_base - 4, z1 = strand_top[i], n = ceil((z1 - z0) / seg))
     [[for (j = [0:n]) let(z = lerp(z0, z1, j / n)) [strand_u(i, z), z]],
      [for (j = [0:n]) limb_r],
@@ -199,14 +203,17 @@ function strand(i) = let(z0 = z_base - 4, z1 = strand_top[i], n = ceil((z1 - z0)
 function strand_end(i) = [strand_u(i, strand_top[i]), strand_top[i]];
 
 // Main roots: control points (u, z), hand laid round the plaque and over the corners.
-main_roots = [
-    [[-2, 49], [-6, 43], [-16, 39.5], [-26, 35], [-30.5, 24], [-30, 12], [-27, 3], [-26, -2]],   // left frame
-    [[-1, 47], [-10, 44.5], [-24, 42.5], [-37, 39], [-47, 31], [-55, 19], [-59, 7], [-60, -2]],  // left, onto the side
-    [[2, 49], [7, 43], [18, 39.5], [28.5, 34], [32, 22], [31, 11], [27, 3], [25, -2]],           // right frame
-    [[1, 47], [11, 44.5], [26, 43], [39, 40], [49, 33], [57, 21], [62, 9], [64, -2]],            // right, onto the side
-    [[31.5, 16], [27, 5.5], [16, 2.6], [2, 2.4], [-12, 2.8], [-24, 2.2], [-29, 0]],               // under the plaque
+// Written for a tree on the left; trunk_side = 1 mirrors them.
+roots_left = [
+    [[-7, 46], [-11, 40], [-19, 35], [-26, 26], [-28.5, 14], [-27, 3], [-26, -2]],                  // left, down to the bed
+    [[-9, 45], [-19, 42], [-31, 40], [-43, 33], [-51, 20], [-54, 6], [-55, -2]],                    // left, onto the side
+    [[-6, 45], [-9.5, 39], [-14, 32], [-15.5, 20], [-14, 8], [-9, 2.8], [3, 2.2], [17, 2.7], [28, 2], [33, -1]],  // round the plaque
+    [[-5, 46], [1, 40], [13, 36.5], [25, 36], [32.5, 33], [35.5, 23], [34, 11], [31.5, 2], [30.5, -2]],  // over the plaque, right frame
+    [[-4, 47], [5, 43], [19, 41], [33, 39.5], [45, 34], [53, 22], [57, 10], [59, -2]],              // over the plaque, onto the right side
+    [[10, 40.5], [22, 39.5], [31, 38], [41, 31], [46, 20], [48, 8], [48.5, -2]],                    // a second over the plaque
 ];
-root_rad = [1.0, 0.95, 1.0, 0.95, 0.6];
+root_rad = [0.85, 0.8, 0.85, 1.0, 1.0, 0.6];
+main_roots = [for (r = roots_left) [for (p = r) [-trunk_side * p[0], p[1]]]];
 
 function root_member(c, r) = let(P = cr(c, max(2, ceil(10 / seg))), n = len(P) - 1)
     [P, [for (i = [0:n]) r * lerp(1, 0.45, pow(i / n, 0.8))], [for (i = [0:n]) 0.15]];
@@ -215,7 +222,7 @@ function root_member(c, r) = let(P = cr(c, max(2, ceil(10 / seg))), n = len(P) -
 function rootlets(m, k) = let(P = m[0], n = len(P) - 1)
     [for (q = [0:2]) let(i = floor(n * (0.25 + 0.25 * q + 0.1 * rnd(k, q))),
                          p = P[i], t = unit(P[min(n, i + 1)] - P[max(0, i - 1)]), ta = ang(t),
-                         side = p[0] >= 0 ? 1 : -1,
+                         side = p[0] >= trunk_u(z_base) ? 1 : -1,
                          a1 = ta + (q == 1 ? -1 : 1) * side * (25 + 20 * rnd(k, q, 2)),
                          L = fit_len(p, a1, 12 + 8 * rnd(k, q, 3), u_side_end - 6, 1.5, box_h),
                          lm = limb(p, ta, a1, max(L, 0.1), 0.62 * m[1][i], 0.3 * m[1][i], k + q, 0.2, true),
@@ -224,16 +231,18 @@ function rootlets(m, k) = let(P = m[0], n = len(P) - 1)
 
 // ---------------------------------------------------------------- all members
 strands = [for (i = [0:2]) strand(i)];
-core = let(n = ceil(34 / seg)) [[for (j = [0:n]) [0.3 * sin(j * 40), lerp(z_base - 3, 70, j / n)]],
+core = let(n = ceil(34 / seg)) [[for (j = [0:n]) let(z = lerp(z_base - 3, 67, j / n)) [trunk_u(z) + 0.3 * sin(j * 40), z]],
                                 [for (j = [0:n]) lerp(4.6, 3.0, j / n)], [for (j = [0:n]) 0.55]];
 // first limbs: [start (u, z), leaving angle, heading, length share, radius share]
-limb_table = [[strand_end(0), 0, -80, 1.15, 1.0],
-              [strand_end(2), 0, 76, 1.15, 1.0],
-              [[0, 64], -20, -38, 1.0, 0.95],
-              [strand_end(1), 0, 4, 0.95, 0.95],
-              [[0.3, 69], 15, 36, 1.0, 0.9]];
-limbs = [for (i = [0:len(limb_table) - 1]) let(l = limb_table[i])
-    each crown(l[0], l[1], l[2], limb_len * l[3], limb_r * l[4], crown_depth - (i >= 2 ? 1 : 0), seed * 31 + i)];
+// The crown grows mostly over the open side: written for a tree on the left, mirrored by trunk_side.
+limb_table = [[strand_end(0), 0, -72, 0.85, 1.0],
+              [[trunk_u(51), 51], 20, 84, 1.6, 0.95],
+              [strand_end(2), 0, 62, 1.4, 1.0],
+              [[trunk_u(61), 61], -15, -32, 0.9, 0.95],
+              [strand_end(1), 0, 6, 1.0, 0.95],
+              [[trunk_u(65), 65], 15, 34, 1.15, 0.9]];
+limbs = [for (i = [0:len(limb_table) - 1]) let(l = limb_table[i], m = -trunk_side)
+    each crown(l[0], m * l[1], m * l[2], limb_len * l[3], limb_r * l[4], crown_depth - (i >= 3 ? 1 : 0), seed * 31 + i)];
 roots = [for (i = [0:len(main_roots) - 1]) root_member(main_roots[i], root_r * root_rad[i])];
 shoots = [for (i = [0:len(roots) - 1]) each rootlets(roots[i], seed * 17 + i * 5)];
 members = concat(strands, [core], limbs, roots, shoots);
@@ -257,19 +266,32 @@ module back_slot() {
 module shell() { difference() { outer(); cavity(); back_slot(); } }
 
 // ---------------------------------------------------------------- the plaque text
+module he_text(t) { text(t, size = text_size, font = font_he, halign = "center", valign = "center",
+                         direction = "rtl", language = "he", script = "hebrew"); }
+module en_text(t) { text(t, size = text_size, font = font_en, halign = "center", valign = "center"); }
 module plaque_2d() {
     cx = (plaque[0][0] + plaque[0][1]) / 2;
     has_logo = logo_file != "";
-    ty = has_logo ? 12.5 : 20.5;                // centre line between the two text rows
-    gap = text_size * 1.55;
-    translate([plaque[0][0] + 1, ty + gap / 2]) text(line_en1, size = text_size, font = font_en, valign = "center");
-    translate([plaque[0][0] + 1, ty - gap / 2]) text(line_en2, size = text_size, font = font_en, valign = "center");
-    translate([plaque[0][1] - 1, ty + gap / 2]) text(line_he1, size = text_size, font = font_he, halign = "right",
-                                                     valign = "center", direction = "rtl", language = "he", script = "hebrew");
-    translate([plaque[0][1] - 1, ty - gap / 2]) text(line_he2, size = text_size, font = font_he, halign = "right",
-                                                     valign = "center", direction = "rtl", language = "he", script = "hebrew");
-    if (has_logo) translate([cx, (plaque[1][1] + ty + gap) / 2 + 1]) resize([logo_w, 0], auto = [true, true])
-        import(logo_file, center = true);
+    pitch = text_size * 1.6;
+    if (plaque_layout == "stacked") {
+        // English over Hebrew, centred; with an emblem the text sits low and the emblem above it
+        z0 = has_logo ? plaque[1][0] + 2 + 1.5 * pitch : (plaque[1][0] + plaque[1][1]) / 2;
+        rows = [line_en1, line_en2, line_he1, line_he2];
+        for (i = [0:3]) translate([cx, z0 + (1.5 - i) * pitch + (i < 2 ? 0.4 : -0.4)])
+            if (i < 2) en_text(rows[i]); else he_text(rows[i]);
+        if (has_logo) translate([cx, (plaque[1][1] + z0 + 2 * pitch) / 2])
+            resize([logo_w, 0], auto = [true, true]) import(logo_file, center = true);
+    } else {
+        // as on the reference print: English left, Hebrew right, emblem above
+        ty = has_logo ? plaque[1][0] + 7.5 : (plaque[1][0] + plaque[1][1]) / 2;
+        w = (plaque[0][1] - plaque[0][0]) / 4;
+        for (i = [0:1]) {
+            translate([plaque[0][0] + w, ty + (0.5 - i) * pitch]) en_text([line_en1, line_en2][i]);
+            translate([plaque[0][1] - w, ty + (0.5 - i) * pitch]) he_text([line_he1, line_he2][i]);
+        }
+        if (has_logo) translate([cx, (plaque[1][1] + ty + pitch) / 2])
+            resize([logo_w, 0], auto = [true, true]) import(logo_file, center = true);
+    }
 }
 module text_solid() {
     if (show_text) translate([0, -box_d / 2 + text_inlay, 0]) rotate([90, 0, 0])
