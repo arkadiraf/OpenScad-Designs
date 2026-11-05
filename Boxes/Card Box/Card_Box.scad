@@ -5,6 +5,11 @@
 // thumb notches only cut the lip and the inner part of the wall, hidden by the
 // lid and the outer skin. A small pull notch at the seam on each short end
 // gives a fingertip something to open it with.
+// The lid top carries the TAU Engineering ECE logo as a black inlay, flush with
+// the white surface (it prints in the lid's first layers, top down on the bed).
+// Logo outline: Card_Box_Logo.scad, traced by Card_Box_logo_trace.py.
+
+include <Card_Box_Logo.scad>
 // Step 1 is the cavity: inner 100 x 70 mm, 25 mm deep (base floor to base rim).
 // Both pieces print open side up / lid top down on the bed, no supports.
 
@@ -33,8 +38,12 @@ pull_h = 2.5;    // [1:0.5:5] height the notch cuts into the lid edge, mm
 pull_depth = 1;  // [0.4:0.2:1.6] depth of the matching scoop in the base wall, mm
 pull_drop = 3;   // [1:0.5:8] how far the base scoop reaches below the seam, mm
 
+/* [Logo] */
+logo_w = 90;      // [0:1:100] logo width on the lid top, mm (0 = no logo)
+logo_depth = 0.6; // [0.2:0.2:1.2] inlay depth, mm (3 layers at 0.2)
+
 /* [Output] */
-part = "assembly"; // [assembly, base, lid, closed, none]
+part = "assembly"; // [assembly, base, lid, logo, closed, none]
 
 /* [Hidden] */
 $fn = 64;
@@ -47,6 +56,10 @@ lid_h   = floor_t + lip_h;
 gap     = 10;                         // spacing between pieces on the plate
 assert(lip_t >= 0.8, "wall too thin for lid_wall + fit: lip under 0.8 mm");
 assert(notch_d < inner_d - 2, "notch deeper than the box");
+assert(logo_w <= outer_l - 2*lid_wall - 4, "logo wider than the lid top");
+assert(logo_depth < floor_t - 0.6, "logo inlay too deep for the lid top");
+white = "#FFFFFF";   // Bambu PLA Basic Jade White
+black = "#000000";   // Bambu PLA Basic Black
 
 // rounded rectangle, centred, outer size l x w, corner radius r
 module rrect(l, w, r) {
@@ -94,7 +107,14 @@ module base() {
 }
 
 // Step 3: the lid, modelled top-down on the bed (open side up)
-module lid() {
+// Logo inlay in lid coordinates: z = 0 is the outside of the lid top. Mirrored in y,
+// so it reads right once the lid is turned over (rotate 180 about x) onto the box.
+module logo_shape() mirror([0, 1, 0]) scale(logo_w / ece_logo_w) ece_logo();
+module logo_inlay() if (logo_w > 0) linear_extrude(logo_depth) logo_shape();
+module logo_cutter() if (logo_w > 0)
+    translate([0, 0, -1]) linear_extrude(logo_depth + 1) logo_shape();
+
+module lid_shell() {
     difference() {
         rbox(outer_l, outer_w, lid_h, corner_r);
         translate([0, 0, floor_t])
@@ -110,17 +130,24 @@ module lid() {
     }
 }
 
+module lid() difference() { lid_shell(); logo_cutter(); }
+
 echo(str("Card Box: inside ", inner_l, " x ", inner_w, " x ", inner_d,
          " mm; outside ", outer_l, " x ", outer_w, " x ",
          base_h + floor_t, " mm closed; base ", base_h, " mm, lid ", lid_h,
          " mm; lip ", lip_t, " mm thick x ", lip_h, " mm"));
 
+// the closed box: the lid turned over onto the base
+module closed_lid() translate([0, 0, base_h + floor_t]) rotate([180, 0, 0]) children();
+
 if (part == "base" || part == "assembly")
-    color("#C12E1F") base();
+    color(white) base();
 if (part == "lid" || part == "assembly")
-    color("#C12E1F") translate([0, outer_w + gap, 0]) lid();
+    color(white) translate([0, outer_w + gap, 0]) lid();
+if (part == "logo" || part == "assembly")
+    color(black) translate([0, outer_w + gap, 0]) logo_inlay();
 if (part == "closed") {
-    color("#C12E1F") base();
-    color("#D8402F")
-        translate([0, 0, base_h + floor_t]) mirror([0, 0, 1]) lid();
+    color(white) base();
+    color("#F2F2F2") closed_lid() lid();
+    color(black) closed_lid() logo_inlay();
 }
