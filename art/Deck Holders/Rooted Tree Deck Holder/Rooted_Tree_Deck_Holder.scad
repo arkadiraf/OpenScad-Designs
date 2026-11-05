@@ -43,7 +43,7 @@ limb_r = 2.8;           // radius of the trunk strands and first limbs, mm
 root_r = 3.0;           // radius of the main roots at the trunk, mm
 spread = 30;            // angle between sibling branches, deg
 bark_depth = 0.08;      // bark ridge depth, share of the radius
-twist = 9;              // bark twist, degrees per ring
+twist = 4;              // bark twist, degrees per mm of height
 
 /* [Plaque] */
 plaque_content = "logo";     // [logo, text, logo_and_text]
@@ -84,6 +84,7 @@ z_base = 40;                                // where the roots leave the trunk
 strand_top = [55, 68, 61];                  // where each trunk strand turns into a limb
 function trunk_u(z) = trunk_side * lerp(7, 12, clamp((z - z_base) / 28, 0, 1));   // leans outwards
 strand_amp = 2.9;
+core_s = 0.52;                              // sink share of the trunk core between the strands
 strand_wave = 30;
 
 plaque = trunk_side < 0 ? [[-11, 26.5], [5, 32]] : [[-26.5, 11], [5, 32]];   // [u], [z] under the roots
@@ -112,14 +113,16 @@ module loft(rings) {
     polyhedron(points = pts, faces = concat(side, caps), convexity = 10);
 }
 
-module sweep(P, R, phase = 0, BK = undef) {      // BK: bark depth share per ring
+// Rings are laid out from the wall's outward normal (W), not a transported frame, and the bark
+// twist (PH, degrees) is a function of the position on the wall: where a child starts inside its
+// parent, both have the same ring vertices and the same ridges, so the join shows no seam.
+module sweep(P, R, W, PH, BK) {
     T = tangents(P);
-    N = transport(T, 0, first_normal(T[0]));
     dep = sketch ? 0 : bark_depth;
-    loft([for (i = [0:len(P) - 1]) let(B = cross(T[i], N[i]))
-          [for (j = [0:sides - 1]) let(a = 360 * j / sides,
-                                        r = R[i] * (1 + dep * (BK == undef ? 1 : BK[i]) * cos(ridges * a + phase + twist * i)))
-               P[i] + r * (cos(a) * N[i] + sin(a) * B)]]);
+    loft([for (i = [0:len(P) - 1]) let(N = unit(W[i] - (W[i] * T[i]) * T[i]), B = cross(T[i], N))
+          [for (j = [0:sides - 1]) let(a = 360 * j / sides + 0.5 * 360 / sides,
+                                        r = R[i] * (1 + dep * BK[i] * cos(ridges * a + PH[i])))
+               P[i] + r * (cos(a) * N + sin(a) * B)]]);
 }
 
 // ---------------------------------------------------------------- the box surface
@@ -147,16 +150,22 @@ function dir_sink(t) = let(c2 = t[0] * t[0] / max(1e-9, t * t)) c2 <= K_OVER ? 0
 // sink share per ring: the larger of the member's own and the overhang limit's, then smoothed over a
 // few mm of path, since a jump between close rings is a kink in the tube
 function member_s(m) = let(P = m[0], n = len(P) - 1, T = tangents(P),
-                           raw = [for (i = [0:n]) max(m[2][i], dir_sink(T[i]))],
+                           own = [for (i = [0:n]) max(m[2][i], dir_sink(T[i]))],
+                           raw = len(m) > 4 ? [for (i = [0:n]) lerp(own[i], m[4], m[3][i])] : own,   // a child starts at its parent's depth (m[4])
                            L = concat([0], [for (i = [1:n]) norm(P[i] - P[i - 1])]),
                            cum = [for (i = 0, a = 0; i <= n; a = a + (i < n ? L[i + 1] : 0), i = i + 1) a])
-    [for (i = [0:n]) let(w = [for (j = [0:n]) abs(cum[j] - cum[i]) < 3 ? 1 : 0])
-        (w * raw) / max(1, w * [for (j = [0:n]) 1])];
+    [for (i = [0:n]) let(w = [for (j = [0:n]) abs(cum[j] - cum[i]) < 3 ? 1 : 0],
+                         sm = (w * raw) / max(1, w * [for (j = [0:n]) 1]))
+        sm];
 // bark fades out where a tip sinks into the wall, or its ridges would surface as separate specks
 function member_bark(m) = [for (s = member_s(m)) clamp((0.85 - s) / 0.3, 0, 1)];
-function member3d(m) = let(P = m[0], R = m[1], S = member_s(m))
+function member_w(m) = [for (p = m[0]) let(n = surf(p[0])[1]) [n[0], n[1], 0]];
+function member_ph(m) = [for (p = m[0]) twist * (p[1] + 0.5 * abs(p[0]))];
+// One corner radius per member, the largest any of its rings needs (sink + 1.15 r): per ring, a
+// radius that changes fast (at a fork) would put neighbouring rings on different corner arcs.
+function member3d(m) = let(P = m[0], R = m[1], S = member_s(m),
+                           rr = max(corner_r, max([for (i = [0:len(P) - 1]) (S[i] + 1.15) * R[i]])))
     [for (i = [0:len(P) - 1]) let(c = S[i] * R[i],
-                                  rr = max(corner_r, c + 1.15 * R[i]),   // corner the centre rides: >= 1.15 r
                                   f = surf(P[i][0], rr))
         [f[0][0] - f[1][0] * c, f[0][1] - f[1][1] * c, P[i][1]]];
 
@@ -183,46 +192,66 @@ function in_plaque(p, m = 2) = p[0] > plaque[0][0] - m && p[0] < plaque[0][1] + 
                             && p[1] > plaque[1][0] - m && p[1] < plaque[1][1] + m;
 
 // A bent member from p, leaving along a0 and heading for a1, with radius r -> r1.
-// Ends are buried when bury is true (the tip sinks into the wall).
-function limb(p, a0, a1, L, r, r1, k, s0 = 0.1, bury = true) =
+// Ends are buried when bury is true (the tip sinks into the wall). back > 0 starts it that far
+// back inside its parent (end radius rp): it leaves the fork 4 % wider and a little deeper than the
+// parent, so it wraps the parent's end, then narrows to its own radius over 1.6 r.
+function limb(p, a0, a1, L, r, r1, k, s0 = 0.1, bury = true, back = 0, rp = 0) =
     let(p1 = p + 0.42 * L * dir(a0), p2 = p + L * dir(a1),
         n = max(4, ceil(L / seg)),
         w = (rnd(k, 3) - 0.5) * min(1.4, L / 14),
         P = [for (i = [0:n]) let(t = i / n, b = bez(p, p1, p2, t), g = unit(bezd(p, p1, p2, t)))
                  b + [-g[1], g[0]] * w * sin(180 * t)],
-        R = [for (i = [0:n]) lerp(r, r1, i / n)],
-        S = [for (i = [0:n]) bury ? lerp(s0, 1.2, smooth(0.72, 1, i / n)) : s0])
-    [P, R, S, ang(p2 - p1)];
+        f = [for (i = [0:n]) back > 0 ? smooth(0, min(1, 1.6 * r / L), i / n) : 1],
+        R0 = [for (i = [0:n]) lerp(1.04 * max(rp, r), lerp(r, r1, i / n), f[i])],
+        S0 = [for (i = [0:n]) (bury ? lerp(s0, 1.2, smooth(0.72, 1, i / n)) : s0) + 0.05 * (1 - f[i])],
+        W0 = [for (i = [0:n]) 1 - f[i]])        // weight of the parent's depth
+    back > 0 ? [concat([p - back * dir(a0)], P), concat([0.8 * max(rp, r)], R0), concat([S0[0] + 0.08], S0), ang(p2 - p1),
+                concat([1], W0)]
+             : [P, R0, S0, ang(p2 - p1), W0];
 
 // The crown: each member forks into 2 (sometimes 3) until depth runs out.
 // A member that would run out of room turns towards the vertical instead (it grows into space).
 function crown_fit(p, a1, L) = fit_len(p, a1, L, fa + 0.55 * fq, z_base + 12, box_h - 3);
-function crown(p, a0, a1_, L, r, d, k) =
+// pre: a member this one continues as one tube (a trunk strand running on into its first limb)
+function tail(v) = [for (i = [1:len(v) - 1]) v[i]];
+function join(pre, m) = pre == undef ? m :
+    [concat(pre[0], tail(m[0])), concat(pre[1], tail(m[1])), concat(pre[2], tail(m[2])), m[3],
+     concat([for (p = pre[0]) 0], tail(m[4]))];
+function crown(p, a0, a1_, L, r, d, k, back, rp, sp, pre) =
     let(a1 = crown_fit(p, a1_, L) >= 0.6 * L ? a1_ : 0.6 * a1_,
         Lf = crown_fit(p, a1, L))
     Lf < 3.5 ? [] :
     let(r1 = max(0.85, 0.74 * r),
-        m0 = limb(p, a0, a1, Lf, r, r1, k, 0.1, false),
+        m0 = join(pre, limb(p, a0, a1, Lf, r, r1, k, 0.1, false, back, rp)),
         e = m0[0][len(m0[0]) - 1], ea = m0[3],
+        se = let(S = member_s([m0[0], m0[1], m0[2], m0[4], sp])) S[len(S) - 1],    // depth at the fork
         nch = d == 0 ? 0 : rnd(k, 5) < 0.45 ? 3 : 2,
         lean = (rnd(k, 9) - 0.5) * 12 - 0.2 * ea,                    // a slight pull upwards
         kids = [for (j = [0:1:nch - 1])
                let(ca = clamp(ea + lean + spread * (j - (nch - 1) / 2) * (nch == 3 ? 0.8 : 1)
                               + (rnd(k, j, 11) - 0.5) * 16, -100, 100))
                each crown(e, ea, ca, L * (0.66 + 0.16 * rnd(k, j, 13)), r1 * (nch == 3 ? 0.88 : 0.96),
-                          d - 1, k * 3 + j + 1)],
-        m = len(kids) == 0 ? limb(p, a0, a1, Lf, r, 0.4 * r, k, 0.1, true) : m0)   // a twig ends in the wall
-    concat([[m[0], m[1], m[2]]], kids);
+                          d - 1, k * 3 + j + 1, 0.9 * r1, r1, se)],
+        // a fork: the parent runs on a little past it, tapering inside its children, so no end cap shows
+        m = len(kids) == 0 ? join(pre, limb(p, a0, a1, Lf, r, 0.4 * r, k, 0.1, true, back, rp))   // a twig ends in the wall
+          : [concat(m0[0], [e + 0.7 * r1 * dir(ea)]), concat(m0[1], [0.5 * r1]),
+             concat(m0[2], [m0[2][len(m0[2]) - 1] + 0.1])])
+    concat([len(kids) == 0 ? [m[0], m[1], m[2], m[4], sp] : [m[0], m[1], m[2], concat(m0[4], [0]), sp]], kids);
 
 // Trunk strands: three tubes braided round the trunk axis.
 function strand_u(i, z) = trunk_u(z) + strand_amp * sin(360 * (z - z_base) / strand_wave + 120 * i);
-function strand(i) = let(z0 = z_base + 3, z1 = strand_top[i], n = ceil((z1 - z0) / seg))
+// Both ends taper inside what grows out of them (the roots below, the first limb above).
+// ext: run on past the top, tapering, for a strand that ends inside something else; a strand that
+// runs on into its first limb (limb_table) stops exactly at its top
+function strand(i, ext = true) = let(z0 = z_base + 1, z1 = strand_top[i] + (ext ? 1.8 : 0), n = ceil((z1 - z0) / (0.5 * seg)))
     [[for (j = [0:n]) let(z = lerp(z0, z1, j / n)) [strand_u(i, z), z]],
-     [for (j = [0:n]) limb_r],
+     [for (j = [0:n]) let(z = lerp(z0, z1, j / n))
+         limb_r * lerp(0.5, 1, smooth(z0, z0 + 3, z)) * (ext ? lerp(1, 0.5, smooth(z1 - 1.8, z1, z)) : 1)],
      [for (j = [0:n]) let(z = lerp(z0, z1, j / n))       // in front where it crosses the middle
-         0.32 + 0.24 * cos(360 * (z - z_base) / strand_wave + 120 * i + 90)]];
+         strand_sink(i, z) + 0.15 * (1 - smooth(z0, z0 + 3, z)) + (ext ? 0.1 * smooth(z1 - 1.8, z1, z) : 0)]];
 
 function strand_end(i) = [strand_u(i, strand_top[i]), strand_top[i]];
+function strand_dir(i) = ang([strand_u(i, strand_top[i] + 0.5) - strand_u(i, strand_top[i] - 0.5), 1]);   // braid lean at the top
 function strand_sink(i, z) = 0.32 + 0.24 * cos(360 * (z - z_base) / strand_wave + 120 * i + 90);
 
 // The roots grow out of the trunk strands: the strand that is leftmost at the base feeds the roots
@@ -255,8 +284,10 @@ extra_root = [[for (p = [[12, 41.2], [22, 39.5], [31, 38], [41, 31], [46, 20], [
 function root_member(i, c, rr) =
     let(C = concat([for (z = [z_base + 9, z_base + 5]) [strand_u(i, z), z]], c),
         P = cr(C, max(2, ceil(8 / seg))), n = len(P) - 1, s1 = strand_sink(i, z_base + 5))
-    [P, [for (k = [0:n]) let(t = k / n) lerp(limb_r * 1.03, rr, smooth(0, 0.22, t)) * lerp(1, 0.45, pow(t, 0.8))],
-        [for (k = [0:n]) lerp(s1, 0.15, smooth(0.04, 0.25, k / n))]];
+    [P, [for (k = [0:n]) let(t = k / n) lerp(limb_r * 1.03, rr, smooth(0, 0.22, t)) * lerp(1, 0.45, pow(t, 0.8))
+                                         * lerp(0.8, 1, smooth(0, 0.09, t))],          // swells out of the strand
+        // while inside the strand it keeps just behind the strand's own (braided) depth
+        [for (k = [0:n]) lerp(strand_sink(i, P[k][1]) + 0.1, 0.15, smooth(0.02, 0.25, k / n))]];
 function plain_root(c, r) = let(P = cr(c, max(2, ceil(10 / seg))), n = len(P) - 1)
     [P, [for (i = [0:n]) r * lerp(1, 0.45, pow(i / n, 0.8))], [for (i = [0:n]) 0.15]];
 
@@ -272,19 +303,25 @@ function rootlets(m, k) = let(P = m[0], n = len(P) - 1)
          if (L >= 4 && !in_plaque(e) && !in_plaque(lm[0][floor(len(lm[0]) / 2)])) [lm[0], lm[1], lm[2]]];
 
 // ---------------------------------------------------------------- all members
-strands = [for (i = [0:2]) strand(i)];
 core = let(n = ceil(28 / seg)) [[for (j = [0:n]) let(z = lerp(z_base + 5, 67, j / n)) [trunk_u(z) + 0.3 * sin(j * 40), z]],
-                                [for (j = [0:n]) lerp(4.6, 3.0, j / n)], [for (j = [0:n]) 0.55]];
-// first limbs: [start (u, z), leaving angle, heading, length share, radius share]
+                                [for (j = [0:n]) lerp(4.6, 3.0, j / n) * lerp(0.55, 1, smooth(0, 0.2, j / n))],
+                                [for (j = [0:n]) let(t = j / n) core_s + (1 - core_s) * max(1 - smooth(0, 0.15, t), smooth(0.85, 1, t))]];  // both ends dive into the wall
+// first limbs: [start (u, z), leaving angle, heading, length share, radius share, start depth, how far
+// back inside the core it starts, the strand it continues as one tube (-1: none)]
 // The crown grows mostly over the open side: written for a tree on the left, mirrored by trunk_side.
-limb_table = [[strand_end(0), 0, -72, 0.85, 1.0],
-              [[trunk_u(51), 51], 20, 84, 1.6, 0.95],
-              [strand_end(2), 0, 62, 1.4, 1.0],
-              [[trunk_u(61), 61], -15, -32, 0.9, 0.95],
-              [strand_end(1), 0, 6, 1.0, 0.95],
-              [[trunk_u(65), 65], 15, 34, 1.15, 0.9]];
+// and the depth it starts at: that of the strand or the trunk core it grows out of
+// (a strand row stores its leaving angle pre-mirrored: the braid itself is not mirrored)
+limb_table = [[strand_end(0), -trunk_side * strand_dir(0), -72, 0.85, 1.0, strand_sink(0, strand_top[0]), 0, 0],
+              [[trunk_u(51), 51], 20, 84, 1.6, 0.95, core_s + 0.05, 0.9 * limb_r, -1],
+              [strand_end(2), -trunk_side * strand_dir(2), 62, 1.4, 1.0, strand_sink(2, strand_top[2]), 0, 2],
+              [[trunk_u(61), 61], -15, -32, 0.9, 0.95, core_s + 0.05, 0.9 * limb_r, -1],
+              [strand_end(1), -trunk_side * strand_dir(1), 6, 1.0, 0.95, strand_sink(1, strand_top[1]), 0, 1],
+              [[trunk_u(65), 65], 15, 34, 1.15, 0.9, core_s + 0.05, 0.9 * limb_r, -1]];
 limbs = [for (i = [0:len(limb_table) - 1]) let(l = limb_table[i], m = -trunk_side)
-    each crown(l[0], m * l[1], m * l[2], limb_len * l[3], limb_r * l[4], crown_depth - (i >= 3 ? 1 : 0), seed * 31 + i)];
+    each crown(l[0], m * l[1], m * l[2], limb_len * l[3], limb_r * l[4], crown_depth - (i >= 3 ? 1 : 0), seed * 31 + i,
+               l[6], limb_r, l[5], l[7] >= 0 ? strand(l[7], false) : undef)];
+fed = [for (l = limb_table) l[7]];
+strands = [for (i = [0:2]) if (len(search(i, fed)) == 0) strand(i)];   // strands not running on into a limb
 roots = concat([for (i = [0:len(main_roots) - 1]) root_member(main_roots[i][0], main_roots[i][1], root_r * root_rad[i])],
              [plain_root(extra_root[0], root_r * 0.6)]);
 shoots = [for (i = [0:len(roots) - 1]) each rootlets(roots[i], seed * 17 + i * 5)];
@@ -298,7 +335,8 @@ function densify(m, k = 5) = let(P = m[0], n = len(P) - 1)
           let(p0 = P[max(0, i - 1)], p1 = P[i], p2 = P[i + 1], p3 = P[min(n, i + 2)])
           0.5 * ((2 * p1) + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t
                  + (-p0 + 3 * p1 - 3 * p2 + p3) * t * t * t)],
-     for (c = [1:2]) [for (x = idx) let(i = floor(x), t = x - i) t == 0 ? m[c][i] : lerp(m[c][i], m[c][i + 1], t)]];
+     for (c = [1:min(3, len(m) - 1)]) [for (x = idx) let(i = floor(x), t = x - i) t == 0 ? m[c][i] : lerp(m[c][i], m[c][i + 1], t)],
+     if (len(m) > 4) m[4]];
 members = [for (m = concat(strands, [core], limbs, roots, shoots)) densify(m)];
 
 // ---------------------------------------------------------------- Step 1: the deck
@@ -365,7 +403,7 @@ module plaque_solid() {
 }
 
 // ---------------------------------------------------------------- the relief
-module tubes() { for (i = [0:len(members) - 1]) let(m = members[i]) sweep(member3d(m), m[1], 37 * i, member_bark(m)); }
+module tubes() { for (m = members) sweep(member3d(m), m[1], member_w(m), member_ph(m), member_bark(m)); }
 module relief() {
     difference() {
         tubes();

@@ -34,20 +34,36 @@ The images are renders, not photos.
   reference photo, swap filament 2 to a silk copper in Bambu Studio.
 - Every tree member is sunk into the wall by a share of its radius that depends on its direction,
   so no underside is steeper than 58° from vertical. Mesh check: 0 open / non-manifold edges on
-  all parts, the relief is one shell, 0.32 % of the surface past 60° above the first centimetre
+  all parts, the relief is one shell, 0.35 % of the surface past 60° above the first centimetre
   (house limit 0.5 %).
 - About 62 g at 100 % solid (roughly 19 g at typical infill). Not yet sliced with Bambu Studio:
   the build ran where Bambu Studio is not installed, so check the slice preview before printing.
 - The emblem in the first disc is small (about 6 mm tall). `Logo_trace.py` thickens its strokes
   by 0.1 mm a side so they hold at a 0.4 mm nozzle; expect the finest slits to close up.
 
+## How the joints work
+
+<img src="Rooted_Tree_Deck_Holder_Trunk.png" width="300" alt="Close-up of the braided trunk, where the strands run on into the limbs">
+
+- **Strands into limbs.** Each trunk strand and the first limb it feeds are one tube: no joint at all.
+- **Forks.** A child starts just inside its parent, 4 % wider than the parent's end and at the same
+  depth, then narrows to its own radius over 1.6 radii. The parent runs on a little past the fork,
+  tapering inside its children, so no end cap shows.
+- **Roots.** The roots start inside their strand, keep just behind its braided depth while they
+  are inside it, and swell out of it. The strand and core ends dive into the wall.
+- **Bark.** Every ring is laid out from the wall's outward normal, and the bark twist is a function
+  of the position on the wall. A parent and a child therefore have the same ring vertices and the
+  same ridges where they overlap, with no sawtooth seam. The bark fades out on tips that sink into
+  the wall.
+
 ## How the corners work
 
 The paths are written on a guide surface with 8 mm corners (`path_r`), so their coordinates keep
 their meaning whatever the real fillet is. Round a corner each tube ring rides a radius of its own,
 its sink depth plus 1.15 × its radius. Then no tube bends tighter than itself, and it stays proud
-of the squarer real corner. Rings are added where a member crosses a corner, and the sink is
-smoothed along each member, so no chord or sink jump cuts a tube under the edge.
+of the squarer real corner. Rings are added where a member crosses a corner, the sink is
+smoothed along each member, and each member keeps one corner radius (the largest its rings need), so
+no chord, sink jump or radius change cuts a tube under the edge or kinks it.
 
 ## Customizer
 
