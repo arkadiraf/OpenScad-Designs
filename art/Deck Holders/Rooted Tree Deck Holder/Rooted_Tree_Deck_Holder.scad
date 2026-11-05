@@ -15,8 +15,9 @@
 // their radius that depends on their direction, so no underside is steeper than 58 deg from
 // vertical (a tube rising at 32 deg or more can stand half proud; a level one is sunk by 53 %).
 //
-// Colour parts: box (white), relief (copper), text (black). The plaque text is inlaid into the
-// wall and stands slightly proud. An emblem of your own (SVG/DXF) can be added with logo_file.
+// Colour parts: box (white), relief (copper), logo (black). The plaque carries the three-disc logo
+// (Logo.svg, built from the supplied artwork by Logo_trace.py), with no words; optional text lines
+// can join or replace it. Whatever is on the plaque is inlaid into the wall and stands slightly proud.
 
 /* [Cards] */
 card_w = 63.5;          // card width, mm (poker 63.5, bridge 57)
@@ -28,7 +29,7 @@ side_clear = 1.25;      // clearance each side of the card, mm
 box_h = 100;            // outer height, mm
 wall = 2.0;             // wall thickness, mm
 floor_t = 2.0;          // floor thickness, mm
-corner_r = 8;           // radius of the vertical box edges, mm (roots wrap round these)
+corner_r = 1.5;         // fillet on the vertical box edges, mm (a card box: square corners, lightly rounded)
 front_clear = 2.0;      // depth clearance in front of + behind the deck, mm (total)
 slot_w = 34;            // width of the back slot, mm
 slot_bottom = 28;       // height of the bottom of the back slot above the bed, mm
@@ -45,8 +46,10 @@ bark_depth = 0.08;      // bark ridge depth, share of the radius
 twist = 9;              // bark twist, degrees per ring
 
 /* [Plaque] */
-show_text = true;
-plaque_layout = "stacked";   // [stacked, side_by_side]
+plaque_content = "logo";     // [logo, text, logo_and_text]
+logo_file = "Logo.svg";     // the logo (SVG or DXF), next to this file
+logo_w = 37;                // logo width, mm (alone on the plaque; Logo.svg was thickened for 37)
+plaque_layout = "stacked";   // [stacked, side_by_side] how the text lines are set
 line_en1 = "TEL AVIV";
 line_en2 = "UNIVERSITY";
 line_he1 = "אוניברסיטת";
@@ -54,26 +57,25 @@ line_he2 = "תל אביב";
 text_size = 3.6;        // cap height-ish, mm
 font_en = "Liberation Sans:style=Bold";
 font_he = "DejaVu Sans:style=Bold";
-logo_file = "";         // optional emblem (SVG or DXF), placed above the text
-logo_w = 34;            // emblem width, mm
-text_proud = 0.4;       // how far the text stands out of the wall, mm
-text_inlay = 0.6;       // how deep it is inlaid, mm
+plaque_proud = 0.4;     // how far the logo / text stands out of the wall, mm
+plaque_inlay = 0.6;     // how deep it is inlaid, mm
 
 /* [Output] */
-part = "assembly";      // [assembly, box, relief, text, none, paths]
+part = "assembly";      // [assembly, box, relief, logo, none, paths]
 sketch = false;         // coarse tubes, no bark: for fast previews
 show_deck = false;      // preview only: the deck in place
 
 /* [Hidden] */
 box_w = card_w + 2 * side_clear + 2 * wall;
 box_d = deck_t + front_clear + 2 * wall;
-rc = corner_r;
+path_r = 8;                                 // the roots wrap the corners along a rounder guide surface
+rc = path_r;
 sides = sketch ? 8 : 15;
 ridges = 5;
 seg = sketch ? 4 : 2.2;                      // ring spacing along members, mm
 K_OVER = pow(sin(58), 2);                   // overhang limit: steepest underside 58 deg
 
-fa = box_w / 2 - rc;                        // half of the flat front
+fa = box_w / 2 - rc;                        // half of the flat front of the guide surface
 fq = rc * PI / 2;                           // corner arc length
 fb = box_d - 2 * rc;                        // flat side length
 u_side_end = fa + fq + fb;                  // where the side ends at the back corner
@@ -84,7 +86,7 @@ function trunk_u(z) = trunk_side * lerp(7, 12, clamp((z - z_base) / 28, 0, 1)); 
 strand_amp = 2.9;
 strand_wave = 30;
 
-plaque = trunk_side < 0 ? [[-11, 29], [5, 32]] : [[-29, 11], [5, 32]];   // [u], [z] under the roots
+plaque = trunk_side < 0 ? [[-11, 26.5], [5, 32]] : [[-26.5, 11], [5, 32]];   // [u], [z] under the roots
 
 // ---------------------------------------------------------------- library
 function unit(v) = v / norm(v);
@@ -110,23 +112,31 @@ module loft(rings) {
     polyhedron(points = pts, faces = concat(side, caps), convexity = 10);
 }
 
-module sweep(P, R, phase = 0) {
+module sweep(P, R, phase = 0, BK = undef) {      // BK: bark depth share per ring
     T = tangents(P);
     N = transport(T, 0, first_normal(T[0]));
     dep = sketch ? 0 : bark_depth;
     loft([for (i = [0:len(P) - 1]) let(B = cross(T[i], N[i]))
           [for (j = [0:sides - 1]) let(a = 360 * j / sides,
-                                        r = R[i] * (1 + dep * cos(ridges * a + phase + twist * i)))
+                                        r = R[i] * (1 + dep * (BK == undef ? 1 : BK[i]) * cos(ridges * a + phase + twist * i)))
                P[i] + r * (cos(a) * N[i] + sin(a) * B)]]);
 }
 
 // ---------------------------------------------------------------- the box surface
-// u = arc length from the front centre, + towards +x. Returns [[x, y], outward normal].
-function surf(u) =
+// u = arc length from the front centre, + towards +x, measured on a guide surface with corners of
+// radius path_r (so the tables of u keep their meaning whatever corner_r is). The guide's corner
+// arc is laid onto the real box as flat front, a corner of radius rr, flat side: rr is chosen per
+// ring (member3d) so the tube centre bends round the corner no tighter than the tube itself.
+// Returns [[x, y], outward normal].
+function surf(u, rr = corner_r) =
     let(s = u < 0 ? -1 : 1, v = abs(u),
         r = v <= fa ? [[v, -box_d / 2], [0, -1]]
-          : v <= fa + fq ? let(t = (v - fa) / rc * 180 / PI)
-                [[fa + rc * sin(t), -box_d / 2 + rc - rc * cos(t)], [sin(t), -cos(t)]]
+          : v <= fa + fq ?
+                let(e = rc - rr, qa = rr * PI / 2, w = (v - fa) * (2 * e + qa) / fq)
+                w <= e ? [[fa + w, -box_d / 2], [0, -1]]
+              : w <= e + qa ? let(t = (w - e) / rr * 180 / PI)
+                    [[box_w / 2 - rr + rr * sin(t), -box_d / 2 + rr - rr * cos(t)], [sin(t), -cos(t)]]
+              : [[box_w / 2, -box_d / 2 + rr + (w - e - qa)], [1, 0]]
           : [[box_w / 2, -box_d / 2 + rc + (v - fa - fq)], [1, 0]])
     [[s * r[0][0], r[0][1]], [s * r[1][0], r[1][1]]];
 
@@ -134,8 +144,20 @@ function surf(u) =
 function dir_sink(t) = let(c2 = t[0] * t[0] / max(1e-9, t * t)) c2 <= K_OVER ? 0 : sqrt(1 - K_OVER / c2);
 
 // member = [points (u, z), radii, base sink shares]; to 3D tube centres
-function member3d(m) = let(P = m[0], R = m[1], SB = m[2], T = tangents(P))
-    [for (i = [0:len(P) - 1]) let(f = surf(P[i][0]), s = max(SB[i], dir_sink(T[i])), c = s * R[i])
+// sink share per ring: the larger of the member's own and the overhang limit's, then smoothed over a
+// few mm of path, since a jump between close rings is a kink in the tube
+function member_s(m) = let(P = m[0], n = len(P) - 1, T = tangents(P),
+                           raw = [for (i = [0:n]) max(m[2][i], dir_sink(T[i]))],
+                           L = concat([0], [for (i = [1:n]) norm(P[i] - P[i - 1])]),
+                           cum = [for (i = 0, a = 0; i <= n; a = a + (i < n ? L[i + 1] : 0), i = i + 1) a])
+    [for (i = [0:n]) let(w = [for (j = [0:n]) abs(cum[j] - cum[i]) < 3 ? 1 : 0])
+        (w * raw) / max(1, w * [for (j = [0:n]) 1])];
+// bark fades out where a tip sinks into the wall, or its ridges would surface as separate specks
+function member_bark(m) = [for (s = member_s(m)) clamp((0.85 - s) / 0.3, 0, 1)];
+function member3d(m) = let(P = m[0], R = m[1], S = member_s(m))
+    [for (i = [0:len(P) - 1]) let(c = S[i] * R[i],
+                                  rr = max(corner_r, c + 1.15 * R[i]),   // corner the centre rides: >= 1.15 r
+                                  f = surf(P[i][0], rr))
         [f[0][0] - f[1][0] * c, f[0][1] - f[1][1] * c, P[i][1]]];
 
 // ---------------------------------------------------------------- paths
@@ -194,28 +216,48 @@ function crown(p, a0, a1_, L, r, d, k) =
 
 // Trunk strands: three tubes braided round the trunk axis.
 function strand_u(i, z) = trunk_u(z) + strand_amp * sin(360 * (z - z_base) / strand_wave + 120 * i);
-function strand(i) = let(z0 = z_base - 4, z1 = strand_top[i], n = ceil((z1 - z0) / seg))
+function strand(i) = let(z0 = z_base + 3, z1 = strand_top[i], n = ceil((z1 - z0) / seg))
     [[for (j = [0:n]) let(z = lerp(z0, z1, j / n)) [strand_u(i, z), z]],
      [for (j = [0:n]) limb_r],
      [for (j = [0:n]) let(z = lerp(z0, z1, j / n))       // in front where it crosses the middle
          0.32 + 0.24 * cos(360 * (z - z_base) / strand_wave + 120 * i + 90)]];
 
 function strand_end(i) = [strand_u(i, strand_top[i]), strand_top[i]];
+function strand_sink(i, z) = 0.32 + 0.24 * cos(360 * (z - z_base) / strand_wave + 120 * i + 90);
+
+// The roots grow out of the trunk strands: the strand that is leftmost at the base feeds the roots
+// that run left, the rightmost the ones that run right, the middle one the root that goes down.
+strand_order = let(b = [for (i = [0:2]) strand_u(i, z_base)],
+                   lo = b[0] <= b[1] && b[0] <= b[2] ? 0 : b[1] <= b[2] ? 1 : 2,
+                   hi = b[0] >= b[1] && b[0] >= b[2] ? 0 : b[1] >= b[2] ? 1 : 2)
+    [lo, 3 - lo - hi, hi];                                  // [left, middle, right]
+function root_strand(side) = strand_order[side + 1];
 
 // Main roots: control points (u, z), hand laid round the plaque and over the corners.
 // Written for a tree on the left; trunk_side = 1 mirrors them.
+// Written for a tree on the left; trunk_side = 1 mirrors them. Each root starts inside the trunk:
+// [strand it grows out of (-1 left, 0 middle, 1 right), control points (u, z) below the base].
 roots_left = [
-    [[-7, 46], [-11, 40], [-19, 35], [-26, 26], [-28.5, 14], [-27, 3], [-26, -2]],                  // left, down to the bed
-    [[-9, 45], [-19, 42], [-31, 40], [-43, 33], [-51, 20], [-54, 6], [-55, -2]],                    // left, onto the side
-    [[-6, 45], [-9.5, 39], [-14, 32], [-15.5, 20], [-14, 8], [-9, 2.8], [3, 2.2], [17, 2.7], [28, 2], [33, -1]],  // round the plaque
-    [[-5, 46], [1, 40], [13, 36.5], [25, 36], [32.5, 33], [35.5, 23], [34, 11], [31.5, 2], [30.5, -2]],  // over the plaque, right frame
-    [[-4, 47], [5, 43], [19, 41], [33, 39.5], [45, 34], [53, 22], [57, 10], [59, -2]],              // over the plaque, onto the right side
-    [[10, 40.5], [22, 39.5], [31, 38], [41, 31], [46, 20], [48, 8], [48.5, -2]],                    // a second over the plaque
+    [-1, [[-12.5, 37], [-19, 32.5], [-26, 25], [-28.5, 14], [-27, 3], [-26, -2]]],                     // left, down to the bed
+    [-1, [[-14, 38.5], [-22, 38.6], [-32, 38], [-43, 32.5], [-51, 20], [-54, 6], [-55, -2]]],         // left, onto the side
+    [0,  [[-8.5, 35], [-12, 29.5], [-14.8, 24], [-15.5, 20], [-14, 8], [-9, 2.8], [3, 2.2], [17, 2.7], [28, 2], [33, -1]]],  // round the plaque
+    [1,  [[-2, 37.5], [6, 35.8], [15, 35.8], [25, 36], [32.5, 33], [35.5, 23], [34, 11], [31.5, 2], [30.5, -2]]],  // over the plaque, right frame
+    [1,  [[0, 39], [9, 40.2], [20, 40.5], [33, 39.5], [45, 34], [53, 22], [57, 10], [59, -2]]],      // over the plaque, onto the right side
 ];
-root_rad = [0.85, 0.8, 0.85, 1.0, 1.0, 0.6];
-main_roots = [for (r = roots_left) [for (p = r) [-trunk_side * p[0], p[1]]]];
+root_rad = [0.85, 0.8, 0.85, 1.0, 1.0];
+mside = -trunk_side;                                        // +1 when the tree is on the left
+main_roots = [for (r = roots_left) [root_strand(mside * r[0]), [for (p = r[1]) [mside * p[0], p[1]]]]];
+// a second root over the plaque, branching off the right-running one
+extra_root = [[for (p = [[12, 41.2], [22, 39.5], [31, 38], [41, 31], [46, 20], [48, 8], [48.5, -2]]) [mside * p[0], p[1]]]];
 
-function root_member(c, r) = let(P = cr(c, max(2, ceil(10 / seg))), n = len(P) - 1)
+// A root that leaves strand i: it starts on the strand, follows it down out of the trunk with the
+// strand's radius and sink, and blends into its own over the first fifth.
+function root_member(i, c, rr) =
+    let(C = concat([for (z = [z_base + 9, z_base + 5]) [strand_u(i, z), z]], c),
+        P = cr(C, max(2, ceil(8 / seg))), n = len(P) - 1, s1 = strand_sink(i, z_base + 5))
+    [P, [for (k = [0:n]) let(t = k / n) lerp(limb_r * 1.03, rr, smooth(0, 0.22, t)) * lerp(1, 0.45, pow(t, 0.8))],
+        [for (k = [0:n]) lerp(s1, 0.15, smooth(0.04, 0.25, k / n))]];
+function plain_root(c, r) = let(P = cr(c, max(2, ceil(10 / seg))), n = len(P) - 1)
     [P, [for (i = [0:n]) r * lerp(1, 0.45, pow(i / n, 0.8))], [for (i = [0:n]) 0.15]];
 
 // Rootlets: side shoots off the main roots, heading outwards and down.
@@ -231,7 +273,7 @@ function rootlets(m, k) = let(P = m[0], n = len(P) - 1)
 
 // ---------------------------------------------------------------- all members
 strands = [for (i = [0:2]) strand(i)];
-core = let(n = ceil(34 / seg)) [[for (j = [0:n]) let(z = lerp(z_base - 3, 67, j / n)) [trunk_u(z) + 0.3 * sin(j * 40), z]],
+core = let(n = ceil(28 / seg)) [[for (j = [0:n]) let(z = lerp(z_base + 5, 67, j / n)) [trunk_u(z) + 0.3 * sin(j * 40), z]],
                                 [for (j = [0:n]) lerp(4.6, 3.0, j / n)], [for (j = [0:n]) 0.55]];
 // first limbs: [start (u, z), leaving angle, heading, length share, radius share]
 // The crown grows mostly over the open side: written for a tree on the left, mirrored by trunk_side.
@@ -243,9 +285,21 @@ limb_table = [[strand_end(0), 0, -72, 0.85, 1.0],
               [[trunk_u(65), 65], 15, 34, 1.15, 0.9]];
 limbs = [for (i = [0:len(limb_table) - 1]) let(l = limb_table[i], m = -trunk_side)
     each crown(l[0], m * l[1], m * l[2], limb_len * l[3], limb_r * l[4], crown_depth - (i >= 3 ? 1 : 0), seed * 31 + i)];
-roots = [for (i = [0:len(main_roots) - 1]) root_member(main_roots[i], root_r * root_rad[i])];
+roots = concat([for (i = [0:len(main_roots) - 1]) root_member(main_roots[i][0], main_roots[i][1], root_r * root_rad[i])],
+             [plain_root(extra_root[0], root_r * 0.6)]);
 shoots = [for (i = [0:len(roots) - 1]) each rootlets(roots[i], seed * 17 + i * 5)];
-members = concat(strands, [core], limbs, roots, shoots);
+// Extra rings where a member crosses a corner: a chord between rings 2 mm apart would cut through
+// the corner and sink the tube under it.
+function in_corner(u) = abs(u) > fa - 1 && abs(u) < fa + fq + 1;
+function densify(m, k = 5) = let(P = m[0], n = len(P) - 1)
+    let(idx = concat([for (i = [0:n - 1]) each (in_corner(P[i][0]) || in_corner(P[i + 1][0]))
+                         ? [for (j = [0:k - 1]) i + j / k] : [i]], [n]))
+    [[for (x = idx) let(i = floor(x), t = x - i) t == 0 ? P[i] :           // positions: Catmull-Rom
+          let(p0 = P[max(0, i - 1)], p1 = P[i], p2 = P[i + 1], p3 = P[min(n, i + 2)])
+          0.5 * ((2 * p1) + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t
+                 + (-p0 + 3 * p1 - 3 * p2 + p3) * t * t * t)],
+     for (c = [1:2]) [for (x = idx) let(i = floor(x), t = x - i) t == 0 ? m[c][i] : lerp(m[c][i], m[c][i + 1], t)]];
+members = [for (m = concat(strands, [core], limbs, roots, shoots)) densify(m)];
 
 // ---------------------------------------------------------------- Step 1: the deck
 module deck() {
@@ -253,7 +307,10 @@ module deck() {
 }
 
 // ---------------------------------------------------------------- Step 2: the box
-module footprint(o = 0) { offset(r = rc + o) square([box_w - 2 * rc, box_d - 2 * rc], center = true); }
+module footprint(o = 0) {
+    rr = max(0.3, corner_r + o);
+    offset(r = rr) square([box_w + 2 * o - 2 * rr, box_d + 2 * o - 2 * rr], center = true);
+}
 module outer() { linear_extrude(box_h) footprint(); }
 module cavity() { translate([0, 0, floor_t]) linear_extrude(box_h) footprint(-wall); }
 module back_slot() {
@@ -265,41 +322,50 @@ module back_slot() {
 }
 module shell() { difference() { outer(); cavity(); back_slot(); } }
 
-// ---------------------------------------------------------------- the plaque text
+// ---------------------------------------------------------------- the plaque
 module he_text(t) { text(t, size = text_size, font = font_he, halign = "center", valign = "center",
                          direction = "rtl", language = "he", script = "hebrew"); }
 module en_text(t) { text(t, size = text_size, font = font_en, halign = "center", valign = "center"); }
+module logo(w = 0, h = 0) { resize([w, h], auto = [true, true]) import(logo_file, center = true); }
 module plaque_2d() {
     cx = (plaque[0][0] + plaque[0][1]) / 2;
-    has_logo = logo_file != "";
+    cz = (plaque[1][0] + plaque[1][1]) / 2;
     pitch = text_size * 1.6;
-    if (plaque_layout == "stacked") {
-        // English over Hebrew, centred; with an emblem the text sits low and the emblem above it
-        z0 = has_logo ? plaque[1][0] + 2 + 1.5 * pitch : (plaque[1][0] + plaque[1][1]) / 2;
-        rows = [line_en1, line_en2, line_he1, line_he2];
-        for (i = [0:3]) translate([cx, z0 + (1.5 - i) * pitch + (i < 2 ? 0.4 : -0.4)])
-            if (i < 2) en_text(rows[i]); else he_text(rows[i]);
-        if (has_logo) translate([cx, (plaque[1][1] + z0 + 2 * pitch) / 2])
-            resize([logo_w, 0], auto = [true, true]) import(logo_file, center = true);
+    if (plaque_content == "logo") {
+        translate([cx, cz]) logo(w = logo_w);
     } else {
-        // as on the reference print: English left, Hebrew right, emblem above
-        ty = has_logo ? plaque[1][0] + 7.5 : (plaque[1][0] + plaque[1][1]) / 2;
-        w = (plaque[0][1] - plaque[0][0]) / 4;
-        for (i = [0:1]) {
-            translate([plaque[0][0] + w, ty + (0.5 - i) * pitch]) en_text([line_en1, line_en2][i]);
-            translate([plaque[0][1] - w, ty + (0.5 - i) * pitch]) he_text([line_he1, line_he2][i]);
+        has_logo = plaque_content == "logo_and_text";
+        if (plaque_layout == "stacked") {
+            // English over Hebrew, centred; with the logo the text sits low and the logo above it
+            z0 = has_logo ? plaque[1][0] + 2 + 1.5 * pitch : cz;
+            rows = [line_en1, line_en2, line_he1, line_he2];
+            for (i = [0:3]) translate([cx, z0 + (1.5 - i) * pitch + (i < 2 ? 0.4 : -0.4)])
+                if (i < 2) en_text(rows[i]); else he_text(rows[i]);
+            if (has_logo) let(top = z0 + 2 * pitch + 1)
+                translate([cx, (plaque[1][1] + top) / 2]) logo(h = plaque[1][1] - top);
+        } else {
+            // English left, Hebrew right, logo above
+            ty = has_logo ? plaque[1][0] + 7.5 : cz;
+            w = (plaque[0][1] - plaque[0][0]) / 4;
+            for (i = [0:1]) {
+                translate([plaque[0][0] + w, ty + (0.5 - i) * pitch]) en_text([line_en1, line_en2][i]);
+                translate([plaque[0][1] - w, ty + (0.5 - i) * pitch]) he_text([line_he1, line_he2][i]);
+            }
+            if (has_logo) let(top = ty + pitch + 1)
+                translate([cx, (plaque[1][1] + top) / 2]) logo(h = plaque[1][1] - top);
         }
-        if (has_logo) translate([cx, (plaque[1][1] + ty + pitch) / 2])
-            resize([logo_w, 0], auto = [true, true]) import(logo_file, center = true);
     }
 }
-module text_solid() {
-    if (show_text) translate([0, -box_d / 2 + text_inlay, 0]) rotate([90, 0, 0])
-        linear_extrude(text_inlay + text_proud) plaque_2d();
+module plaque_solid() {
+    translate([0, -box_d / 2 + plaque_inlay, 0]) rotate([90, 0, 0])
+        linear_extrude(plaque_inlay + plaque_proud) intersection() {
+            plaque_2d();
+            translate([-box_w / 2 + corner_r + 0.5, 0]) square([box_w - 2 * corner_r - 1, box_h]);   // the flat front only
+        }
 }
 
 // ---------------------------------------------------------------- the relief
-module tubes() { for (i = [0:len(members) - 1]) sweep(member3d(members[i]), members[i][1], phase = 37 * i); }
+module tubes() { for (i = [0:len(members) - 1]) let(m = members[i]) sweep(member3d(m), m[1], 37 * i, member_bark(m)); }
 module relief() {
     difference() {
         tubes();
@@ -319,16 +385,16 @@ echo(str("Deck holder: outer ", box_w, " x ", box_d, " x ", box_h, " mm; cavity 
 
 // ---------------------------------------------------------------- parts
 if (part == "assembly") {
-    color("#F4F4F0") difference() { shell(); text_solid(); }
+    color("#F4F4F0") difference() { shell(); plaque_solid(); }
     color("#B5651D") relief();
-    color("#111111") text_solid();
+    color("#111111") plaque_solid();
     if (show_deck) deck();
 } else if (part == "box") {
-    difference() { shell(); text_solid(); }
+    difference() { shell(); plaque_solid(); }
 } else if (part == "relief") {
     relief();
-} else if (part == "text") {
-    text_solid();
+} else if (part == "logo") {
+    plaque_solid();
 } else if (part == "paths") {
     for (m = members) echo(m[0]);
 }
