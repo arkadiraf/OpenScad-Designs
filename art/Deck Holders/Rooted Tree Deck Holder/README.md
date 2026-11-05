@@ -59,11 +59,10 @@ The images are renders, not photos.
 ## How the corners work
 
 The paths are written on a guide surface with 8 mm corners (`path_r`), so their coordinates keep
-their meaning whatever the real fillet is. Round a corner each tube ring rides a radius of its own,
-its sink depth plus 1.15 × its radius. Then no tube bends tighter than itself, and it stays proud
-of the squarer real corner. Rings are added where a member crosses a corner, the sink is
-smoothed along each member, and each member keeps one corner radius (the largest its rings need), so
-no chord, sink jump or radius change cuts a tube under the edge or kinks it.
+their meaning whatever the real fillet is. Round a corner each tube rides a radius of its own: the
+largest of its rings' sink depth plus 1.15 × radius. Then no tube bends tighter than itself, and it
+stays proud of the squarer real corner. Rings are added where a member crosses a corner, and the
+sink is smoothed along each member, so no chord or sink jump cuts a tube under the edge or kinks it.
 
 ## Customizer
 
