@@ -1,13 +1,13 @@
 // Card Box - a two-piece box for a deck of playing cards.
 // Base tray with thumb notches on the long sides, and a lid that slips over a
 // thin lip at the top of the base, flush with the base's outer wall when closed.
-// Step 1 is the cavity: inner 100 x 70 mm, 50 mm deep (base floor to base rim).
+// Step 1 is the cavity: inner 100 x 70 mm, 25 mm deep (base floor to base rim).
 // Both pieces print open side up / lid top down on the bed, no supports.
 
 /* [Cavity (inside dimensions)] */
 inner_l = 100;   // [40:1:200] inside length, mm
 inner_w = 70;    // [30:1:150] inside width, mm
-inner_d = 50;    // [10:1:120] inside depth of the base, mm
+inner_d = 25;    // [10:1:120] inside depth of the base, mm
 
 /* [Walls] */
 wall    = 2.4;   // [1.6:0.4:4] base wall thickness (six 0.4 mm lines)
