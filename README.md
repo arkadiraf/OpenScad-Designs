@@ -165,6 +165,25 @@ your glass sits too high). The images above are renders, not photos. The four tr
 glass in their branches carry a **layout** script as well: the search that drew their 13 branches,
 with the seed that reproduces the tables in the `.scad` (another seed grows a different tree).
 
+### Deck Holders
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <a href="art/Deck%20Holders/Rooted%20Tree%20Deck%20Holder/">
+        <img src="art/Deck%20Holders/Rooted%20Tree%20Deck%20Holder/Rooted_Tree_Deck_Holder.png" alt="Rooted Tree Deck Holder" width="260">
+      </a>
+      <br><b>Rooted Tree Deck Holder</b>
+    </td>
+  </tr>
+</table>
+
+A card box for a deck of playing cards, 70 × 25 × 100 mm with lightly filleted corners, a sliding lid
+that snaps shut, and a slot at the back. A copper tree stands to one side of the front in relief. Its roots run
+out to both sides, frame the three-disc logo on the other side and wrap over the corners. [scad](art/Deck%20Holders/Rooted%20Tree%20Deck%20Holder/Rooted_Tree_Deck_Holder.scad) ·
+[3mf](art/Deck%20Holders/Rooted%20Tree%20Deck%20Holder/Rooted_Tree_Deck_Holder.3mf) ·
+[lid 3mf](art/Deck%20Holders/Rooted%20Tree%20Deck%20Holder/Rooted_Tree_Deck_Holder_Lid.3mf)
+
 ### Catalogues
 
 Two of the designs, grown 25 times each: every tree has its own branch layout, its own branch
