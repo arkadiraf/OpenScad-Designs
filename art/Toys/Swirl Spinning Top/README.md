@@ -1,9 +1,9 @@
 # Swirl Spinning Top
 
-A small spinning top, 50 mm tall and 42 mm across, printed in one piece. Its body is four spiral
-ribbons. Each one starts at a corner of a rounded-square frame and winds in to the hub, getting
-rounder as it goes. Their lower edges taper down to the point in a cone. Their top edges rise
-towards the middle and flow into a slender stem for twirling.
+A small spinning top, 50 mm tall and 36 mm across, printed in one piece. From the side it is a
+double trumpet with a thin rounded-square frame round its waist. Four ribbons start at the corners
+of the frame and wind in towards the axis. They alternate: two climb and become fins running up the
+stem, and two drop and become fins running down the spike to the point.
 
 ![Swirl Spinning Top](Swirl_Spinning_Top.png)
 
@@ -16,18 +16,19 @@ Basic **Pumpkin Orange**. The top stands upright on its point. The point has a 0
 (`tip_flat`) to stand on. Turn on:
 
 - **supports**: tree supports, auto. The frame and the lower edges of the ribbons hang in the air
-  (about 6 % of the surface is past 60°).
+  (about 9 % of the surface is past 60°).
 - **a brim**, so the small flat at the point stays on the bed.
 
-Mesh checks: closed, one shell. About 10 g at 100 % solid. It has not been sliced with Bambu Studio
+Mesh checks: closed, one shell. About 5 g at 100 % solid. It has not been sliced with Bambu Studio
 yet: that check was skipped in the build environment.
 
 ## Customizer
 
-- `total_h`, `frame_w`, `body_h`: overall size
-- `arms`, `turns`, `wind_bias`, `squareness`, `handed`: the swirl. With 4 arms, keep `turns` around
-  0.8, or the gaps between ribbons get too narrow
-- `top_rise`, `rise_power`: how the ribbon tops climb into the stem
+- `total_h`, `frame_w`, `frame_z`: overall size and the height of the waist
+- `arms`, `turns`, `wind_bias`, `straighten`, `squareness`, `handed`: the swirl in plan
+- `fin_top`, `fin_bot`, `soften`, `band_h`, `fin_h`: the side profile, meaning how high the fins run up
+  the stem, how low they run down the spike, and how early the trumpets climb
+- `core_r`, `core_flare`, `flare_len`: the stem and spike
 - `ribbon_t`, `frame_t`, `frame_h`: wall sizes. Keep them at 2.4 mm or more
 
 Change any of them, then rebuild with:
