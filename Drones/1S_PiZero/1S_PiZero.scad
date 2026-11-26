@@ -199,7 +199,7 @@ motor_thread = 2.0;          // [1:0.5:4] usable thread depth in the motor base
 show_hardware = true;
 
 /* [Output] */
-part = "assembly"; // [assembly, electronics, pcb, pcb_outline, cradle, cam_mount, gear, guard, print, cradle_print, cam_mount_print, gear_print, guard_print, none]
+part = "assembly"; // [assembly, electronics, fc, pcb, pcb_outline, cradle, cam_mount, gear, guard, print, cradle_print, cam_mount_print, gear_print, guard_print, none]
 show_props = true;
 show_electronics = true;
 
@@ -863,6 +863,9 @@ if (part == "stack_section") {
     stack_cut() hardware();
     color("DarkGreen") render() stack_cut() fc_board();   // meshed: OpenCSG drops this cut in preview
     stack_cut() frame_electronics();
+}
+if (part == "fc") {                              // the FC module alone (Flow deck with flow_deck=true)
+    flight_controller(); if (flow_deck) flow_deck_board();
 }
 if (part == "electronics") {                     // the two boards and their parts, for review
     pcb(); frame_electronics(); flight_controller(); if (flow_deck) flow_deck_board();
