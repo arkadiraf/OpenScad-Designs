@@ -360,6 +360,12 @@ module flight_controller() {                     // its screws and standoffs are
         if (is_fp(p, "Bosch_LGA-16")) chip(p, bmi088_size, "1", "7", "Black");
         if (is_fp(p, "Bosch_LGA-10")) chip(p, bmp388_size, "4", "9", "Silver");
         if (is_fp(p, "C_0402")) chip(p, c0402_size, "1", "2", "Tan");
+        if (is_fp(p, "JST_SH")) let(n = len([for (q = p[3]) if (q[0] != "MP") q]),            // J9 SWD (DNP), FC underside
+                                    a = kc_pad(p, "1"), b = kc_pad(p, str(n)), d = b - a, w = n + 2,
+                                    m = [for (q = p[3]) if (q[0] == "MP") [q[1], q[2]]], mc = (m[0] + m[1]) / 2,
+                                    o = mc - (a + b) / 2, u = o / norm(o))                       // towards the opening
+            translate(concat((a + b) / 2 + 1.25 * u, z_fc - sh_h)) rotate(atan2(d[1], d[0]))
+                color("Wheat") translate([-w / 2, -4.25 / 2, 0]) cube([w, 4.25, sh_h]);
     }
 }
 
