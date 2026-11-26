@@ -77,9 +77,11 @@ def near(x, y, r=0.6):
     hs = [h for h in holes if math.hypot(h[0] - x, h[1] - y) < r]
     return hs[0] if hs else None
 
-print('Shared M2 holes: battery cover + landing gear + FC module standoffs')
+print('Shared M2 holes: battery cover + FC module standoffs; landing gear on its own four')
 m2 = [h for h in holes if 2.0 < h[2] < 2.4 and abs(abs(h[0]) - 24) < 0.5 and abs(abs(h[1]) - 17.5) < 0.5]
-check('cover / gear / FC holes in the frame', len(m2), 4, 0)
+check('cover / FC holes in the frame', len(m2), 4, 0)
+lg = [h for h in holes if 2.0 < h[2] < 2.4 and abs(abs(h[0]) - 35) < 0.5 and abs(abs(h[1]) - 18.5) < 0.5]
+check('landing-gear holes in the frame (own, near the plate ends)', len(lg), 4, 0)
 check('no separate FC holes left (30.5 mm square)', len([h for h in holes if abs(abs(h[0]) - 15.25) < 0.5
                                                          and abs(abs(h[1]) - 15.25) < 0.5]), 0, 0)
 # the FC module's holes (KiCad, via 1S_PiZero_electronics.scad) must sit on the same four
@@ -214,6 +216,11 @@ for body in ['props', 'motors', 'pcb', 'escs', 'cradle', 'gear', 'cam_mount', 'f
 print('FC module stack clears the frame, landing gear, ESCs and hardware')
 for body in ['pcb', 'gear', 'escs', 'hardware']:
     clear(f'FC stack vs {body}', 'fc_clash', body)
+
+# The Flow deck sensors (PMW3901, VL53L1x) look straight down: nothing may sit in their view cones
+# down to the ground (landing gear, ESCs, screws, FC, prop guard).
+print('Flow deck sensors have a clear view of the ground')
+clear('PMW3901 / VL53L1x view cones', 'fov_clash', 'none', 'prop_guard=true')
 
 print(f"\n{'ALL MATCH' if not fails else 'MISMATCH: ' + ', '.join(fails)}")
 sys.exit(1 if fails else 0)
