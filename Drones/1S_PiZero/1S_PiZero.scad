@@ -178,8 +178,9 @@ spoke_w     = 2.5;   // [1.5:0.5:5]
 
 /* [Connectors: JST] */
 // Pi power over JST PH (2.0 mm, 2 pins, through-hole, vertical) on the frame top next to the Pi's
-// GPIO end (KiCad J8 sits on these holes). The Pi's UART + PI_STATUS come from the FC through the
-// board-to-board headers to a JST-SH 4 on the frame top (KiCad J7, SMD, drawn from the export).
+// GPIO end (KiCad J8 sits on these holes). The Pico's USB (the Pi is its host) comes from the FC
+// through the board-to-board headers to a JST-SH 4 on the frame top (KiCad J7), and its SWD to an
+// optional JST-SH 3 next to it (KiCad J9, not fitted by default); both SMD, drawn from the export.
 ph_pitch = 2.0;
 ph_hole  = 0.75;  // [0.6:0.05:1.2] drill for the PH pins (JST ePH, as the KiCad footprint)
 ph_body  = [4.5, 6.0];   // [depth, height] of a B2B-PH-K-S header; width = (n - 1) x pitch + 4
@@ -366,9 +367,10 @@ module flight_controller() {                     // its screws and standoffs are
 module frame_electronics() for (p = kc_frame_parts) {
     if (is_fp(p, "Bitcraze_FemaleDeck")) at_row(p)
         translate([0, 0, -b2b_sock_h]) row_body(10, 2.05, 2.0, b2b_sock_h, "Black");      // 20.5 x 2.0 x 2.1
-    if (is_fp(p, "JST_SH")) let(a = kc_pad(p, "1"), b = kc_pad(p, "4"), d = b - a)      // SM04B-SRSS-TB, side entry
+    if (is_fp(p, "JST_SH")) let(n = len([for (q = p[3]) if (q[0] != "MP") q]),          // SMxxB-SRSS-TB, side entry
+                                a = kc_pad(p, "1"), b = kc_pad(p, str(n)), d = b - a, w = n + 2)
         translate(concat((a + b) / 2, pcb_t)) rotate(atan2(d[1], d[0]))
-            color("Wheat") translate([-3, -1.4, 0]) cube([6, 4.25, sh_h]);
+            color("Wheat") translate([-w / 2, -1.4, 0]) cube([w, 4.25, sh_h]);
 }
 
 // Plugged into the FC's deck headers (2 x 1x10, 2.00 mm, fc_deck_rows apart), centred on them.
