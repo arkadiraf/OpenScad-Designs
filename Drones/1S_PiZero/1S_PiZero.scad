@@ -78,10 +78,12 @@ fc_size   = kc_fc_size;  // FC outline bounding box, from KiCad (minimum outline
 fc_standoff = kc_b2b_standoff;  // FC top to frame bottom = M2 standoff = mated header + socket height
 fc_sto    = fc_standoff;         // M2 standoff length, female-female
 sto_af    = 4;    // [3:0.5:5] M2 standoff hex, across flats
-b2b_plastic = 1.5;   // [1:0.1:3] male header plastic on the FC (socket = fc_standoff - this)
+b2b_plastic = kc_b2b_male_plastic;   // male header plastic on the FC (Bitcraze pins)
+b2b_sock_h  = kc_b2b_socket_h;       // Bitcraze female deck connector on the frame underside
+b2b_pin     = kc_b2b_male_pin;       // mating pin above the plastic, trimmed
 // Pico 2 W datasheet: 51 x 21 x 1 mm, micro USB overhanging the USB end by 1.3 mm.
 pico_t     = 1.0;
-pico_usb   = [5.6, 8.0, 2.7];   // [along, across, height] of the micro USB; height is a typical receptacle (to check)
+pico_usb   = [5.6, 8.0, kc_pico_top - 1.0];   // [along, across, height above the Pico PCB]: 2.73 mm (KiCad-RP-Pico 3D model)
 pico_parts = 1.2;               // [0.5:0.1:3] envelope of the other top-side parts (to check)
 fc_deck_rows = 22;  // Crazyflie deck rows, centre to centre (Bitcraze deck template), 2.00 mm pitch
 // Sensors on the FC underside, drawn from their KiCad pads (sizes from Bosch STEP models):
@@ -176,12 +178,13 @@ spoke_w     = 2.5;   // [1.5:0.5:5]
 
 /* [Connectors: JST] */
 // Pi power over JST PH (2.0 mm, 2 pins, through-hole, vertical) on the frame top next to the Pi's
-// GPIO end. (The Bolt's power/UART pair and the Pi UART header are gone: the FC module plugs into
-// the frame, and the Pi's UART runs from a JST-SH on the FC module straight to the Pi.)
+// GPIO end (KiCad J8 sits on these holes). The Pi's UART + PI_STATUS come from the FC through the
+// board-to-board headers to a JST-SH 4 on the frame top (KiCad J7, SMD, drawn from the export).
 ph_pitch = 2.0;
-ph_hole  = 0.8;   // [0.6:0.05:1.2] drill for the PH pins
+ph_hole  = 0.75;  // [0.6:0.05:1.2] drill for the PH pins (JST ePH, as the KiCad footprint)
 ph_body  = [4.5, 6.0];   // [depth, height] of a B2B-PH-K-S header; width = (n - 1) x pitch + 4
 gh_pitch = 1.25;
+sh_h     = 2.95;  // JST SH side-entry header height (SM04B-SRSS-TB; to check)
 gh_body  = [4.25, 4.25]; // [depth, height] of an SMxxB-GHS-TB header; width = (n - 1) x pitch + 4.25 (tabs)
 
 /* [Hardware] */
@@ -235,7 +238,7 @@ gear_y   = center_w / 2 - 0.5;
 
 // Frame connectors: [name, side, type, pins, [x, y], rotation, signals]
 connectors = [
-    ["J1 Pi power", "top",    "PH", 2, [-6, center_w / 2 - 3],    0,  "5V1, GND"]
+    ["J8 Pi power", "top",    "PH", 2, [-6, center_w / 2 - 3],    0,  "5V1, GND"]   // KiCad J8
 ];
 
 // Camera placement: centre in front of the block, lens along cam_n.
@@ -347,7 +350,7 @@ module flight_controller() {                     // its screws and standoffs are
         if (is_fp(p, "RPi_Pico")) pico2w(p);
         if (is_fp(p, "PinHeader_1x10_P2.00mm") && p[2] == "top") at_row(p) {     // to the frame, pins up
             translate([0, 0, z_fct]) row_body(10, 2, 2, b2b_plastic, "Black");
-            row_pins(10, 2, z_fc - 1.5, z_fct + b2b_plastic + (fc_standoff - b2b_plastic) - 0.7);
+            row_pins(10, 2, z_fc - 0.4, z_fct + b2b_plastic + b2b_pin);
         }
         if (is_fp(p, "PinHeader_1x10_P2.00mm") && p[2] == "bottom") at_row(p) {  // to the Flow deck, pins down
             translate([0, 0, z_fc - deck_hdr_plastic]) row_body(10, 2, 2, deck_hdr_plastic, "Black");
@@ -359,10 +362,14 @@ module flight_controller() {                     // its screws and standoffs are
     }
 }
 
-// Frame-side parts placed in KiCad: the FC sockets on the underside.
-module frame_electronics() for (p = kc_frame_parts)
-    if (is_fp(p, "PinSocket_1x10_P2.00mm")) at_row(p)
-        translate([0, 0, -(fc_standoff - b2b_plastic)]) row_body(10, 2, 2.2, fc_standoff - b2b_plastic, "DimGray");
+// Frame-side parts placed in KiCad: the FC sockets on the underside, the Pi UART JST-SH on top.
+module frame_electronics() for (p = kc_frame_parts) {
+    if (is_fp(p, "Bitcraze_FemaleDeck")) at_row(p)
+        translate([0, 0, -b2b_sock_h]) row_body(10, 2.05, 2.0, b2b_sock_h, "Black");      // 20.5 x 2.0 x 2.1
+    if (is_fp(p, "JST_SH")) let(a = kc_pad(p, "1"), b = kc_pad(p, "4"), d = b - a)      // SM04B-SRSS-TB, side entry
+        translate(concat((a + b) / 2, pcb_t)) rotate(atan2(d[1], d[0]))
+            color("Wheat") translate([-3, -1.4, 0]) cube([6, 4.25, sh_h]);
+}
 
 // Plugged into the FC's deck headers (2 x 1x10, 2.00 mm, fc_deck_rows apart), centred on them.
 function deck_c() = let(r = [for (p = kc_fc_parts) if (is_fp(p, "PinHeader_1x10_P2.00mm") && p[2] == "bottom") kc_c(p)])
