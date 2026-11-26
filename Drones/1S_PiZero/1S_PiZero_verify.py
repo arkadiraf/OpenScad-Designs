@@ -4,7 +4,7 @@ Exports the PCB outline and the printed harness from 1S_PiZero.scad and measures
 actually drawn (hole centres and diameters, post positions), then compares it with the
 datasheet figures:
 
-    FC module (KiCad)    56 x 35.4 mm, M2.5 on 30.5 x 30.5, Crazyflie deck rows 22 mm apart
+    FC module (KiCad)    minimum outline, on the 4 cover screws (M2, 48 x 35), Crazyflie deck rows 22 mm apart
     GTS V3 1203 motor    4 x M2 base holes, 9 mm apart across (a cross), bell 15.76
     DYS XSD 7A ESC       16.2 x 11 x 4 mm, 4 + 3 pins at 2.54 mm pitch
     Pi Zero 2 W          65 x 30 mm, M2.5 holes 3.5 mm in from each edge (58 x 23)
@@ -77,14 +77,18 @@ def near(x, y, r=0.6):
     hs = [h for h in holes if math.hypot(h[0] - x, h[1] - y) < r]
     return hs[0] if hs else None
 
-print('FC module (frame holes for its M2.5 standoffs, 30.5 mm square)')
-bolt = [h for h in holes if abs(abs(h[0]) - 15.25) < 0.5 and abs(abs(h[1]) - 15.25) < 0.5]
-check('number of FC module holes', len(bolt), 4, 0)
-if bolt:
-    xs = sorted({round(h[0], 2) for h in bolt}); ys = sorted({round(h[1], 2) for h in bolt})
-    check('hole spacing x', xs[-1] - xs[0], 30.5)
-    check('hole spacing y', ys[-1] - ys[0], 30.5)
-    check('frame hole dia (M2.5 clearance)', max(h[2] for h in bolt), 2.7, 0.1)
+print('Shared M2 holes: battery cover + landing gear + FC module standoffs')
+m2 = [h for h in holes if 2.0 < h[2] < 2.4 and abs(abs(h[0]) - 24) < 0.5 and abs(abs(h[1]) - 17.5) < 0.5]
+check('cover / gear / FC holes in the frame', len(m2), 4, 0)
+check('no separate FC holes left (30.5 mm square)', len([h for h in holes if abs(abs(h[0]) - 15.25) < 0.5
+                                                         and abs(abs(h[1]) - 15.25) < 0.5]), 0, 0)
+# the FC module's holes (KiCad, via 1S_PiZero_electronics.scad) must sit on the same four
+kc = open(os.path.join(HERE, '1S_PiZero_electronics.scad')).read()
+fc_holes = [(float(x), float(y)) for x, y in re.findall(r'\["H\d", "MountingHole_2.2mm_M2", "top", \[\["", ([-\d.]+), ([-\d.]+), 2.2\]\]\]', kc)]
+check('FC module M2 holes (KiCad)', len(fc_holes), 4, 0)
+for fx, fy in fc_holes:
+    d = min(math.hypot(fx - h[0], fy - h[1]) for h in m2) if m2 else 99
+    check(f'  FC hole ({fx:+.2f},{fy:+.2f}) to frame hole', d, 0.0, 0.05)
 
 print('GTS V3 1203 motors (4 x M2, 9 mm apart across)')
 L = 140 / (2 * math.sqrt(2))
@@ -131,7 +135,7 @@ for line in open(os.path.join(tempfile.gettempdir(), 'v.echo')).read().splitline
     if m:
         vals[m.group(1)] = float(m.group(2))
 for key, want in [('pi_l', 65), ('pi_w', 30), ('pi_hole_x', 58), ('pi_hole_y', 23),
-                  ('fc_l', 56), ('fc_w', 35.4), ('fc_deck_rows', 22),
+                  ('fc_deck_rows', 22),
                   ('motor_bell_d', 15.76), ('motor_h', 9.9), ('motor_base_t', 1.4), ('motor_shaft', 4.8),
                   ('esc_l', 16.2), ('esc_w', 11), ('esc_t', 4), ('bat_d', 18.4), ('bat_len', 65.2),
                   ('cam_w', 9)]:

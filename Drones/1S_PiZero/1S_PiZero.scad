@@ -5,7 +5,8 @@
 //            the 18650 cell, lying on the PCB; its tabs are soldered to pads at both ends
 //   PCB      motors on top at the arm ends; charging/protection and power on the board
 //   bottom   the four DYS XSD 7A ESCs, soldered on pin headers under the arms
-//            the flight-controller module (custom PCB, Pico 2 W on its top) on M2.5 standoffs,
+//            the flight-controller module (custom PCB, Pico 2 W on its top), hung on M2 standoffs
+//            from the SAME four screws that hold the battery cover and the landing gear, and
 //            plugged into the frame on 2.00 mm headers so it can be swapped; the ICs and the
 //            Crazyflie Flow deck v2 on its underside
 //            the landing gear, screwed through the frame with the harness
@@ -71,10 +72,10 @@ esc_radius = 47;     // [30:0.5:60] distance of the ESC centre from the frame ce
 // The board outline and every part position come from KiCad (1S_PiZero_electronics.scad).
 // Top (facing the frame): the Pico 2 W and two male 1x10 2.00 mm headers that plug up into
 // female SMD sockets on the frame's underside. Bottom: the ICs and the Crazyflie deck connectors.
-fc_size   = [56, 35.4]; // FC module x (front) and y, as drawn in KiCad (for the summary and checks)
-fc_holes  = 30.5; // M2.5 square mounting pattern (frame and FC)
-fc_hole_d = 2.7;  // frame hole for the M2.5 screws
-fc_standoff = kc_b2b_standoff;  // FC top to frame bottom = mated header + socket height
+// It hangs on the four cover screws (crad_hole): cover boss - frame - landing gear - standoff - FC.
+fc_size   = kc_fc_size;  // FC outline bounding box, from KiCad (minimum outline: Pico band, deck, ears)
+fc_standoff = kc_b2b_standoff;  // FC top to frame bottom = gear_t + fc_sto = mated header + socket height
+sto_af    = 4;    // [3:0.5:5] M2 standoff hex, across flats
 b2b_plastic = 1.5;   // [1:0.1:3] male header plastic on the FC (socket = fc_standoff - this)
 // Pico 2 W datasheet: 51 x 21 x 1 mm, micro USB overhanging the USB end by 1.3 mm.
 pico_t     = 1.0;
@@ -126,7 +127,8 @@ rail_w    = 6;    // [4:0.5:8]
 rail_h    = 2;    // [1.5:0.5:4]
 
 /* [Landing gear] */
-gear_t    = 2;    // [1.5:0.5:4]
+gear_t    = 2;    // [1.5:0.5:4] also clamped in the FC bolt stack: fc_standoff = gear_t + fc_sto
+fc_sto    = fc_standoff - gear_t;   // M2 standoff length, female-female (4 mm with the 2 mm gear)
 gear_bar  = 3;    // [2:0.5:6] width of the frame bars
 leg_r     = 2.2;  // [1.5:0.1:4]
 foot_x    = 42;   // [30:1:60]
@@ -403,7 +405,6 @@ module pcb_shape() difference() {
     }
     for (m = motors) for (p = esc_pins(m)) translate(p) circle(d = 1.0, $fn = 12);
     for (i = [-1, 1], j = [-1, 1]) {
-        translate([i * fc_holes / 2, j * fc_holes / 2]) circle(d = fc_hole_d, $fn = 20);
         translate([i * crad_hole[0], j * crad_hole[1]]) circle(d = 2.2, $fn = 16);
     }
     for (c = connectors) if (c[2] == "PH") for (p = conn_pins(c)) translate(p) circle(d = ph_hole, $fn = 12);
@@ -474,7 +475,6 @@ module cradle() difference() {
             cylinder(d = ins_m25[2], h = ins_m25[1] + 1, $fn = 20);     // M2.5 insert for the Pi
         translate([i * pi_hole_x / 2, j * post_y, post_top - ins_m25[1] - 2])
             cylinder(d = 2.6, h = 2, $fn = 16);                          // room for the screw tip
-        translate([i * fc_holes / 2, j * fc_holes / 2, 0]) cylinder(d = 6.5, h = 10);            // FC screw heads
     }
     for (j = [-1, 1]) translate([rail_end + eps, j * post_y, boss_z]) rotate([0, -90, 0])
         cylinder(d = ins_m2[2], h = ins_m2[1] + 1.5, $fn = 20);        // M2 insert for the camera harness
@@ -525,15 +525,15 @@ module gear() difference() {
             rrect([2 * (gear_x - 2 * gear_bar), 2 * (gear_y - gear_bar)], 1.5);
         }
         for (i = [-1, 1], j = [-1, 1]) {
-            translate([i * crad_hole[0], j * crad_hole[1], -ins_m2[1] - 1.5])
-                cylinder(d = ins_m2[0] + 3, h = ins_m2[1] + 1.5 + eps);   // insert boss
+            translate([i * crad_hole[0], j * crad_hole[1], -gear_t])
+                cylinder(d = 6.6, h = gear_t);                          // pad clamped between frame and standoff
             rod(leg_top(i, j), leg_foot(i, j), leg_r);
             translate([i * foot_x, j * foot_y, z_foot]) cylinder(r1 = 3.5, r2 = 0.9 * leg_r, h = 3);
         }
     }
     translate([0, 0, 5]) cube([200, 200, 10], center = true);            // flush with the PCB underside
-    for (i = [-1, 1], j = [-1, 1]) translate([i * crad_hole[0], j * crad_hole[1], -ins_m2[1] - 0.5])
-        cylinder(d = ins_m2[2], h = 5, $fn = 20);                       // M2 insert, pressed in from the top
+    for (i = [-1, 1], j = [-1, 1]) translate([i * crad_hole[0], j * crad_hole[1], -gear_t - 1])
+        cylinder(d = 2.3, h = gear_t + 2, $fn = 16);                    // M2 through: cover screw to the FC standoff
 }
 
 // --------------------------------------------------------------------------------------------
@@ -642,15 +642,19 @@ module cam_view() let(n = [cos(cam_tilt), 0, -sin(cam_tilt)], up = [sin(cam_tilt
 std_len = [3, 4, 5, 6, 8, 10, 12, 14, 16, 20];
 function pick(lo, hi) = let(ok = [for (l = std_len) if (l >= lo && l <= hi) l])
     assert(len(ok) > 0, str("no standard screw between ", lo, " and ", hi, " mm")) ok[len(ok) - 1];
+function pick_short(lo, hi) = let(ok = [for (l = std_len) if (l >= lo && l <= hi) l])
+    assert(len(ok) > 0, str("no standard screw between ", lo, " and ", hi, " mm")) ok[0];
 
 cover_head = pcb_t + rail_h + 2;                  // top of the cover's screw bosses
-len_cover  = pick(cover_head + 1.5, cover_head + ins_m2[1] - 0.3);        // M2: cover + PCB + gear insert
+// The FC standoff is threaded through and takes a screw from each end, so the two share its length:
+// the FC screw is the shortest with >= 1.2 mm of thread, the cover screw gets the rest (0.2 mm gap).
+len_fc     = pick_short(kc_fc_t + 1.2, kc_fc_t + fc_sto - 1.2);                // M2: FC into its standoff, from below
+len_cover  = pick(cover_head + gear_t + 1.5, cover_head + gear_t + fc_sto - (len_fc - kc_fc_t) - 0.2);  // M2: cover + PCB + gear into the standoff
 len_pi     = pick(pi_t + 1.5, pi_t + ins_m25[1] - 0.3);                   // M2.5: Pi into its post insert
 len_cam    = pick(block_t + 1.5, block_t + ins_m2[1] - 0.3);              // M2: camera harness into cover
 len_motor  = pick(pcb_t + 1, pcb_t + motor_thread);                       // M2: from under the frame
 len_motor_g = pick(guard_t + pcb_t + 1, guard_t + pcb_t + motor_thread);  // the same through the guard's pads
 len_motor_used = prop_guard ? len_motor_g : len_motor;
-len_fc     = pick(max(pcb_t, kc_fc_t) + 1.5, min(pcb_t, kc_fc_t) + fc_standoff / 2);   // M2.5: frame / FC into its standoff
 
 // Masses from the geometry: shank (x0.85 for the thread) + head (x0.8 for the socket).
 STEEL = 7.85e-3; BRASS = 8.5e-3; NYLON = 1.14e-3;   // g/mm^3
@@ -658,7 +662,7 @@ function screw_g(d, l, dk, k, rho) = (PI * d * d / 4 * l * 0.85 + PI * dk * dk /
 function insert_g(ins, d) = PI * (ins[0] * ins[0] - d * d) / 4 * ins[1] * BRASS;
 function nut_g(s, m, d, rho) = (0.866 * s * s - PI * d * d / 4) * m * rho;
 function tube_g(od, id, l, rho) = PI * (od * od - id * id) / 4 * l * rho;
-function standoff_g(l, male, rho) = (0.866 * 25 - PI * 2.5 * 2.5 / 4) * l * rho + PI * 2.5 * 2.5 / 4 * male * 0.85 * rho;
+function standoff_g(l, male, rho, af = 5, d = 2.5) = (0.866 * af * af - PI * d * d / 4) * l * rho + PI * d * d / 4 * male * 0.85 * rho;
 COPPER = 8.96e-3; PVC = 1.4e-3; PA66 = 1.14e-3;
 // cable: n wires of copper area a (mm^2) and outside diameter od, length l, plus a plug at each end
 function cable_g(n, a, od, l, plug) = n * l * (a * COPPER + (PI * od * od / 4 - a) * PVC) + 2 * plug;
@@ -667,15 +671,14 @@ cable_len = 60;   // mm, each connector's lead
 
 // [item, qty, g each, where]
 hardware_list = [
-    [str("M2 x ", len_cover, " socket head screw, steel"), 4, screw_g(2, len_cover, 3.8, 2, STEEL), "battery cover + PCB + landing gear"],
-    ["M2 heat-set insert, brass", 4, insert_g(ins_m2, 2), "landing gear bosses"],
+    [str("M2 x ", len_cover, " socket head screw, steel"), 4, screw_g(2, len_cover, 3.8, 2, STEEL), "battery cover + PCB + landing gear, into the FC standoffs"],
     [str("M2.5 x ", len_pi, " socket head screw, steel"), 4, screw_g(2.5, len_pi, 4.5, 2.5, STEEL), "Pi Zero into the cover posts"],
     ["M2.5 heat-set insert, brass", 4, insert_g(ins_m25, 2.5), "cover posts"],
     [str("M2 x ", len_cam, " socket head screw, steel"), 2, screw_g(2, len_cam, 3.8, 2, STEEL), "camera harness to the cover"],
     ["M2 heat-set insert, brass", 2, insert_g(ins_m2, 2), "cover front blocks"],
     [str("M2 x ", len_motor, " screw, steel (check against the motor's own)"), 16, screw_g(2, len_motor, 3.8, 1.5, STEEL), "motors, from under the frame (no guard)"],
-    [str("M2.5 x ", fc_standoff, " standoff, female-female, nylon"), 4, standoff_g(fc_standoff, 0, NYLON), "FC module under the frame"],
-    [str("M2.5 x ", len_fc, " socket head screw, steel"), 8, screw_g(2.5, len_fc, 4.5, 2.5, STEEL), "FC standoffs, 4 from the frame, 4 from the FC"],
+    [str("M2 x ", fc_sto, " standoff, female-female, nylon, ", sto_af, " mm hex"), 4, standoff_g(fc_sto, 0, NYLON, sto_af, 2), "FC module, under the landing gear"],
+    [str("M2 x ", len_fc, " socket head screw, steel"), 4, screw_g(2, len_fc, 3.8, 2, STEEL), "FC module into the standoffs, from below"],
     ["Pin header 2.00 mm male 1x10, through-hole", 2, 10 * (0.5 * 0.5 * (b2b_plastic + kc_fc_t + 1.5 + fc_standoff - 0.7) * BRASS) + 20 * 2 * b2b_plastic * PA66,
         "FC module top (J1, J2)"],
     ["Socket 2.00 mm female 1x10, SMD", 2, 10 * 0.12 + 20 * 2.2 * (fc_standoff - b2b_plastic) * 0.5 * PA66, "frame underside (J5, J6)"],
@@ -692,9 +695,9 @@ module screw(d, l, dk, k, c = "DimGray") color(c) {             // head on z = 0
     cylinder(d = dk, h = k, $fn = 20);
     translate([0, 0, -l]) cylinder(d = d, h = l, $fn = 12);
 }
-module standoff(l, male) color("WhiteSmoke") {                  // hex body from z = 0 up, male stud down
-    difference() { cylinder(d = 5 / cos(30), h = l, $fn = 6); if (male == 0) translate([0, 0, -1]) cylinder(d = 2.5, h = l + 2, $fn = 12); }
-    if (male > 0) translate([0, 0, -male]) cylinder(d = 2.5, h = male, $fn = 12);
+module standoff(l, male, af = 5, d = 2.5) color("WhiteSmoke") {  // hex body from z = 0 up, male stud down
+    difference() { cylinder(d = af / cos(30), h = l, $fn = 6); if (male == 0) translate([0, 0, -1]) cylinder(d = d, h = l + 2, $fn = 12); }
+    if (male > 0) translate([0, 0, -male]) cylinder(d = d, h = male, $fn = 12);
 }
 module insert(ins) color("Goldenrod") translate([0, 0, -ins[1]]) difference() {
     cylinder(d = ins[0], h = ins[1], $fn = 20);
@@ -703,18 +706,14 @@ module insert(ins) color("Goldenrod") translate([0, 0, -ins[1]]) difference() {
 
 module hardware() {
     for (i = [-1, 1], j = [-1, 1]) {
-        translate([i * crad_hole[0], j * crad_hole[1], 0]) {
+        translate([i * crad_hole[0], j * crad_hole[1], 0]) {     // one bolt stack: cover, frame, gear, standoff, FC
             translate([0, 0, cover_head]) screw(2, len_cover, 3.8, 2);
-            insert(ins_m2);
+            translate([0, 0, -gear_t - fc_sto]) standoff(fc_sto, 0, sto_af, 2);
+            translate([0, 0, z_fc]) rotate([180, 0, 0]) screw(2, len_fc, 3.8, 2);
         }
         translate([i * pi_hole_x / 2, j * post_y, 0]) {
             translate([0, 0, z_pi_top]) screw(2.5, len_pi, 4.5, 2.5);
             translate([0, 0, post_top]) insert(ins_m25);
-        }
-        translate([i * fc_holes / 2, j * fc_holes / 2, 0]) {
-            translate([0, 0, pcb_t]) screw(2.5, len_fc, 4.5, 2.5);
-            translate([0, 0, -fc_standoff]) standoff(fc_standoff, 0);
-            translate([0, 0, z_fc]) rotate([180, 0, 0]) screw(2.5, len_fc, 4.5, 2.5);
         }
     }
     for (j = [-1, 1]) translate([0, j * post_y, boss_z]) {
@@ -748,7 +747,8 @@ echo(str("  cell axis z ", z_bc, " (on the PCB), Pi board ", round(z_pi_bot * 10
          ", FC module ", z_fc, "..", z_fct, ", Flow deck sensor ", z_sensor, ", feet at z ", round(z_foot * 10) / 10,
          ", overall height ", round((z_pi_top + 3 - z_foot) * 10) / 10, " mm; camera at ", cam_tilt, " deg"));
 echo(str("  hardware: M2 x ", len_cover, " cover, M2.5 x ", len_pi, " Pi, M2 x ", len_cam, " camera, M2 x ",
-         len_motor, " motors, M2.5 x ", len_fc, " FC module on ", fc_standoff, " mm standoffs; weights in 1S_PiZero_BOM.md"));
+         len_motor, " motors; FC module on the cover screws: M2 x ", fc_sto, " standoffs + M2 x ", len_fc,
+         " from below; weights in 1S_PiZero_BOM.md"));
 if (echo_bom) for (h = hardware_list) echo(str("BOM|", h[0], "|", h[1], "|", h[2], "|", h[3]));
 // With the optional prop guard, the motor screws get longer: listed as the difference.
 guard_hw = [[str("M2 x ", len_motor_g, " motor screws instead of M2 x ", len_motor, " (difference)"), 16,
@@ -759,6 +759,7 @@ esc_gear = (esc_radius - row_off - pitch / 2 - esc_pins_in * pitch / 2) / sqrt(2
 echo(str("  ESC ", esc_l, " x ", esc_w, " on ", esc_pins_in, "+", esc_pins_out, " pin headers, rows ",
          round(2 * row_off * 100) / 100, " mm apart; each end rests ", round(esc_seat * 100) / 100,
          " mm on the plastic; inner header clears the landing gear by ", round(esc_gear * 10) / 10, " mm"));
+assert(gear_t == kc_gear_t, str("gear_t ", gear_t, " differs from KiCad B2B gear_t ", kc_gear_t, ": the header stack would not mate"));
 assert(boss_z + 3 < post_top - 1, "camera blocks would cover the Pi post inserts: lower boss_z");
 assert(esc_seat > 0.3, "ESC barely rests on the header plastic: reduce pin_gap");
 assert(esc_gear > 0.5, "inner ESC header hits the landing gear: increase esc_radius");
@@ -788,6 +789,17 @@ if (part == "assembly") {
     }
 }
 if (part == "pcb")         pcb();
+// Section through the front-left bolt stack (cut at the hole, looking from +y): cover, frame,
+// landing gear, standoff, FC module, screws; for checking the stack heights
+module stack_cut() intersection() { children(); translate([0, crad_hole[1], -60]) cube([120, 60, 120]); }
+if (part == "stack_section") {
+    stack_cut() color("DarkOrange") cradle();
+    stack_cut() pcb();
+    stack_cut() color("SlateGray") gear();
+    stack_cut() hardware();
+    color("DarkGreen") render() stack_cut() fc_board();   // meshed: OpenCSG drops this cut in preview
+    stack_cut() frame_electronics();
+}
 if (part == "electronics") {                     // the two boards and their parts, for review
     pcb(); frame_electronics(); flight_controller(); if (flow_deck) flow_deck_board();
     for (m = motors) esc(m);
