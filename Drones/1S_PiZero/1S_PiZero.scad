@@ -89,7 +89,8 @@ fc_deck_rows = 22;  // Crazyflie deck rows, centre to centre (Bitcraze deck temp
 // Sensors on the FC underside, drawn from their KiCad pads (sizes from Bosch STEP models):
 bmi088_size = [4.5, 3.0, 1.0];    // LGA-16
 bmp388_size = [2.0, 2.0, 0.75];   // LGA-10
-c0402_size  = [1.0, 0.5, 0.5];
+// Chip passives (design rule: 0603 R/C, 0805 / 1206 for bulk capacitors), L x W x H:
+chip_sizes = [["0603", [1.6, 0.8, 0.8]], ["0805", [2.0, 1.25, 1.0]], ["1206", [3.2, 1.6, 1.1]]];
 
 /* [Flow deck v2, under the FC module] */
 flow_deck = true;
@@ -359,7 +360,10 @@ module flight_controller() {                     // its screws and standoffs are
         }
         if (is_fp(p, "Bosch_LGA-16")) chip(p, bmi088_size, "1", "7", "Black");
         if (is_fp(p, "Bosch_LGA-10")) chip(p, bmp388_size, "4", "9", "Silver");
-        if (is_fp(p, "C_0402")) chip(p, c0402_size, "1", "2", "Tan");
+        for (cs = chip_sizes) {
+            if (is_fp(p, str("C_", cs[0]))) chip(p, cs[1], "1", "2", "Tan");
+            if (is_fp(p, str("R_", cs[0]))) chip(p, [cs[1][0], cs[1][1], cs[1][2] * 0.6], "1", "2", "DimGray");
+        }
         if (is_fp(p, "JST_SH")) let(n = len([for (q = p[3]) if (q[0] != "MP") q]),            // J9 SWD (DNP), FC underside
                                     a = kc_pad(p, "1"), b = kc_pad(p, str(n)), d = b - a, w = n + 2,
                                     m = [for (q = p[3]) if (q[0] == "MP") [q[1], q[2]]], mc = (m[0] + m[1]) / 2,
