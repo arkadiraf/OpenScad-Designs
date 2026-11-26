@@ -91,6 +91,7 @@ bmi088_size = [4.5, 3.0, 1.0];    // LGA-16
 bmp388_size = [2.0, 2.0, 0.75];   // LGA-10
 // Chip passives (design rule: 0603 R/C, 0805 / 1206 for bulk capacitors), L x W x H:
 chip_sizes = [["0603", [1.6, 0.8, 0.8]], ["0805", [2.0, 1.25, 1.0]], ["1206", [3.2, 1.6, 1.1]]];
+b3u_size = [3.0, 2.5, 0.9];     // Omron B3U-1000P body (BOOTSEL button SW1, FC underside); plunger to 1.6 mm
 
 /* [Flow deck v2, under the FC module] */
 flow_deck = true;
@@ -360,6 +361,10 @@ module flight_controller() {                     // its screws and standoffs are
         }
         if (is_fp(p, "Bosch_LGA-16")) chip(p, bmi088_size, "1", "7", "Black");
         if (is_fp(p, "Bosch_LGA-10")) chip(p, bmp388_size, "4", "9", "Silver");
+        if (is_fp(p, "SW_SPST_B3U")) {                                          // SW1 BOOTSEL, pressed from below
+            chip(p, b3u_size, "1", "2", "Silver");
+            translate(concat(kc_c(p), z_fc - 1.6)) color("DimGray") cylinder(d = 1.5, h = 1.6 - b3u_size[2], $fn = 24);
+        }
         for (cs = chip_sizes) {
             if (is_fp(p, str("C_", cs[0]))) chip(p, cs[1], "1", "2", "Tan");
             if (is_fp(p, str("R_", cs[0]))) chip(p, [cs[1][0], cs[1][1], cs[1][2] * 0.6], "1", "2", "DimGray");
