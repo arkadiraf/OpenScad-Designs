@@ -4,7 +4,7 @@ Exports the PCB outline and the printed harness from 1S_PiZero.scad and measures
 actually drawn (hole centres and diameters, post positions), then compares it with the
 datasheet figures:
 
-    Crazyflie Bolt 1.1   36 x 35.4 mm, holes 3.1 mm on 30.5 x 30.5, deck rows 17 mm apart
+    FC module (KiCad)    56 x 35.4 mm, M2.5 on 30.5 x 30.5, Crazyflie deck rows 22 mm apart
     GTS V3 1203 motor    4 x M2 base holes, 9 mm apart across (a cross), bell 15.76
     DYS XSD 7A ESC       16.2 x 11 x 4 mm, 4 + 3 pins at 2.54 mm pitch
     Pi Zero 2 W          65 x 30 mm, M2.5 holes 3.5 mm in from each edge (58 x 23)
@@ -77,9 +77,9 @@ def near(x, y, r=0.6):
     hs = [h for h in holes if math.hypot(h[0] - x, h[1] - y) < r]
     return hs[0] if hs else None
 
-print('Crazyflie Bolt 1.1 (frame holes for its M2.5 screws)')
+print('FC module (frame holes for its M2.5 standoffs, 30.5 mm square)')
 bolt = [h for h in holes if abs(abs(h[0]) - 15.25) < 0.5 and abs(abs(h[1]) - 15.25) < 0.5]
-check('number of Bolt holes', len(bolt), 4, 0)
+check('number of FC module holes', len(bolt), 4, 0)
 if bolt:
     xs = sorted({round(h[0], 2) for h in bolt}); ys = sorted({round(h[1], 2) for h in bolt})
     check('hole spacing x', xs[-1] - xs[0], 30.5)
@@ -96,9 +96,9 @@ for mx, my in [(L, L), (L, -L), (-L, -L), (-L, L)]:
         check('  opposite holes apart', d[-1], 9.0)
         check('  M2 hole dia', mh[0][2], 2.2, 0.1)
 
-print('JST PH power connectors (2 pins, 2.0 mm pitch)')
+print('JST PH Pi power connector (2 pins, 2.0 mm pitch)')
 ph = sorted((h for h in holes if 0.7 < h[2] < 0.9), key=lambda h: (h[1], h[0]))
-check('PH pin holes (2 connectors x 2)', len(ph), 4, 0)
+check('PH pin holes (1 connector x 2)', len(ph), 2, 0)
 for k in range(0, len(ph) - 1, 2):
     check(f'  pitch at ({ph[k][0]:.1f}, {ph[k][1]:.1f})', math.hypot(ph[k + 1][0] - ph[k][0], ph[k + 1][1] - ph[k][1]), 2.0)
 
@@ -131,7 +131,7 @@ for line in open(os.path.join(tempfile.gettempdir(), 'v.echo')).read().splitline
     if m:
         vals[m.group(1)] = float(m.group(2))
 for key, want in [('pi_l', 65), ('pi_w', 30), ('pi_hole_x', 58), ('pi_hole_y', 23),
-                  ('fc_l', 36), ('fc_w', 35.4), ('fc_deck_rows', 17),
+                  ('fc_l', 56), ('fc_w', 35.4), ('fc_deck_rows', 22),
                   ('motor_bell_d', 15.76), ('motor_h', 9.9), ('motor_base_t', 1.4), ('motor_shaft', 4.8),
                   ('esc_l', 16.2), ('esc_w', 11), ('esc_t', 4), ('bat_d', 18.4), ('bat_len', 65.2),
                   ('cam_w', 9)]:
@@ -154,8 +154,8 @@ if len(posts) == 4:
 # inside the cell's width (18.4 mm, plus the 0.25 mm fit).
 print('Battery cover lifts off (slices between the PCB and the cell axis)')
 fit_r = 18.4 / 2 + 0.25
-z_axis = 1.6 + 18.4 / 2
-for z in [1.8, 4, 7, 10, z_axis - 0.05]:
+z_axis = 2.0 + 18.4 / 2                       # frame PCB 2.0 mm (KiCad)
+for z in [2.2, 4, 7, 10, z_axis - 0.05]:       # from just above the 2.0 mm frame
     out = os.path.join(tempfile.gettempdir(), '1s_pizero_slice.svg')
     subprocess.run([openscad_exe(), '-o', out, '-D', 'part="cradle_slice"', '-D', f'slice_z={z}', SCAD],
                    capture_output=True, text=True)
@@ -171,28 +171,45 @@ for z in [1.8, 4, 7, 10, z_axis - 0.05]:
         fails.append(f'lift-off at z {z}')
 
 # The optional prop guard must not touch anything: its intersection with each body is empty.
-print('Prop guard clears every other part and the prop sweep')
-for body in ['props', 'motors', 'pcb', 'escs', 'cradle', 'gear', 'cam_mount', 'bolt', 'pi', 'cam_view']:
+def overlap(part, body, *defines):
+    """Volume (mm3) that part="<part>" (an intersection with clash=<body>) leaves; 0 = clear."""
     out = os.path.join(tempfile.gettempdir(), '1s_pizero_clash.stl')
     if os.path.exists(out):
         os.remove(out)
-    r = subprocess.run([openscad_exe(), '-o', out, '-D', 'part="guard_clash"', '-D', f'clash="{body}"',
-                        '-D', 'prop_guard=true', SCAD], capture_output=True, text=True)
-    empty = 'top level object is empty' in r.stderr.lower() or not os.path.exists(out)
+    args = [openscad_exe(), '-o', out, '-D', f'part="{part}"', '-D', f'clash="{body}"']
+    for d in defines:
+        args += ['-D', d]
+    r = subprocess.run(args + [SCAD], capture_output=True, text=True)
+    if 'top level object is empty' in r.stderr.lower() or not os.path.exists(out):
+        return 0.0
+    data = open(out, 'rb').read()
     vol = 0.0
-    if not empty:                                    # something was written: how much overlaps?
-        import struct
-        data = open(out, 'rb').read()
-        if data[:5] == b'solid':
-            tris = re.findall(r'vertex\s+(\S+)\s+(\S+)\s+(\S+)', data.decode(errors='replace'))
-            v = [tuple(map(float, t)) for t in tris]
-            for a, b, c in zip(v[0::3], v[1::3], v[2::3]):
-                vol += (a[0] * (b[1] * c[2] - b[2] * c[1]) - a[1] * (b[0] * c[2] - b[2] * c[0])
-                        + a[2] * (b[0] * c[1] - b[1] * c[0])) / 6
-        empty = abs(vol) < 0.01
-    print(f"  {'ok  ' if empty else 'FAIL'} guard vs {body:10s} {'no overlap' if empty else f'overlap {abs(vol):.2f} mm3'}")
-    if not empty:
-        fails.append(f'guard vs {body}')
+    if data[:5] == b'solid':
+        tris = re.findall(r'vertex\s+(\S+)\s+(\S+)\s+(\S+)', data.decode(errors='replace'))
+        v = [tuple(map(float, t)) for t in tris]
+        for a, b, c in zip(v[0::3], v[1::3], v[2::3]):
+            vol += (a[0] * (b[1] * c[2] - b[2] * c[1]) - a[1] * (b[0] * c[2] - b[2] * c[0])
+                    + a[2] * (b[0] * c[1] - b[1] * c[0])) / 6
+    return abs(vol)
+
+
+def clear(label, part, body, *defines):
+    vol = overlap(part, body, *defines)
+    ok = vol < 0.01
+    print(f"  {'ok  ' if ok else 'FAIL'} {label:24s} {'no overlap' if ok else f'overlap {vol:.2f} mm3'}")
+    if not ok:
+        fails.append(label)
+
+
+print('Prop guard clears every other part and the prop sweep')
+for body in ['props', 'motors', 'pcb', 'escs', 'cradle', 'gear', 'cam_mount', 'fc', 'pi', 'cam_view']:
+    clear(f'guard vs {body}', 'guard_clash', body, 'prop_guard=true')
+
+# The FC module (KiCad placement), its frame sockets and the Flow deck must not touch the frame
+# board, the landing gear, the ESCs or the screws/standoffs (touching faces count as clear).
+print('FC module stack clears the frame, landing gear, ESCs and hardware')
+for body in ['pcb', 'gear', 'escs', 'hardware']:
+    clear(f'FC stack vs {body}', 'fc_clash', body)
 
 print(f"\n{'ALL MATCH' if not fails else 'MISMATCH: ' + ', '.join(fails)}")
 sys.exit(1 if fails else 0)

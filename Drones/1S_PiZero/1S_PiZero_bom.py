@@ -50,7 +50,8 @@ COMPONENTS = [
     ('Motor', 'RCINPOWER GTS V3 1203 11500 KV', 4, 4.5, GIVEN, 'https://www.rcinpower.com/G-SERIES/65.html'),
     ('Propeller', 'Gemfan 2520 Hurricane, 3-blade', 4, 1.0, GIVEN, 'https://www.gemfanhobby.com/2520-hurricane-pc-3-blade.html'),
     ('ESC', 'DYS XSD 7A (16.2 x 11 x 4 mm)', 4, 0.83, GIVEN, 'https://www.dys.hk/product/XSD%207A.html'),
-    ('Flight controller', 'Bitcraze Crazyflie Bolt 1.1', 1, 9.2, GIVEN, 'https://www.bitcraze.io/products/crazyflie-bolt/'),
+    ('Flight controller', 'FC module: Raspberry Pi Pico 2 W on the custom PCB (KiCad Drone_1S_FC), parts not yet chosen', 1, 9.0, EST,
+     'size: FR4 56 x 35.4 x 1.6 mm less the antenna notch ~5.2 g, + Pico 2 W ~3 g, + BMI088, BMP388, passives ~0.8 g'),
     ('Sensor deck', 'Bitcraze Flow deck v2', 1, 1.6, GIVEN, 'https://www.bitcraze.io/products/flow-deck-v2/'),
     ('Companion computer', 'Raspberry Pi Zero 2 W', 1, 9.0, EST,
      'size: FR4 65 x 30 x 1.4 mm = 5.0 g, + SiP/shield ~1.5 g, + mini HDMI, 2 x micro USB, SD, camera connectors ~2.5 g'),
@@ -58,8 +59,8 @@ COMPONENTS = [
      'size: lens module 8 x 8 x 5 mm ~0.4 g, + polyimide flex ~60 x 10 x 0.15 mm ~0.15 g, + parts and stiffener ~0.25 g'),
     ('Frame electronics', 'charger, protection, 5 V boost, passives on the frame PCB', 1, 2.0, EST,
      'guess for a 1S charger IC, protection FETs, 5 V boost inductor and capacitors; depends on the board'),
-    ('Wiring', 'Bolt motor outputs to the ESC signal pads, solder', 1, 1.0, EST,
-     '4 short 30 AWG leads + solder; the Pi and Bolt leads are listed with their connectors'),
+    ('Wiring', 'solder for the ESC headers and the cell tabs', 1, 0.5, EST,
+     'the ESC signals now run in the frame copper from the FC sockets; the Pi lead is listed with its connector'),
 ]
 
 PRINTED = [   # part value, name, colour (one filament each so the slice reports them apart), optional
