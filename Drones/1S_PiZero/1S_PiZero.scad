@@ -91,7 +91,7 @@ bmi088_size = [4.5, 3.0, 1.0];    // LGA-16
 bmp388_size = [2.0, 2.0, 0.75];   // LGA-10
 // Chip passives (design rule: 0603 R/C, 0805 / 1206 for bulk capacitors), L x W x H:
 chip_sizes = [["0603", [1.6, 0.8, 0.8]], ["0805", [2.0, 1.25, 1.0]], ["1206", [3.2, 1.6, 1.1]]];
-b3u_size = [3.0, 2.5, 0.9];     // Omron B3U-1000P body (BOOTSEL button SW1, FC underside); plunger to 1.6 mm
+b3u_size = [3.0, 2.5, 1.2];     // Omron/Aratas B3U-1000P body 1.2 mm (datasheet); plunger to 1.6 mm
 
 /* [Flow deck v2, under the FC module] */
 flow_deck = true;
