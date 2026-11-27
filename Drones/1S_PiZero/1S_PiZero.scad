@@ -103,7 +103,7 @@ deck_l = 21.079;  // along the connector rows (x)
 deck_w = 27.94;   // across them (y)
 deck_t = 0.8;     // [0.6:0.1:1.6] deck PCB (assumed; datasheet gives only the 4 mm overall)
 deck_sock_h = 2.1;          // Bitcraze female deck connector height
-deck_hdr_plastic = 2.0;     // [1.5:0.1:3] male SMD header plastic on the FC (to check with the part)
+deck_hdr_plastic = 2.77;    // [1.5:0.01:3] Samtec TMM-110-04-L-S-SM: 1.50 mm plastic, 1.27 mm above the FC (drawing F-226)
 deck_gap = deck_hdr_plastic + deck_sock_h;   // FC underside to deck top
 deck_sens_h = 4 - deck_sock_h - deck_t;      // sensors below the deck PCB, so the deck is 4 mm overall
 // Sensor positions on the deck underside, from the product photo (approximate): PMW3901 (6 x 6
